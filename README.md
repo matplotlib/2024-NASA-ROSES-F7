@@ -22,7 +22,7 @@ Grant proposal responding to the 2024 NASA ROSES F7 solicitation.
 
 
 - NOI: 2024-05-03
-- Full propsoal: 2024-07-07
+- Full propsoal: 2024-06-07
 
 ## How you can help
 
