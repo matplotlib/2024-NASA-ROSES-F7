@@ -1,0 +1,1422 @@
+%!TEX TS-program = XeLaTeX
+\documentclass[12pt]{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%%%
+%% Needed for fonts in xelatex to work
+%%%
+% NOTE: I actually use XeLaTeX, which allows me to get the fonts
+% exactly the way that I want them. For proposals, this means
+% I can use Times New Roman instead of the default Computer
+% Modern. I actually like Computer Modern, but since Arial
+% is what the solicitation suggests there's no point in throwing off a reviewer
+% with an unexpected font, particularly one with such a
+% polarizing reaction in readers. Never upset the reviewrers, I
+% always say.
+%
+% What's the point of this bit of rambling? If you do not want to use
+% XeLaTeX and would rather stick to good old LaTeX, then you
+% need to comment out the next few lines of font packages and
+% font commands.
+%
+% If you want to use XeLaTeX but want different fonts, then you
+% just need to change the name in the argument for \setmainfont.
+% Make sure that the font you use is loaded on
+% your machine and your TeX distribution knows how to find it.
+% See Google if you need to learn more about this.
+%
+\usepackage{fontspec}
+\setmainfont{Arial}
+
+%%%
+%% Packages that I use on a regular basis.
+%%%
+% Of course, you are likely to need some math typesetting so these
+% three packages have you covered.
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+% I use color, graphicx, and epstopdf to read in PDFs for my figures.
+\usepackage{color}
+\usepackage{graphicx}
+% \usepackage{epstopdf}
+% I don't remember why threeparttable and setspace is here. Inertia.
+\usepackage{threeparttable}
+\usepackage{setspace}
+%\doublespacing
+%%%
+%% Some packages to handle the figures and captions
+%%%
+\usepackage[labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+%%%
+%% Packages and settings for my bibliography.
+%%%
+% apa_with_doi is a style I created to keep DOI in the bibliography
+% but strip out URLs. There are a lot of other styles you can
+% find for natbib. Again, Google is your friend.
+% Author name and year references, i.e., Author (year):
+%\usepackage{natbib}
+%\bibliographystyle{apa_with_doi}
+% Numbered references:
+\usepackage[numbers,super]{natbib}
+\bibliographystyle{unsrtnat}
+
+
+%%%
+%% Packages and commands to build my table of contents (TOC).
+%%%
+%% The trick was getting the References included properly.
+%% Also, some of my table of contents entry have no page number
+%% because those pages are generated separately by my institute.
+%% Nothing to be done about that. You may or may not have the
+%% same problem, so you may or may not have to tweak this.
+\usepackage[nottoc,numbib]{tocbibind}
+\renewcommand{\tocbibname}{References\setcounter{page}{1}}
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+%%%
+%% These commands get the spacing around the title and section titles right.
+%%%
+% I tightened up the spacing. The LaTeX default is just too roomy.
+% This spacing is still clean and legible, just not so free with the
+% whitespace between sections.
+%
+% First the title.
+\usepackage{titling}
+\setlength{\droptitle}{-50pt}
+\pretitle{\begin{center}\Large\bfseries\vspace{0ex}}%
+\posttitle{\end{center}\Large\vspace{-2ex}}%
+\preauthor{\begin{center}\large}%
+\postauthor{\end{center}\large\vspace{-3ex}}%
+\predate{\begin{center}\large}%q
+\postdate{\end{center}\large\vspace{-6ex}}%
+% Now the section headings.
+\usepackage[noindentafter]{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titlespacing{\section}{0pt}{18pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\subsection}{0pt}{16pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\subsubsection}{0pt}{14pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
+
+%%%
+%% These commands get the lists to work the way that I want them to.
+%%%
+% i.e. I want less space wrapping around the list.
+\usepackage{enumitem}
+\setlist{nolistsep}
+\setlist[2]{noitemsep}
+\setlist[1]{noitemsep}
+
+%%%
+%% Commands for making the tables.
+%%%
+\usepackage{booktabs}
+\usepackage{multirow, hhline}
+\usepackage{array}
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
+
+%%%
+%%% Package to create Gantt schedules
+%%%
+\usepackage{pgfgantt}
+
+
+%%%
+%%% Formatting urls
+%%%
+\usepackage{url}
+\urlstyle{rm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+
+%% In order to have a caption to the side of a figure or table, use the
+%% 'sidecap' package.
+\usepackage[rightcaption]{sidecap}
+\sidecaptionvpos{figure}{t}
+
+\usepackage{wrapfig}
+
+
+%% For more control of the enumeration environment (lists with numbers)
+%% use the enumitem package.
+%\usepackage{enumitem}
+
+%% Also, to reset the numbering of enumerate, use the following:
+%\setenumerate[0]{label=\alph*.}
+
+% To deal with figures all alone on a page.
+\renewcommand{\floatpagefraction}{.8}%
+
+% To use symbols for the footnotes:
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+% set up the page numbers as 1-N, 2-N, ...
+\numberwithin{page}{section}
+\renewcommand{\thepage}{\thesection-\arabic{page}}
+
+% https://tex.stackexchange.com/questions/210871/latex-page-numbering-by-section
+%this does not seem to work, just hard code it :(
+% not sure if there is something else in this template that is breaking it
+% or things have changed in the last 6 years?
+%\usepackage{etoolbox}
+%\makeatletter
+%% Make sure that page starts from 1 with every \section
+%\patchcmd{\@sect}% <cmd>
+%  {\protected@edef}% <search>
+%  {\def\arg{#1}\def\arg@{section}%
+%   \ifx\arg\arg@\stepcounter{page}\fi%
+%   \protected@edef}% <replace>
+%  {}{}% <success><failure>
+%\makeatother
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}%
+  {\z@}{1.25ex \@plus 0ex \@minus .2ex}{-.5em}%
+  {\normalfont\normalsize\itshape\bfseries}%
+}
+\makeatother
+%% Finally, we get to the document.
+\begin{document}
+\title{Sustainment of Matplotlib and Cartopy}
+\author{Thomas A.\ Caswell}
+\date{}
+\maketitle
+
+% First, let's get that TOC in there. NASA likes it.
+\setcounter{tocdepth}{2}
+\tableofcontents
+\thispagestyle{empty}
+% Let's leave this TOC alone on this page and start a new one for
+% proposal body.
+\newpage
+
+\section{Scientific/Technical/Management (S/T/M)}
+% Let's reset the page counter.
+\setcounter{page}{1}
+% the subsection are a combination of the lines labeled "Content" in
+% Table 1 (on ROSES-20 SoS-51) and the text in E.7.3 (on E.7-2 -
+% E.7-3) describing what needs to be in the proposal.
+
+% not sure that this order is right, but I think we need to hit all of
+% these points.  Maybe want to rename the section headings or merge
+% some of them?
+\subsection{Matplotlib's role in scientific computing}
+
+% - TODO trim this whole section down
+
+% - TODO find a Earth science and/or helio flagship using Matplotlib
+
+Matplotlib~\cite{Hunter:2007} is a comprehensive Python library for
+creating static, animated, and interactive visualizations.  It
+provides the visualization for projects across all SMD divisions,
+including flagship missions like the Hubble Space Telescope (HST) and
+the James Webb Space Telescope~\cite{jwst_pipeline} (JWST), and
+instruments like the Curiosity Rover
+Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
+
+
+Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely
+defined community of projects and programmers with the common goal of
+advancing science through the use of the Python programming language.
+This development is largely volunteer work or work that is sponsored
+implicitly by specific science projects.  SPE, shown with a rough
+schematic in Figure \ref{fig:ecosystem}, has a core of general purpose
+domain-agnostic tools, like NumPy~\cite{Harris2020} and
+SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of
+specialized, but still domain agnostic tools, and is the most
+prevalent data visualization library for the SPE.  The outer rings are
+increasingly domain-specific tools, like
+AstroPy~\cite{astropy:2013,
+  astropy:2018} for astrophysics,
+SunPy~\cite{sunpy_community2020}  for heliophysics, and
+MetPy~\cite{metpy} and cartopy~\cite{Cartopy} for earth sciences; all of these use
+Matplotlib for specialized plotting.  This layered approach gives
+scientists and engineers convenient and powerful high-level tools
+while enabling direct access to the underlying libraries when needed.
+
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{scipy-ecosystem}
+  \caption{\small A schematic of the Scientific Python ecosytem.  At the
+    core we have the Python language itself with concentric rings of
+    domain agnostic to domain specific libraries.  Both AstroPy (top
+    left) and SunPy (top right), used in the astrophysics and
+    heliophysics divisions respectively, rely on Matplotlib (center, circled)
+    Credit: Jake van der Plas, ``The Unexpected Effectiveness of Python
+    in Science'', PyCon 2017}
+  \label{fig:ecosystem}
+\end{wrapfigure}
+
+
+Soon after its start by John D. Hunter in 2002, Matplotlib began growing as an
+open source plotting library with a BSD-compatible license. The first commits
+in the Matplotlib history date to early 2003.  Over the last 21 years
+Matplotlib has been actively developed and maintained by a vibrant, primarily
+volunteer, community.  Matplotlib has over 1,700 individual contributors to the
+code base, with many more individuals having contributed in ways not easily
+tracked, such as answering user questions on the mailing list and reporting
+issues.
+
+% - TODO mention the new work here?
+
+Matplotlib has a high-level API for quick plotting, such as in
+exploratory data analysis, plus a low-level API that gives full control for
+fine-tuned publication-quality plots, for animations, for writing both
+GUI-independent and GUI-specific tools for interactive data plotting, and
+for output to a variety of vector and raster
+formats including \texttt{svg}, \texttt{eps},
+\texttt{pdf}, and \texttt{png}.
+
+Matplotlib's generality and flexibility make it readily extendable to
+many data visualization domains.  A rich ecosystem of downstream packages use
+Matplotlib as their base, providing domain-specific streamlining of
+Matplotlib's API: including
+yt~\cite{2011ApJS..192....9T}, AstroPy~\cite{astropy:2013,
+  astropy:2018}, ArviZ~\cite{arviz_2019},
+seaborn~\cite{waskom2020seaborn}, xarray~\cite{hoyer2017xarray},
+cartopy~\cite{Cartopy}, corner.py~\cite{corner} and
+mpl-scatter-density~\cite{mpl-scatter-density}.
+
+Matplotlib is ubiquitous in scientific computing.  Conservative estimates based
+on downloads and on usage of the documentation website indicate that Matplotlib
+has over a million users.  We expect that a large fraction of NASA
+SMD-sponsored projects rely on this shared infrastructure to some degree, but
+this is hard to quantify.  It is not usual to cite tool chains in scientific
+literature, so citation counts are likely to vastly under-represent the
+scientific use of Matplotlib.  For example, a canonical reference for
+Matplotlib~\cite{Hunter:2007} has over 31,80 citations overall and over 12,800
+citations in ADS~\cite{ads_mpl}.
+
+
+
+% - TODO re-run this code to get up-to-date numbers
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{arXiv_usage}
+  \caption{\small Percent of all papers on arXiv that have a Matplotlib
+    watermark.}
+  \label{fig:other}
+\end{wrapfigure}
+
+An empirical measure of usage is to look at the files uploaded to arXiv.org.
+When saving figures Matplotlib inserts a string into the file metadata
+indicating that it was created by Matplotlib (and by what version).  By search
+the files uploaded to the arXiv for the string ``matplotlib'' we can thus put a
+rough lower bound on the number of papers that mention or have at least one
+figure generated by Matplotlib.  As of early 2023 over 17\% of all new papers
+uploaded have used Matplotlib and as of 2018Q2 over a third of papers published
+to astro-ph on the Arxiv contained a figure generated with
+Matplotlib~\cite{arxvi_stats}.  Both show a clear upward trend.
+
+% - TODO write up cartopy description
+
+\subsection{Objectives}
+
+% - keep the lights on
+% - cartopy refactor
+% - partner with NASA mission(s)
+
+Matplotlib is a primarily community-driven project, but we have grown to the
+point where we need supported developers with the time to organize, plan, and
+make decisions.  Supported developers will continue to allow us to take on more
+complex projects than can be implemented by part-time volunteer effort alone,
+while executing critical day-to-day maintenance tasks required to keep the
+project healthy.  \textbf{We propose to split the effort on this grant IN SOME
+  WAY between maintenance and new development}.
+
+
+\subsubsection{Refactor cartopy}
+
+\subsubsection{General maintenance}
+
+We need to sustain Matplotlib as a vibrant project and continue to support the
+hundred of thousands of users and hundreds of downstream packages.  To maintain
+Matplotlib's health we must:
+\begin{itemize}[noitemsep]
+\item fix critical bugs and regressions promptly as they are reported;
+\item make improvements while maintaining backward compatibility and
+  documenting changes;
+\item categorize Issues and PRs in terms of topic, difficulty, and
+  urgency;
+\item entrain new contributors to sustain and diversify the community
+  developer team;
+\item maintain the continuous-integration infrastructure;
+\item manage the release process;
+\item and manage community discussions about proposed enhancements, features,
+  and API changes.
+\end{itemize}
+These are tasks that are never ``done''; users find new ways to use
+the library, they expose previously un-detected bugs, they request or propose new
+features, and the world continues to changes around us.   \textbf{Dedicated
+full-time developers help ensure that things happen in a consistent and timely
+manner, and provide the crucial roadmaps that will steer the future of the library}.
+
+
+%plot?
+
+Historically, pull requests (PRs) and issues have been submitted
+faster than they can be reviewed; Matplotlib has accumulated about 300
+open PRs and 1300 open issues due to this imbalance. There are
+critical bug reports and insightful feature requests among the issue
+backlog, while among the PR backlog there are useful contributions or
+bug fixes that would improve the libraries for direct users and
+downstream packages.  The large backlog is discouraging for new and
+occasional contributors and distracting for core developers.
+
+% - TODO update to include rest of CZI grants + current ROSES grant
+
+In 2020, with a grant from CZI supporting a Research Software Engineer
+(RSE) working on Matplotlib for 10 month, we resolved 2,056 PRs and
+999 issues.  However, even at this rate we only reduced the PR backlog
+by 70 open PRs and held the issue backlog even.  As part of reducing
+the backlog, we were able to fix several long-standing bugs.  We have
+demonstrated that supporting maintenance work has a positive effect on
+the health of the project and \textbf{the additional resources
+  requested here will further reduce, but not eliminate, the
+  maintenance backlog}.
+
+
+\subsection{Impact and Relevance to Science Mission Directorate}
+
+
+% - TODO re-check these numbers
+
+As mentioned above, it is hard to estimate the prevalence of open
+source software due to it being freely distributed and not
+systematically cited.  Matplotlib is in the top 100 most-downloaded
+packages from PyPI~\cite{pypi_stats} and is packaged by every major
+Linux and scientific Python distribution.  Another metric to measure
+impact is static analysis of publicly available code.  According to
+github over 299k repositories and over 12k packages hosted on GitHub
+depend on Matplotlib~\cite{gh_deps:2021}. A recent study of the
+almost 10M Jupyter notebooks on github found that over 3M of them have
+a direct Matplotlib import~\cite{datalore:2020}.
+
+% - update with more recent examples, sort by division
+
+Exoplanets \cite{2020AJ....160..116G}
+
+These measures show broad impact but cover many uses outside of the
+SMD community.  If we restrict the static analysis to
+\url{https://github.com/nasa}, NASA's official organization on GitHub,
+we see that 53 of the 330 hosted repositories make reference to
+Matplotlib.  Soliciting on social media for examples of Matplotlib in SMD research
+yielded a (non-exhaustive) list including:
+\begin{itemize}[noitemsep]
+\item
+  to study
+  thunderstorms~\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
+  seasonal ocean winds~\cite{https://doi.org/10.1002/2017JD027516} and
+  tropical storms~\cite{Lang_2020};
+\item in the first science paper from the Parker Solar
+  probe~\cite{Bale2019};
+\item in the Martian science program in both
+  orbiter~\cite{https://doi.org/10.1029/2019JE006188} and
+  rover~\cite{https://doi.org/10.1002/2016EA000219} contexts;
+\item as part of ground operations from the Mars Phoenix Lander;
+\item with data from Kepler and K2 missions to study Trojan
+  asteroids~\cite{Nixon_2019} and
+  Titan~\cite{Ryan_2017,2019PASP..131h4505P};
+\item on the New Horizons Kuiper belt extended
+  mission~\cite{Porter_2018};
+\item for visualization of scheduling, safety and constraint checks,
+  and telemetry by the Swift science operations
+  team~\cite{swift_ops,2020ApJ...900...35T};
+\item as part of the HST and JWST~\cite{jwst_pipeline} data processing
+  pipelines;
+\item in Monte, JPL's mission design
+  and navigation software system to support spaceflight operations;
+\item in fundamental research on graphene~\cite{PhysRevLett.120.236802};
+\item and for work on nuclear powered rockets~\cite{leu_cerment}.
+\end{itemize}
+This list shows the breadth of Matplotlib usage across the SMD
+divisions.  Matplotlib falls under the umbrella of projects which the
+National Academies of Science recommended for funding in the report
+``Open Source Software Policy Options for NASA Earth and Space
+Sciences (2018)''~\cite{NAP25217} (Option B4).
+\textbf{Small investments in Matplotlib will have returns across the
+  entire SMD portfolio}.
+
+Maintaining Matplotlib's health and engineering for its future will
+have wide-ranging impacts for the scientific community, and for NASA in
+particular.  As pointed out above, Matplotlib is the plotting layer
+for much of the Python ecosystem.  It has been used in thousands of
+academic papers, plotting for news and sporting media, technical
+dash-boarding, and most modern data science applications.
+% - TODO re-run this with updated numbers, re-run
+Matplotlib has also been used in a number
+of high-profile astronomy projects including the Nobel prize-winning
+observation of black hole merger by the Laser Interferometer
+Gravitational-Wave Observatory (LIGO), the 2020 Nobel prize-winning
+discovery of a super massive compact object at the center of our
+galaxy and the recent observation of Sagittarius A* by the Event
+Horizon Telescope (EHT).
+
+This proposal is another step towards Matplotlib's sustainability, and
+ability to move forward. Given the usage and the scale of the library
+it is not sustainable to continue to maintain Matplotlib as a
+volunteer-only effort.  A core team of full-time developers and
+managers will better co-ordinate and nurture volunteer efforts, with
+the goal of growing and sustaining a diverse community of volunteer
+expert contributors.
+
+Finally, with explicit support for their time, Matplotlib's core developers
+will better be able to plan the project's future.
+This requires vision, co-ordination with the rest of the scientific
+Python community, including downstream libraries, and getting out in
+the community to get feedback.  It is very hard to provide that
+leadership and vision while working a ``day job''.
+
+
+\subsection{Risk Management}
+
+There is minimal risk in the maintenance work.  There is a large volume
+of individually small tasks that need to be addressed: the issue and
+PR backlogs.  Any dedicated effort devoted to clearing the backlog
+will have a positive impact on the project.  We have demonstrated that
+supporting developers for maintenance work is an effective and
+efficient use of resources.
+
+% - need to be very careful about not breaking back-compatibility
+There is also the risk than we are underestimating the amount of work
+that will be required.  There is always a possibility that during
+refactoring the scope of work will rapidly snowball due to unexpected
+internal dependencies or edge cases.
+However, even in the event that we cannot complete the implementation of a new data
+pipeline model within the performance period, throughout the process we will be working towards
+improving library internals and improving our
+documentation.
+
+We anticipate that all of the work can be done incrementally and will
+be merged to the default branch of Matplotlib throughout the
+performance period.  Frequently merging incremental work reduces the
+risk, and is consistent with our standard development process.  Work
+done under this proposal will be reviewed in our normal fashion, and many
+small PRs are easier to review and merge than a single large PR.
+Large PRs also quickly drift out of sync with the master branch, and
+develop insurmountable rebase requirements.  The improvements, both to
+the code and documentation, will be released to users as part of our
+standard semiannual release cadence.
+
+There is personnel risk in that we have not yet identified the RSEs who will be
+a key individual for carrying out this work.  We are optimistic that we will be
+able to recruit a qualified individuals in reasonable time.  We have now hired
+two individuals as fulltime RSEs through NumFOCUS within reasonable time
+frames.
+
+\subsection{Contributions of Principal Investigator and Key Personnel}
+
+Dr.\ Thomas A.\ Caswell has the sole individual responsibility for directing
+and supervising the execution of this work.  He has extensive experience
+developing and maintaining Python libraries for scientists.  He has been
+involved with Matplotlib from 2012 and had a leadership role in the project
+from 2014.  He is also a core developer of h5py and has contributed to many of
+the other core projects of the SPE.  He is currently a group leader of the Data
+Acquisition and Detectors group in the Data Science and Systems Integration
+program at the National Synchrotron Light Source II (NSLS-II) at Brookhaven
+National Labratory and the technical lead of a new beamline at NSLS-II.  He is
+also the lead architect and developer of the Bluesky Suite, an ecosystem of
+co-developed libraries and applications for data acquisition and management,
+which is being adopted for beamline operations at synchrotrons in the US and
+across the world.
+
+% - TODO WRITE
+Dr.\ Gregory Lucas ...
+
+% - TODO WRITE
+Dr.\ Kyle Sunden ...
+
+
+\subsection{Work Plan}
+
+
+\subsubsection{General Maintenance}
+
+Throughout the project both Dr.\ Caswell and the RSE will work on
+Matplotlib general maintenance and community engagement.  This includes,
+but is not limited to, fixing bugs, reviewing Pull Requests, answering
+user questions, welcoming new contributors to the project, and
+planning for the future.  Dr.\ Caswell will particularly focus on
+the project roadmap and community governance.
+
+% 4 part plan
+%  1. document how units work now, document how it should work, id problems
+%  2. work to adapt the theoretical and prototype datasource work to API stable
+%  3. plan!
+%  4. re-write every Artist sub-class
+
+\subsubsection{Data Model Refactor}
+
+\subsubsection{Work Process}
+
+All work under this proposal will undergo the same review process
+as any other contribution.  We
+encourage many small PRs to reduce risk.  At least one maintainer not
+supported on this proposal
+will need to sign off on any changes before they are merged. This
+disseminates understanding of the proposed work and ensures
+community buy-in.  Finally, by merging
+changes to the default branch continuously throughout the period of
+work the incremental improvements will be released as part of our
+semiannual release cadence.
+
+The RSE will present the status of the work at two conferences yearly,
+expected to be SciPy in July and one of PyData regional conferences in
+the winter.
+
+
+\subsubsection{Grant Management}
+
+Dr.\ Caswell of BNL and the Matplotlib Project Lead is the PI of the proposed
+development.  He is responsible for the quality and direction of the proposed
+work and the proper use of all awarded funds.  He is also responsible for all
+management, and budget issues and is the final authority for this task.
+
+
+\subsection{Matplotlib Project Management}
+\subsubsection{Governance and Finances}
+
+Matplotlib is a NumFOCUS Fiscally Sponsored Project.
+
+Matplotlib is governed by a steering council, a Project Lead (PL), and
+several Deputy Project Leads (DPL)~\cite{gov}.  We are a community
+project and try to make all decisions, both strategic and day-to-day,
+by consensus.  However, if consensus can not be reached, the
+responsibility falls back to the DPLs and ultimately to the PL.  The
+current PL is Dr.\ Caswell.
+
+As Matplotlib has matured we have moved from a single person,
+originally Dr.\ John Hunter, to a ``BDFL'' governance model.  The
+leadership of the project passed to Dr.\ Micheal Droettboom in 2012.
+In 2014 Dr.\ Caswell and Dr.\ Droettboom were co-leads and in 2016
+Dr.\ Caswell took over as the sole project lead.  In 2020 we formally
+adopted the current governance model.
+
+\subsubsection{License}
+
+Matplotlib is licensed under the Matplotlib License~\cite{mpl_lic}
+which is a derivative of the Python Software Foundation
+license~\cite{psf_lic} and is a permissive license compatible with the
+BSD license~\cite{jdh_bsd_opinions}.
+
+Cartopy is licenced under the BSD-3 clause.
+
+
+\subsubsection{Sustainability Metrics}
+
+There are many possible ways to measure the sustainability of an
+open source project.  We propose to focus on growing our developer
+community, reducing our Issue and PR backlogs, and maintaining a
+regular release cadence.
+
+Matplotlib is a community driven project with a vast majority of the
+work done by volunteers.  The thing we are shortest on is the time of
+maintainers who are able and willing to review Pull Requests.
+Increasing the number of regular contributors and maintainers improves
+the sustainability of the project in several ways; many hands make
+light work and it makes the project resilient to individuals leaving
+the project.
+
+Quantitatively evaluating maintenance work can be tricky --- some
+Issues or PRs take minutes to review while others can take days to
+weeks of effort --- but we believe that there is value at looking at
+the total number of open Issues and PRs and the rate at which they are
+addressed.  We aim to close Issues and PRs faster than they are opened
+until a reasonable equilibrium is reached.  We will aim to hit the
+following metrics:
+\begin{itemize}[noitemsep]
+\item Initial response to all issues / new PRs within a week
+\item Resolve majority of new issues / PRs within 1 month
+\item Reduce backlog of issues by 25 / quarter
+\item Reduce backlog of PRs by 25 / quarter
+\end{itemize}
+
+Finally, for the user community to benefit from our work we need to do
+regular releases.  We will continue to maintain a bi-yearly release
+cycle for feature releases with 1-3 bug-fix releases as needed.
+Holding to a time-based release schedule is advantageous because it
+provides predictability to our users and reduce the lag between when a
+new feature is merged to the default branch and when it is generally
+available.
+
+
+\subsubsection{Collaboration with Related Projects}
+
+
+Much of the communication is through the standard communication
+channels, such as project issue trackers, mailing lists or discussions
+forums, and submitting PRs.  The strongest relationships, both
+historical and current, are with projects where we have shared
+developers.  For example Ryan May and Elliot sales de Andre are both
+core contributors to Matplotlib and Cartopy and David Stansby is a
+maintainer on both Matplotlib and \texttt{SunPy}.  Micheal Droettboom,
+the previous Matplotlib Project lead, was a core developer on Astropy.
+Additionally, through NumFOCUS and domain-specific conferences there
+are regular in-person meetings.
+
+We will work with down-stream projects to help them improve their test
+coverage of plotting code and to add jobs to their continuous
+integration that test development snap-shots of Matplotlib.  This is
+particularly useful during the planned refactor as we will be making
+extensive changes to Matplotlib that we believe are backwards
+compatible, but down-stream projects and users exercise the library in
+ways the test suite does not.  While we hope to introduce any
+regressions, catching them before release is the next best thing.
+
+% wording all NF projects are putting in, please avoid wordsmithing it.
+As a NumFOCUS project, we recognize the importance of every project
+that is part of our open source scientific computing community. Though
+we would like for our work to be funded we are committed to supporting
+and collaborating with other NumFOCUS projects that receive funding
+regardless of our own outcome. We believe that this attitude is
+crucial for the success of our community and the sustainability of
+open source projects. It is our hope that this sentiment will be taken
+into consideration when evaluating our proposal.
+
+
+\subsubsection{Inclusive Community Development}
+
+% - TODO this subsubsection may move to the inclusion plan which is
+% required for foundation level call
+
+Matplotlib strives to be an inclusive and open project, anyone who is
+willing and able to contribute to the project should feel welcome to
+do so.  We have adopted the Contributor Covenant V2.0 as
+our Code of Conduct~\cite{CoC}.
+
+Matplotlib has an open development model, all work is done in the open
+and welcome contributions, in the from of bug reports, feature
+requests, or pull requests from anyone.  We maintain an extensive
+contribution guide
+(\url{https://matplotlib.org/devdocs/devel/index.html}) as part of our
+documentation.  To improve the development and retention of new
+contributors we have recently started two efforts: an ``incubator''
+channel on gitter and a Triage Team.
+
+%% I really want to put this in, but do not see a good place for it :/
+%
+% It is important for everyone working on the project to feel safe to
+% make mistakes.
+
+The hardest part of getting started to contributing to open source
+projects is can be simply getting started.  Open source communities,
+particularly big ones, can be intimidating for first time
+contributors.  The incubator is a semi-closed chat room where new
+contributors can get support on any aspect of contributing to
+Matplotlib.  This include the technical aspects of the code they are
+working on, help with git/github, our review process, or the social
+expectations and norms of the community.  The goal is that by
+providing this support to first time contributors we will retain more
+of them as regular contributors and then maintainers.
+
+The issue tracker is important to communication in the project because
+it serves as the centralized location for making feature requests,
+reporting bugs, identifying major projects to work on, and discussing
+priorities.  For this reason, it is important to curate the issue
+list, adding labels to issues and closing issues that are resolved or
+unresolvable. Triaging issues does not require any particular
+expertise in the internals of Matplotlib but is extremely valuable to
+the project.  To this end we have created a ``Triage Team'' in the
+organization who have power to tag, milestone, and close issues.  In
+addition to the direct benefit of improving the issue triage and
+freeing the core-developers to spend more time reviewing PRs, this
+role will bring more people into the developer community and may
+provide a path way to becoming regular contributors and maintainers.
+
+Ongoing work at NumFOCUS to develop metrics will help us evaluate the
+efficacy of these efforts at diversifying our contributor base.
+
+\subsubsection{Contribution Workflow}
+%check that this is not a required title
+%\subsection{Technical approach and methodology}
+
+\paragraph{Matplotlib}
+Matplotlib is an established community driven project in the
+``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.
+We have a core group regular maintainers who take responsibility for
+reviewing and merging proposed changes to the library and  welcome Pull
+Requests from anyone who is interesting in contributing.  We strive
+for consensus and rely on the collective judgment of our maintainers
+to maintain the quality and functionality of the library.
+
+Matplotlib uses a variation on the ``git flow'' process~\cite{ghflow}
+to manage proposing and reviewing contributions to the library and
+documentation on GitHub.  Changes are proposed by opening a ``Pull
+Request'' on GitHub; the process is the same for core maintainers,
+regular contributors, and a first time contributors.  The proposed
+changes are reviewed by maintainers who either request changes, which
+starts a cycle of iteration with the contributor, or approve.  In
+addition to human review we have an extensive test suite that is
+automatically run via cloud services and the results are reported to
+the PR.  Once consensus is reached and the test pass the PR is merged
+and the changes will be released as part of the next release.
+
+Matplotlib maintains an extensive suite of automated tests that
+exercises a large fraction of our code base.  The full test suite, and
+a build of the documentation, is run against several versions of
+Python on OSX, Windows, and Linux hosts on every PR and merge to the
+default branch via continuous integration.  For every new feature or
+bug fix that gets merged we also add tests that codify the expected
+behavior.  This gives us the ability to make changes to the library
+with confidence that we will not break existing behavior.
+
+The threshold for merging a PR depends on the reviewer judgment of the
+risk of the changes.  PRs that only change documentation, which cannot
+introduce regressions or introduce new features, may be merged by the
+first reviewer whereas code changes need to be reviewed and approved
+by at least two maintainers (not including the author of the PR).
+However in either case a maintainer may wish to leave a positive
+review but not merge the PR to request additional feed back from other
+maintainers.  If a maintainer objects to a PR, the PR will not be
+merged until their concerns have been addressed.  If consensus cannot
+be reached, the final decision falls back to a Deputy Project Lead or
+the Project Lead.
+
+Matplotlib is cautious about making backwards-incompatible change that
+intentionally break users existing code.  While in an ideal world,
+future versions of the library would be 100\% backwards compatible
+with previous versions, sometimes we do need to make incompatible
+changes.  As part of the review process we check that any API changes
+are well documented and justified.  When technically possible we
+provide user-visible warnings the version before we actually implement
+a breaking change.  This provides a window for users to either adapt
+to the change or to communicate to us that they cannot adapt so we
+can reconsider the change.  Given this high barrier to changing or
+removing behavior we are careful to make sure that any new API we add
+to the library is well thought out and complete because once we have
+released a version of the library with that code it is hard to take it
+back.  These considerations together are important enough that we have
+a Deputy Project Lead responsible for API consistency.
+
+This process works well for incremental contributions and bug fixes,
+new features or bigger changes are typically discussed before
+significant work is done.  In many cases if the feature does not need
+to be in the core library we encourage contributors to create a new
+stand-alone project.  This has several advantages including the giving
+the author more control, allows them to iterate faster than our 6
+month release schedule, and gives them greater flexibility to change
+their APIs.
+
+\paragraph{Cartopy}
+
+% TODO write
+
+\subsubsection{Information Dissemination}
+
+\paragraph{Matplotlib}
+
+As a project Matplotlib maintains a range of communication channels
+aimed at several, overlapping, audiences.  This includes a
+the source, issue tracker and PRs on GitHub,
+the published documentation (including historical and development versions),
+weekly developer call,
+mailing lists,
+a discourse forum,
+an active chat room on gitter,
+in-person presentations at conferences and pydata events,
+a blog, and several social media accounts.
+
+
+The center of gravity of Matplotlib development takes place on GitHub
+(\url{https://github.com/matplotlib/matplotlib}) where the canonical
+repository for the source and documentation is hosted.  Around this
+repository we use Issues and PRs to track bug reports, feature
+requests, and to discuss proposed changes.  We also host our
+governance documents on GitHub
+(\url{https://github.com/matplotlib/governance}) and revise them via
+Pull Request.
+
+We publish extensive prose, example, and API documentation
+(\url{https://matplotilb.org}) that is refreshed with each release.
+In addition to the top-level docs, which always refer to the most
+recent release, we also host historical
+(e.g. \url{https://matplotlib.org/3.1.3} for the v3.1.3 documentation) and
+development versions of the documentation
+(\url{https://dev.matplotlib.org}).  In 2020 we had between 700k-1M
+unique visitors a month to the documentation.
+
+
+The weekly developer calls are typically attended by six to eight
+people and are used for high-bandwidth discussions about both the
+overall direction of the project and technical issues.  The agenda and
+minutes are publicly available
+(\url{https://hackmd.io/team/matplotlib}) and the calls are open to
+all.
+
+Matplotlib has an active gitter
+(\url{https://gitter.im/matplotlib/matplotlib}) chat room.  Gitter is
+a real-time chat platform that we use for general coordination and
+resolving minor technical discussions.  While the chat room's history
+is technically persistent, we treat it as transient.  For more
+in-depth discussions or anything we want a record of, we move the
+conversation to github, the mailing list, or discourse.
+
+For user support and general discussion we maintain two mailing lists,
+matplotlib-users
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-users}) for
+user support and matplotlib-devel
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-devel}) for
+developer discussion and announcements, and a discourse
+(\url{https://discourse.matplotlib.org}) instance.  While users have
+to subscribe or register respectively to post, these forums are open
+to all.  We also maintain a read-only mailing list for announcements
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-announce}).
+
+Matplotlib developers have frequently attended meetings including
+SciPy, PyData, and science conferences.
+
+\paragraph{cartopy}
+
+% TODO wriet
+
+\newpage
+% Here's how I get references.
+% needed for AAS citation
+
+\def\ref@jnl#1{{\rm#1}}
+
+\def\aj{\ref@jnl{AJ}}                   % Astronomical Journal
+\def\actaa{\ref@jnl{Acta Astron.}}      % Acta Astronomica
+\def\araa{\ref@jnl{ARA\&A}}             % Annual Review of Astron and Astrophys
+\def\apj{\ref@jnl{ApJ}}                 % Astrophysical Journal
+\def\apjl{\ref@jnl{ApJ}}                % Astrophysical Journal, Letters
+\def\apjs{\ref@jnl{ApJS}}               % Astrophysical Journal, Supplement
+\def\ao{\ref@jnl{Appl.~Opt.}}           % Applied Optics
+\def\apss{\ref@jnl{Ap\&SS}}             % Astrophysics and Space Science
+\def\aap{\ref@jnl{A\&A}}                % Astronomy and Astrophysics
+\def\aapr{\ref@jnl{A\&A~Rev.}}          % Astronomy and Astrophysics Reviews
+\def\aaps{\ref@jnl{A\&AS}}              % Astronomy and Astrophysics, Supplement
+\def\azh{\ref@jnl{AZh}}                 % Astronomicheskii Zhurnal
+\def\baas{\ref@jnl{BAAS}}               % Bulletin of the AAS
+\def\bac{\ref@jnl{Bull. astr. Inst. Czechosl.}}
+                % Bulletin of the Astronomical Institutes of Czechoslovakia
+\def\caa{\ref@jnl{Chinese Astron. Astrophys.}}
+                % Chinese Astronomy and Astrophysics
+\def\cjaa{\ref@jnl{Chinese J. Astron. Astrophys.}}
+                % Chinese Journal of Astronomy and Astrophysics
+\def\icarus{\ref@jnl{Icarus}}           % Icarus
+\def\jcap{\ref@jnl{J. Cosmology Astropart. Phys.}}
+                % Journal of Cosmology and Astroparticle Physics
+\def\jrasc{\ref@jnl{JRASC}}             % Journal of the RAS of Canada
+\def\memras{\ref@jnl{MmRAS}}            % Memoirs of the RAS
+\def\mnras{\ref@jnl{MNRAS}}             % Monthly Notices of the RAS
+\def\na{\ref@jnl{New A}}                % New Astronomy
+\def\nar{\ref@jnl{New A Rev.}}          % New Astronomy Review
+\def\pra{\ref@jnl{Phys.~Rev.~A}}        % Physical Review A: General Physics
+\def\prb{\ref@jnl{Phys.~Rev.~B}}        % Physical Review B: Solid State
+\def\prc{\ref@jnl{Phys.~Rev.~C}}        % Physical Review C
+\def\prd{\ref@jnl{Phys.~Rev.~D}}        % Physical Review D
+\def\pre{\ref@jnl{Phys.~Rev.~E}}        % Physical Review E
+\def\prl{\ref@jnl{Phys.~Rev.~Lett.}}    % Physical Review Letters
+\def\pasa{\ref@jnl{PASA}}               % Publications of the Astron. Soc. of Australia
+\def\pasp{\ref@jnl{PASP}}               % Publications of the ASP
+\def\pasj{\ref@jnl{PASJ}}               % Publications of the ASJ
+\def\rmxaa{\ref@jnl{Rev. Mexicana Astron. Astrofis.}}%
+                % Revista Mexicana de Astronomia y Astrofisica
+\def\qjras{\ref@jnl{QJRAS}}             % Quarterly Journal of the RAS
+\def\skytel{\ref@jnl{S\&T}}             % Sky and Telescope
+\def\solphys{\ref@jnl{Sol.~Phys.}}      % Solar Physics
+\def\sovast{\ref@jnl{Soviet~Ast.}}      % Soviet Astronomy
+\def\ssr{\ref@jnl{Space~Sci.~Rev.}}     % Space Science Reviews
+\def\zap{\ref@jnl{ZAp}}                 % Zeitschrift fuer Astrophysik
+\def\nat{\ref@jnl{Nature}}              % Nature
+\def\iaucirc{\ref@jnl{IAU~Circ.}}       % IAU Cirulars
+\def\aplett{\ref@jnl{Astrophys.~Lett.}} % Astrophysics Letters
+\def\apspr{\ref@jnl{Astrophys.~Space~Phys.~Res.}}
+                % Astrophysics Space Physics Research
+\def\bain{\ref@jnl{Bull.~Astron.~Inst.~Netherlands}}
+                % Bulletin Astronomical Institute of the Netherlands
+\def\fcp{\ref@jnl{Fund.~Cosmic~Phys.}}  % Fundamental Cosmic Physics
+\def\gca{\ref@jnl{Geochim.~Cosmochim.~Acta}}   % Geochimica Cosmochimica Acta
+\def\grl{\ref@jnl{Geophys.~Res.~Lett.}} % Geophysics Research Letters
+\def\jcp{\ref@jnl{J.~Chem.~Phys.}}      % Journal of Chemical Physics
+\def\jgr{\ref@jnl{J.~Geophys.~Res.}}    % Journal of Geophysics Research
+\def\jqsrt{\ref@jnl{J.~Quant.~Spec.~Radiat.~Transf.}}
+                % Journal of Quantitiative Spectroscopy and Radiative Transfer
+\def\memsai{\ref@jnl{Mem.~Soc.~Astron.~Italiana}}
+                % Mem. Societa Astronomica Italiana
+\def\nphysa{\ref@jnl{Nucl.~Phys.~A}}   % Nuclear Physics A
+\def\physrep{\ref@jnl{Phys.~Rep.}}   % Physics Reports
+\def\physscr{\ref@jnl{Phys.~Scr}}   % Physica Scripta
+\def\planss{\ref@jnl{Planet.~Space~Sci.}}   % Planetary Space Science
+\def\procspie{\ref@jnl{Proc.~SPIE}}   % Proceedings of the SPIE
+
+\let\astap=\aap
+\let\apjlett=\apjl
+\let\apjsupp=\apjs
+\let\applopt=\ao
+\setcounter{page}{1}
+\bibliography{highlight,mpl_cartopy}
+
+\newpage
+
+\section{Data Management Plan}
+\setcounter{page}{1}
+
+Matplotlib is a software library and does not produce any scientific
+data as defined in E.1.2 that needs to be preserved.  Matplotlib is a
+tool used to visualize data that is acquired through other means.
+
+Matplotlib is a community library developed in the open on GitHub.
+It is released the Matplotlib license
+(\url{https://matplotlib.org/users/license.html}) is a permissive
+license that is a derivative of the PSF license
+(\url{https://docs.python.org/3/license.html}) and compatible with the
+BSD-3 license.  All work done on Matplotlib as part of this grant will
+be done through the current workflow, will be publicly available, and
+released under the same license.  Matplotlib uses git for version
+control, thus every developer has the full history on their computer
+which provides significant redundancy.  Tagged releases of the
+software are published to PyPI (in both source and binary forms).  In
+addition, Anaconada, macports, homebrew, and all major Linux
+distributions independently build, package, and distribute Matplotlib.
+Extensive User facing documentation, including install instructions
+and usage guides, is built and hosted at \url{https://matplotlib.org}.
+
+Any new libraries created as part of the ROSES award will be developed
+in the open on GitHub and will released under a permissive license.
+
+Any incidental work on other software packages, either upstream or
+downstream of Matplotlib, will follow the license and development of
+process of those projects.
+
+
+\newpage
+\section{Biographical Sketch}
+\setcounter{page}{1}
+\begin{center}
+  \textbf{Thomas A.\ Caswell}\\
+  Computational Scientist\\
+  Brookhaven National Laboratory\\
+  Building 741 P.O. Box 5000\\
+  Upton, NY 11973-5000\\
+  (631) 344-3146\\
+\end{center}
+
+\subsubsection*{Relevant Experience}
+13+ years working in data intensive experimental science.  8 years of
+experience contributing to Scientific Python, 6 years in leadership
+roles in the open source community.  Current Project lead on
+Matplotlib, past release manager for h5py, has contributed to NumPy,
+Pandas, SciPy, and IPython.  Co-developed \texttt{trackpy}, now widely
+used in soft-matter physics community.  Lead architect and developer
+of Bluesky Suite for data acquisition now being adopted at x-ray
+facilities around the world.
+
+\subsubsection*{Education}
+Ph.D., Physics, University of Chicago \hfill 2014\\
+M.S., Physics, University of Chicago \hfill 2008\\
+B.A., Physics, Mathematics, Cornell University \hfill 2007
+
+\subsubsection*{Professional Experience}
+Brookhaven National Laboratory, Computational Scientist \hfill 2020 - Present\\
+Columbia University, Visiting Associate Research Scientist \hfill 2019 - 2023 \\
+Brookhaven National Laboratory, Associate Computational Scientist \hfill 2017 - 2020\\
+Matplotlib Project Lead \hfill 2016 - Present\\
+Brookhaven National Laboratory, Assistant Computational Scientist \hfill 2015 - 2017\\
+Matplotlib Project Co-Lead \hfill 2014 - 2016\\
+Brookhaven National Laboratory, Research Associate \hfill 2014 - 2015\\
+
+\subsubsection*{Honors/Awards (selected)}
+Brookhaven National Laboratory Spotlight  Award \hfill 2018\\
+Brookhaven National Laboratory Lab Award \hfill 2017\\
+Google Open Source Peer Bonus \hfill 2017
+
+\subsubsection*{Refereed Publications (selected)}
+
+\begin{enumerate}[noitemsep]
+    \item Maksim S Rakitin, Abigail Giles, Kaleb Swartz, Joshua Lynch,
+      Paul Moeller, Robert Nagler, Daniel B Allan, \textbf{Thomas A Caswell},
+      Lutz Wiegart, Oleg Chubar, Yonghua Du. \textbf{Introduction of
+        the Sirepo-Bluesky interface and its application to the
+        optimization problems} Proc. SPIE 11493, Advances in
+      Computational Methods for X-Ray Optics V, 1149311 (21 August
+      2020)
+
+  \item Lucas J Koerner, \textbf{Thomas A Caswell}, Daniel B Allan,
+    Stuart I Campbell. \textbf{A Python Instrument Control and Data
+      Acquisition Suite for Reproducible Research}, IEEE Transactions
+    on Instrumentation and Measurement (2019)
+
+  \item Anya Tafliovich, Francisco Estrada, \textbf{Thomas A Caswell}.
+    \textbf{Teaching Software Engineering with Free Open Source
+      Software Development: An Experience Report}, Proceedings of the
+    52nd Hawaii International Conference on System Sciences (2019)
+
+  \item Ronald J Pandolfi, Daniel B Allan, Elke Arenholz, Luis
+    Barroso-Luque, Stuart I Campbell, \textbf{Thomas A Caswell},
+    Austin Blair, Francesco De Carlo, Sean Fackler, Amanda P Fournier,
+    Guillaume Freychet, Masafumi Fukuto, Dogˇa Gürsoy, Zhang Jiang,
+    Harinarayan Krishnan, Dinesh Kumar, R Joseph Kline, Ruipeng Li,
+    Christopher Liman, Stefano Marchesini, Apurva Mehta, Alpha T
+    N'Diaye, Dilworth Y Parkinson, Holden Parks, Lenson A Pellouchoud,
+    Talita Perciano, Fang Ren, Shreya Sahoo, Joseph Strzalka, Daniel
+    Sunday, Christopher J Tassone, Daniela Ushizima, Singanallur
+    Venkatakrishnan, Kevin G Yager, Peter Zwart, James A Sethian,
+    Alexander Hexemer. \textbf{Xi-cam: a versatile interface for data
+      visualization and analysis}, Journal of Synchrotron Radiation
+    (2018). 25, 1261-1270
+
+  \item Abdul K Rumaiz, Anthony J Kuczewski, Joseph Mead, Emerson
+    Vernon, Donald Pinelli, Eric Dooryhee, Sanjit Ghose,
+    \textbf{Thomas A Caswell}, D Peter Siddons, Antonino Miceli,
+    Jonathan Baldwin, Jonathan Almer, John Okasinski, Orlando
+    Quaranta, Russell Woods, Thomas Krings, Stuart Stock.
+    \textbf{Multi-element germanium detectors for synchrotron
+      applications}, Journal of Instrumentation (2018) 13 (04), C04030
+
+  \item Simon JL Billinge, Christopher J Wright, Chia-Hao Liu, Michael
+    Waddell, Pavol Juhas, Eric Dooryhee, Sanjit Ghose, Milinda
+    Abeykoon, Arman Arkilic, Daniel Allan, \textbf{Thomas A Caswell}.
+    \textbf{Robust Nanostructure from High Throughput Powder
+      Diffraction Data} (2017) Microscopy and Microanalysis 23 (S1),
+    172-173
+
+  \item \textbf{Thomas A Caswell}. \textbf{Dynamics of the vapor layer below a
+      Leidenfrost drop}, Phys Rev E 90, 013014 (2014)
+
+  \item \textbf{Thomas A Caswell}, Zexin Zhang, Margaret L Gardel, and
+    Sidney R Nagel.  \textbf{Observation and Characterization of the
+      Vestige of the Jamming Transition in a Thermal 3D System}, Phys
+    Rev E 87, 012303 (2013)
+
+  \item \textbf{Thomas A Caswell}, Peter Ercius, Mark W Tate, Alper
+    Ercan, Sol M Gruner, David A Muller. \textbf{A High Speed Area
+      Detector for Novel Imaging Techniques in a Scanning Transmission
+      Electron Microscope} Ultramicroscopy 109, 304-311 (2009)
+
+  \item Xin Liu, Kyoung-Su Im, Yujie Wang, Jin Wang, David LS Hung,
+    James R Winkelman, Mark W Tate, Alper Ercan, Lucas J Koerner,
+    \textbf{Thomas A. Caswell}, Darol Chamberlain, Daniel R Schuette,
+    Hugh Philipp, Detlef M Smilgies, Sol M Gruner. \textbf{Quantitative
+      Characterization of Near-Field Fuel Sprays by Multi-Orifice
+      Direct Injection Using Ultrafast X-ray Tomography Technique}.
+    Society of Automotive Engineers (SAE) Technical Paper 2006-01-1041
+
+\end{enumerate}
+
+\newpage
+\section{Table of Personnel and Work Effort}
+\setcounter{page}{1}
+
+\begin{tabular}{|l|l|c|c|c|c|}
+  \hline
+  \multicolumn{6}{|c|}{\cellcolor{gray!30}\textbf{Work Efforts to be Funded by this Proposal}}\\
+  \hline
+  \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{4}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
+  \hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
+  \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3} & \cellcolor{gray!30}\textbf{Total}     \\  \hline
+  Dr.\ Thomas A.\ Caswell & PI \& Research Software Engineer & 0.25 & 0.25 & 0.25 & 0.75 \\  \hline
+  -- & Research Software Engineer & 1.00 & 1.00 & 1.00 & 3.00 \\  \hline
+  \multicolumn{2}{|l|}{\textbf{Total Funded Work Effort}} & \textbf{1.25} & \textbf{1.25} & \textbf{1.25}& \textbf{3.75}\\    \hline
+  \multicolumn{6}{|c|}{\cellcolor{gray!30}\textbf{Work Efforts Proposed, but NOT to be Funded by this Proposal}}\\  \hline
+  \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{4}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
+  \hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
+  \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3} & \cellcolor{gray!30}\textbf{Total}     \\  \hline
+  Dr.\ Thomas A.\ Caswell & PI \& Research Software Engineer & 0.00 & 0.00 & 0.00 & 0.00 \\  \hline
+  - & Research Software Engineer & 0.00 & 0.00 & 0.00 & 0.00 \\  \hline
+  \multicolumn{2}{|l|}{\textbf{Total Unfunded Work Effort}} & \textbf{0.00} & \textbf{0.00} & \textbf{0.00}& \textbf{0.00}\\\hline
+  \multicolumn{6}{|c|}{\cellcolor{gray!30}\textbf{TOTAL Work Efforts Proposed (Funded + Unfunded)}}\\  \hline
+  \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{4}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\\hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
+  \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3} & \cellcolor{gray!30}\textbf{Total}     \\      \hline
+  Dr.\ Thomas A.\ Caswell & PI \& Research Software Engineer & 0.25 & 0.25 & 0.25 & 0.75 \\  \hline
+  -- & Research Software Engineer & 1.00 & 1.00 & 1.00 & 3.00 \\  \hline
+  \multicolumn{2}{|l|}{\textbf{Grand Total of Work Efforts}} & \textbf{1.25} & \textbf{1.25} & \textbf{1.25}& \textbf{3.75}\\  \hline
+\end{tabular}
+
+
+
+\newpage
+\section{Current and Pending Support}
+% TODO update
+\setcounter{page}{1}
+\subsection{Current Awards}
+Dr.\ Caswell is fully supported by NSLS-II operations.  He has an
+agreement to reduce time allocated to NSLS-II operations by the amount
+of time that is required by this proposal and the award below.\\
+\begin{tabular}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2.54cm}|>{\raggedright\arraybackslash}p{3.1cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{1.8cm}|}
+  \hline
+   \multicolumn{1}{|>{\centering\arraybackslash}p{3cm}|}{\scriptsize\cellcolor{gray!30}\textbf{Name of Principal Investigator on Award}}
+  & \multicolumn{1}{>{\centering\arraybackslash}p{2.54cm}|}{\scriptsize\cellcolor{gray!30}\textbf{Award / Project Title}}
+  & \multicolumn{1}{>{\centering\arraybackslash}p{3.1cm}|}{\scriptsize\cellcolor{gray!30}\textbf{Program Name / Sponsoring Agency / Point of Contact telephone and email}}
+   & \multicolumn{1}{>{\centering\arraybackslash}p{1.8cm}|}{\scriptsize\cellcolor{gray!30}\textbf{Period of Performance}}
+  & \multicolumn{1}{>{\centering\arraybackslash}p{1.8cm}|}{\scriptsize\cellcolor{gray!30}\textbf{Total Amount received}}
+  & \multicolumn{1}{>{\centering\arraybackslash}p{1.8cm}|}{\scriptsize\cellcolor{gray!30}\textbf{Commitment (Person-Month per Year)}}
+   \\\hline
+     {\footnotesize Thomas A.\ Caswell} &
+     {\footnotesize Matplotlib - Foundation of Scientific Visualization (EOSS3)} &
+     {\footnotesize\raggedright Essential Open Source Software for Science (Cycle 3)\\ Chan Zuckerberg Initiative \\ Dario Taraborelli }  &
+     {\footnotesize 01/21 - 01/22} &
+     {\footnotesize \$250k} &
+     {\footnotesize 3.6}\\
+     \hline
+     {\footnotesize Thomas A.\ Caswell} &
+     {\footnotesize Hosted mac-mini for testing OSX-specific bugs} &
+     {\footnotesize\raggedright Small Development Grant\\ NumFOCUS \\ Nicole Foster }  &
+     {\footnotesize 05/20 - 05/23} &
+     {\footnotesize \$3k} &
+     {\footnotesize 0}\\\hline
+\end{tabular}
+\subsection{Pending Awards}
+None
+
+\newpage
+\section{Budget Justification}
+\setcounter{page}{1}
+\subsection{Budget Narrative}
+
+Due to being an established community driven project most regular
+contributors have established and distinct primary institutions.  For
+this reason significant portions of the budget will need to be
+subcontracted to the primary institutions of key individuals who are
+uniquely qualified for this work.
+
+Salary support is requested for PI Dr.\ Thomas A.\ Caswell (0.25 FTE in
+years 1-3).  He will participate in all aspects of the proposed work
+and supervise the RSE.
+
+Salary support is requested for a Research Software Engineer (1 FTE in
+years 1-3).  The RSE will be responsible for carrying out the data
+model refactoring and general maintenance tasks on Matplotlib.  The
+RSE will be hired as a consultant through NumFOCUS.
+
+Support is requested for the RSE to attend the SciPy conference in
+Austin, TX each year.  Cost estimates are based on the following: Meal
+per diem from the GSA website, airfare from NYC to ATX from
+\url{https://travel.google.com}, 2019 registration and conference hotel.
+
+\begin{tabular}{|r|r|}
+  \hline
+  & Austin, TX scipy conference\\\hline
+  airfare & \$500 \\\hline
+  lodging & \$770 (5 nights at \$154/night) \\\hline
+  Registration & \$700 \\\hline
+  per diem & \$396 (\$61/day) \\\hline
+  misc ground transport & \$100 \\\hline\hline
+  total for one person & \$2,466    \\\hline
+\end{tabular}
+
+
+NumFOCUS organizes 4-5 regional PyData conferences in the United
+States each year.  Support is requested for the RSE to attend one of
+the PyData conference each year.  Cost estimates are based on the
+following: Meal and hotel per diem from the GSA website for NYC in
+November (as a worst-case scenario), airfare from NYC to LAX from
+\url{https://travel.google.com}, and guidance from NumFOCUS as to the
+registration fee.
+
+
+\begin{tabular}{|r|r|}
+  \hline
+  & New York, NY  PyDATA conference\\\hline
+  airfare & \$500     \\\hline
+  lodging & \$858 (3 nights at \$286/night)     \\\hline
+  Registration & \$200     \\\hline
+  per diem & \$342 (\$76/day)     \\\hline
+  misc ground transport & \$100     \\\hline\hline
+  total for one person & \$2,000     \\\hline
+\end{tabular}
+
+Total requested for travel: \$13,398
+
+\subsubsection{Facilities and Equipment}
+
+Standard desktop workstations that Caswell has access to, either
+through BNL or personal hardware, is sufficient for this work.
+
+We request \$4,000 to purchase a computer, monitor, and accessories
+for the RSE.
+
+\subsection{Budget Details}
+\subsubsection{Year 1}
+\paragraph{Direct Labor}
+No direct labor
+\paragraph{Other Direct Costs}
+\textit{Subcontract/Subawards}
+\begin{itemize}
+  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee all aspects of the
+  proposed work.  The time commitment is 0.2FTE.  His primary
+  appointment is at Brookhaven National Laboratory which will be
+  subcontracted for his effort.
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+  proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
+\item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
+  aspects of the project.  He will be contracted through NumFOCUS and work and
+  commit 1.00 FTE to this project.
+\end{itemize}
+\textit{Consultants}
+\begin{itemize}
+\item 3 RSEs who will work on general maintenance and STUFF.  The time commitment is 1.00
+  FTE.
+\end{itemize}
+\textit{Equipment}
+\begin{itemize}
+\item \$5000 is requested for any computer equipment required by the RSE.
+\end{itemize}
+\textit{Services}
+\begin{itemize}
+\item No support for services is requested.
+\end{itemize}
+\textit{Travel}
+\begin{itemize}
+\item Support is requested for each RSE to attend two conferences a
+  year (NUMBERS).  See the budget narrative for estimated cost
+  breakdown.
+\end{itemize}
+\subsubsection{Year 2}
+\paragraph{Direct Labor}
+No direct labor
+\paragraph{Other Direct Costs}
+\textit{Subcontract/Subawards}
+\begin{itemize}
+  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee all aspects of the
+  proposed work.  The time commitment is 0.2FTE.  His primary
+  appointment is at Brookhaven National Laboratory which will be
+  subcontracted for his effort.
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+  proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
+\item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
+  aspects of the project.  He will be contracted through NumFOCUS and work and
+  commit 1.00 FTE to this project.
+\end{itemize}
+\textit{Consultants}
+\begin{itemize}
+\item 3 RSEs who will work on general maintenance and STUFF.  The time commitment is 1.00
+  FTE.
+\end{itemize}
+\textit{Equipment}
+\begin{itemize}
+\item \$5000 is requested for any computer equipment required by the RSE.
+\end{itemize}
+\textit{Services}
+\begin{itemize}
+\item No support for services is requested.
+\end{itemize}
+\textit{Travel}
+\begin{itemize}
+\item Support is requested for each RSE to attend two conferences a
+  year (NUMBERS).  See the budget narrative for estimated cost
+  breakdown.
+\end{itemize}
+\subsubsection{Year 3}
+\paragraph{Direct Labor}
+No direct labor
+\paragraph{Other Direct Costs}
+\textit{Subcontract/Subawards}
+\begin{itemize}
+  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee all aspects of the
+  proposed work.  The time commitment is 0.2FTE.  His primary
+  appointment is at Brookhaven National Laboratory which will be
+  subcontracted for his effort.
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+  proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
+\item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
+  aspects of the project.  He will be contracted through NumFOCUS and work and
+  commit 1.00 FTE to this project.
+\end{itemize}
+\textit{Consultants}
+\begin{itemize}
+\item 3 RSEs who will work on general maintenance and STUFF.  The time commitment is 1.00
+  FTE.
+\end{itemize}
+\textit{Equipment}
+\begin{itemize}
+\item \$5000 is requested for any computer equipment required by the RSE.
+\end{itemize}
+\textit{Services}
+\begin{itemize}
+\item No support for services is requested.
+\end{itemize}
+\textit{Travel}
+\begin{itemize}
+\item Support is requested for each RSE to attend two conferences a
+  year (NUMBERS).  See the budget narrative for estimated cost
+  breakdown.
+\end{itemize}
+\subsubsection{Year 4}
+\paragraph{Direct Labor}
+No direct labor
+\paragraph{Other Direct Costs}
+\textit{Subcontract/Subawards}
+\begin{itemize}
+  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee all aspects of the
+  proposed work.  The time commitment is 0.2FTE.  His primary
+  appointment is at Brookhaven National Laboratory which will be
+  subcontracted for his effort.
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+  proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
+\item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
+  aspects of the project.  He will be contracted through NumFOCUS and work and
+  commit 1.00 FTE to this project.
+\end{itemize}
+\textit{Consultants}
+\begin{itemize}
+\item 3 RSEs who will work on general maintenance and STUFF.  The time commitment is 1.00
+  FTE.
+\end{itemize}
+\textit{Equipment}
+\begin{itemize}
+\item \$5000 is requested for any computer equipment required by the RSE.
+\end{itemize}
+\textit{Services}
+\begin{itemize}
+\item No support for services is requested.
+\end{itemize}
+\textit{Travel}
+\begin{itemize}
+\item Support is requested for each RSE to attend two conferences a
+  year (NUMBERS).  See the budget narrative for estimated cost
+  breakdown.
+\end{itemize}
+\subsubsection{Year 5}
+\paragraph{Direct Labor}
+No direct labor
+\paragraph{Other Direct Costs}
+\textit{Subcontract/Subawards}
+\begin{itemize}
+  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee all aspects of the
+  proposed work.  The time commitment is 0.2FTE.  His primary
+  appointment is at Brookhaven National Laboratory which will be
+  subcontracted for his effort.
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+  proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
+\item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
+  aspects of the project.  He will be contracted through NumFOCUS and work and
+  commit 1.00 FTE to this project.
+\end{itemize}
+\textit{Consultants}
+\begin{itemize}
+\item 3 RSEs who will work on general maintenance and STUFF.  The time commitment is 1.00
+  FTE.
+\end{itemize}
+\textit{Equipment}
+\begin{itemize}
+\item \$5000 is requested for any computer equipment required by the RSE.
+\end{itemize}
+\textit{Services}
+\begin{itemize}
+\item No support for services is requested.
+\end{itemize}
+\textit{Travel}
+\begin{itemize}
+\item Support is requested for each RSE to attend two conferences a
+  year (NUMBERS).  See the budget narrative for estimated cost
+  breakdown.
+\end{itemize}
+
+\subsection{Tabular Form}
+
+% \includegraphics[width=\textwidth]{detailed_budget}
+
+
+\end{document}
