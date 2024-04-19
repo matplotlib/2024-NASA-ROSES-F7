@@ -200,15 +200,60 @@
 % Let's reset the page counter.
 \setcounter{page}{1}
 % the subsection are a combination of the lines labeled "Content" in
-% Table 1 (on ROSES-20 SoS-51) and the text in E.7.3 (on E.7-2 -
-% E.7-3) describing what needs to be in the proposal.
+% Table 1 (on ROSES-24 stand alone) and the text in 3.2 (on F.7-3 -
+% F.7-4) describing what needs to be in the proposal.
 
-% not sure that this order is right, but I think we need to hit all of
-% these points.  Maybe want to rename the section headings or merge
-% some of them?
-\subsection{Matplotlib's role in scientific computing}
 
-% - TODO trim this whole section down
+% The Science/Technical/Management section of the proposal must contain a detailed
+% statement of the proposed work within 15 single-spaced pages including figures and
+% tables. Proposals must adhere to formatting requirements (e.g., margins, font sizes, line
+% spacing). Please see section IV(b)ii of the ROSES-2024 Summary of Solicitation for
+% complete guidelines.
+%
+% The following elements must be included in the S/T/M Section of the proposal to allow
+% for the evaluation of the proposal:
+%
+% • A clear description of the software, relevance to the SMD science community,
+% and the relationship to NASA SMD scientific vision and data strategic plan. This
+% must include:
+%   o the impact of the software in the SMD science community,
+%   o the current usage in the SMD science community,
+%   o how the software is being used by SMD divisions,
+%   o the status of development of the software package, and
+%   o the level of community contributions to the code base.
+% • The project management for the software must be described. This must include:
+%   o governance and development model for the project,
+%   o the license the project is using,
+%   o metrics for assessing the successful implementation of sustainability,
+%   o collaboration with related projects, and
+%   o the inclusive practices of the project to foster community development (e.g.
+% code of conduct, contributors’ guides, open development model).
+% • The sustainable activities to be undertaken for the software must be described.
+%   o This may include, but not be limited to, adding extensions, documentation,
+%   infrastructure, refactoring, security, and maintenance of the software.
+%   o A discussion that demonstrates that the requested resources are necessary
+%   and sufficient for success in achieving the proposed effort. The resource
+%   discussion should include how many hours at what specific level of support
+%   persons are required.
+%   o This description should include aspects of how information about the software
+%   is disseminated to the community, which may include documentation, training,
+%   workshops, and/or publications.
+%
+% The proposals must clearly state the process of adding extensions, documentation, and
+% maintenance of the software to support the user community and should include an
+% assessment of the potential impact to the SMD science community of the proposed
+% work.
+%
+% In addition, proposals for Foundational Awards must demonstrate the significant nature
+% of the project to SMD. This should include the substantial involvement or participation
+% by a NASA mission, Center or contractor, and/or data repository. The proposal must
+% show how two or more SMD divisions are using the tool, framework, or library. This may
+% include the usage of the tool, framework, or library by the Earth and/or Space
+% communities.
+
+\subsection{Matplotlib and cartopy's role in scientific computing}
+\subsubsection{Matplotlib}
+% - TODO trim this whole section down to make space for cartopy
 
 % - TODO find a Earth science and/or helio flagship using Matplotlib
 
@@ -221,24 +266,22 @@ instruments like the Curiosity Rover
 Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
 
 
-Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely
-defined community of projects and programmers with the common goal of
-advancing science through the use of the Python programming language.
-This development is largely volunteer work or work that is sponsored
-implicitly by specific science projects.  SPE, shown with a rough
-schematic in Figure \ref{fig:ecosystem}, has a core of general purpose
-domain-agnostic tools, like NumPy~\cite{Harris2020} and
-SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of
-specialized, but still domain agnostic tools, and is the most
-prevalent data visualization library for the SPE.  The outer rings are
-increasingly domain-specific tools, like
-AstroPy~\cite{astropy:2013,
-  astropy:2018} for astrophysics,
-SunPy~\cite{sunpy_community2020}  for heliophysics, and
-MetPy~\cite{metpy} and cartopy~\cite{Cartopy} for earth sciences; all of these use
-Matplotlib for specialized plotting.  This layered approach gives
-scientists and engineers convenient and powerful high-level tools
-while enabling direct access to the underlying libraries when needed.
+Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely defined
+community of projects and programmers with the common goal of advancing science
+through the use of the Python programming language.  This development
+historically has been largely volunteer work or work that is sponsored
+implicitly by specific science projects, but recently there has been explicit
+funding.  SPE, shown with a rough schematic in Figure \ref{fig:ecosystem}, has
+a core of general purpose domain-agnostic tools, like NumPy~\cite{Harris2020}
+and SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of specialized,
+but still domain agnostic tools, and is the most prevalent data visualization
+library for the SPE.  The outer rings are increasingly domain-specific tools,
+like AstroPy~\cite{astropy:2013, astropy:2018} for astrophysics,
+SunPy~\cite{sunpy_community2020} for heliophysics, and MetPy~\cite{metpy} and
+cartopy~\cite{Cartopy} for earth sciences; all of these use Matplotlib for
+specialized plotting.  This layered approach gives scientists and engineers
+convenient and powerful high-level tools while enabling direct access to the
+underlying libraries when needed.
 
 
 \begin{wrapfigure}{r}{0.5\textwidth}
@@ -287,31 +330,37 @@ Matplotlib is ubiquitous in scientific computing.  Conservative estimates based
 on downloads and on usage of the documentation website indicate that Matplotlib
 has over a million users.  We expect that a large fraction of NASA
 SMD-sponsored projects rely on this shared infrastructure to some degree, but
-this is hard to quantify.  It is not usual to cite tool chains in scientific
-literature, so citation counts are likely to vastly under-represent the
-scientific use of Matplotlib.  For example, a canonical reference for
-Matplotlib~\cite{Hunter:2007} has over 31,80 citations overall and over 12,800
-citations in ADS~\cite{ads_mpl}.
+this is hard to quantify.  It is not usual, but becoming more common, to cite
+tool chains in scientific literature, so citation counts are likely to
+under-represent the scientific use of Matplotlib.  Nevertheless, the canonical
+reference for Matplotlib~\cite{Hunter:2007} has over 31,800 citations overall.
+and has over 12,800 citations in ADS~\cite{ads_mpl}.
 
 
 
 % - TODO re-run this code to get up-to-date numbers
 \begin{wrapfigure}{l}{0.5\textwidth}
   \includegraphics[width=0.45\textwidth]{arXiv_usage}
-  \caption{\small Percent of all papers on arXiv that have a Matplotlib
-    watermark.}
-  \label{fig:other}
+  \caption{\small Percent of all papers on arXiv per-month that have a
+    Matplotlib metadata in the files associated with the paper.  When saving a
+    figure Matplotlib sets the string ``Matplotlib'' and the version of the
+    library to the producer field or equivalent of the file.}
+  \label{fig:arxiv}
 \end{wrapfigure}
 
-An empirical measure of usage is to look at the files uploaded to arXiv.org.
-When saving figures Matplotlib inserts a string into the file metadata
-indicating that it was created by Matplotlib (and by what version).  By search
-the files uploaded to the arXiv for the string ``matplotlib'' we can thus put a
-rough lower bound on the number of papers that mention or have at least one
-figure generated by Matplotlib.  As of early 2023 over 17\% of all new papers
-uploaded have used Matplotlib and as of 2018Q2 over a third of papers published
-to astro-ph on the Arxiv contained a figure generated with
-Matplotlib~\cite{arxvi_stats}.  Both show a clear upward trend.
+Figure~\ref{fig:arxiv} shows an empirical measure of usage by looking from at
+metadata in files uploaded to the arXiv.  When saving figures Matplotlib
+inserts a string into the file metadata indicating that it was created by
+Matplotlib (and by what version).  By searching the files uploaded to the arXiv
+for the string ``matplotlib'' we can thus put a rough lower bound, as
+post-processing may lose the metadata, on the number of papers that mention or
+have at least one figure generated by Matplotlib.  As of early 2023 over 17\%
+of all new papers uploaded have used Matplotlib and as of 2018Q2 over a third
+of papers published to astro-ph on the Arxiv contained a figure generated with
+Matplotlib~\cite{arxvi_stats}.  All measures of Matplotlib's usage show clear upward
+trends.
+
+\subsubsection{Carotpy}
 
 % - TODO write up cartopy description
 
@@ -472,6 +521,7 @@ Python community, including downstream libraries, and getting out in
 the community to get feedback.  It is very hard to provide that
 leadership and vision while working a ``day job''.
 
+\subsection{Technical Approach and Methodology}
 
 \subsection{Risk Management}
 
@@ -955,7 +1005,7 @@ SciPy, PyData, and science conferences.
 
 \newpage
 
-\section{Data Management Plan}
+\section{Open Science and Data Management Plan}
 \setcounter{page}{1}
 
 Matplotlib is a software library and does not produce any scientific
@@ -985,6 +1035,94 @@ Any incidental work on other software packages, either upstream or
 downstream of Matplotlib, will follow the license and development of
 process of those projects.
 
+\newpage
+
+\section{Inclusion Plan}
+\setcounter{page}{1}
+% 2 pages
+
+% Inclusion is a core NASA value, as described in the NASA Administrator’s policy
+% statement on Diversity, Equity, Inclusion, and Accessibility (DEIA). Additionally, Strategy
+% 4.1 of the latest version of “Science 2020-2024: A Vision for Scientific Excellence”
+% states: “Increase the diversity of thought and backgrounds represented across the entire
+% SMD portfolio through a more inclusive environment.”
+% Inclusion is defined here as the full participation, belonging, and contribution of
+% organizations and individuals. Note that inclusion is distinct and different from diversity.
+% Inclusion requires that all individuals can participate fully, regardless of the diversity
+% dimension, do their best work, advance their career, and feel welcomed, valued,
+% connected, engaged, and supported to reach their full potential. If a program element
+% requires an Inclusion Plan, it shall focus on inclusion, not diversity, accessibility, or
+% equity.
+% Proposers shall tailor their Inclusion Plans specifically to the proposal team rather than
+% to generic issues in the broader STEM community surrounding inclusion. If
+% volunteers/citizen scientists are among the proposed investigators, see Section 1(i), the
+% inclusion plan should apply to those team members as well. Inclusion plans should be
+% distinct from, and not solely focus on, public engagement efforts.
+% Proposers are encouraged to leverage institutional resources when available. However,
+% the plan should not include a restatement of policies of the host institution; rather, it
+% shall provide a clear discussion of how these policies connect to the proposed
+% investigation and proposal team.
+% The Inclusion Plan shall:
+% • clearly state the goals for creating and sustaining a positive and inclusive working
+% environment for the investigation team and describe activities to achieve such an
+% environment;
+% • identify barriers to creating a positive and inclusive working environment that are
+% specific to the team carrying out the proposed investigation;
+% • address ways in which the investigation team will work to attenuate or reduce
+% these barriers;
+% • describe roles, responsibilities, and work efforts for Inclusion Plan activities for
+% team members with specific tasks in said activities;
+% • include a timeline for completing or carrying out proposed activities;
+% • and contain a plan for evaluating progress towards achieving the proposed
+% Inclusion Plan activities or goals.
+% Unless prohibited by the program element, teams may request funding for the hiring of
+% experts and/or those familiar with inclusion best practices to join the team, advise on, or
+% oversee the proposed Inclusion Plan efforts. Any funding requested for Inclusion Planrelated activities shall be explicitly identified and justified in the Inclusion Plan section
+% and clearly identified in the proposal budget.
+% See individual program elements for the required location in the proposal for Inclusion
+% Plans and page limits. For programs that use dual anonymous peer review, the
+% inclusion plans are generally to be anonymized, but please refer to the specific
+% instructions for the program element. If institutions or partners are contributing to or
+% assisting with the Inclusion Plan efforts, but they are not otherwise on the proposal
+% team, then Letters of Resource Support (see Table 1) must be included after the
+% Inclusion Plan references, unless otherwise specified in the program element, and do
+% not count toward the page limit noted in the program element.
+% The assessment of the Inclusion Plan will be based on these factors:
+% ● The extent to which the Inclusion Plan provided appropriate processes and goals
+% for both creating and sustaining a positive and inclusive working environment for
+% the investigation team;
+% ● The extent to which the Inclusion Plan demonstrated awareness of systemic
+% barriers to creating inclusive working environments that are or may be specific to
+% the proposal team;
+% ● The extent to which the Inclusion Plan contained appropriate activities for
+% equipping team members to build and maintain inclusive working environments;
+% ● The extent to which the roles and responsibilities for those participating in the
+% proposed activities were well described and justified;
+% ROSES SoS-37
+% ● The reasonableness of the proposed timeline for the proposed Inclusion Plan
+% activities;
+% ● The extent to which the Inclusion Plan provided reasonable and appropriate
+% assessment mechanisms for measuring progress in and success of the proposed
+% activities;
+% ● The reasonableness of the resources requested to execute the proposed
+% activities and the quality and appropriateness of the justification for these
+% resources.
+% The assessment of the Inclusion Plan will be led by individuals with practical and/or
+% research expertise in IDEA topics.
+% Feedback will be provided to proposers in a separate Inclusion Plan evaluation form.
+% The assessment of the Inclusion Plan will not be part of the adjectival rating for the
+% proposal and will not inform the selection of proposals.
+% It is the proposal team’s responsibility to carry out the proposed activities rather than
+% fully outsource them. All team members are expected to contribute to fostering an
+% inclusive and positive work environment, regardless of their involvement with specific
+% Inclusion Plan activities.
+% The Inclusion Plan and any associated activities are expected to reflect the size of
+% proposal team, scale and complexity of the proposed research project, and the available
+% budget.
+% Some resources and research that may be useful when formulating an Inclusion Plan,
+% can be found at https://science.nasa.gov/researchers/inclusion.
+% Progress in executing the investigation’s Inclusion Plan shall be described in the annual
+% progress report.
 
 \newpage
 \section{Biographical Sketch}
