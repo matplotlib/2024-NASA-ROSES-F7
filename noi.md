@@ -45,19 +45,16 @@ Sustainment of Matplotlib and Cartopy
 
 Matplotlib is a comprehensive library for creating static, animated, and
 interactive visualizations in Python.  It is one of the foundational open
-source library in the scientific Python ecosystem.  Matplotlib is widely used
+source libraries in the scientific Python ecosystem.  Matplotlib is widely used
 across the Astrophysics, Earth Science, Heliophysics, and Planetary Science
 divisions of NASA SMD.
 
-Cartopy is a Python package designed to make drawing maps for data analysis and
-visualization easy.  Cartopy is built on top of Matplotlib and provides the
-projections required for geo-spatial visualizations.  Cartopy is currently used
-in the Earth Science division.
+Cartopy is a Python package designed as an extension of Matplotlib to make it easy to visualize datasets on maps and project datasets between various map projections. Cartopy is currently used extensively in the Earth Science division for Earth-based maps, but is also used by the Heliophysics and Planetary Science Divisions for maps of solar and other planetary datasets.
 
 We propose three main thrust of work:
 
  - the ongoing maintenance and incremental development of both libraries,
- - the adoption of new Matplotlib data model into cartopy
+ - the adoption of the new Matplotlib data model into Cartopy
  - the targeted support of NASA missions.
 
 
@@ -81,8 +78,8 @@ functionality.
 Maintenance is not limited to the technical aspects of the project.  Supported
 developers improve the management of the project.  We now have the time and
 bandwidth to make strategic decisions about the direction of the project to
-ensure the long term health and viability of Matplotlib and cartopy.  An
-important part of project management is community management: fostering,
+ensure the long term health and viability of Matplotlib and Cartopy.  An
+important part of project management is community engagement: fostering,
 diversifying, and growing our communities.  Supported developers are able to
 perform outreach: attending conferences, mentoring sprints, or teaching
 tutorials.  We must ensure that our community is open and welcoming to everyone
@@ -93,13 +90,17 @@ Matplotlib has an ongoing project to modernize how we access and manage
 user-supplied data structures (supported by a current grant from NASA
 (ROSES-2020)).  We anticipate that this work will be available in the main
 library and general use by the end of calendar year 2025.  We propose to
-refactor cartopy to use the new Matplotlib implementation.  This will both
-improve cartopy and serve as a reference implementation for other
-domains-specific libraries on how to fully utilize Matplotlib.
+refactor Cartopy to use the new Matplotlib implementation.  This will both
+improve Cartopy and serve as a reference implementation for other
+domain-specific libraries on how to fully utilize modern data structures with Matplotlib.
+The integration with Cartopy will speed up the feedback cycle during testing
+of the Matplotlib data work and enable broader adoption within the community.
 
-Finally, we will identify, one or more NASA missions to partner with to ensure
-that upstream we are fully meeting their needs and that they are using the
-tools in an optimal way to address the science needs of their users.
+Finally, we will identify one or more NASA missions to partner with to ensure
+that we are fully meeting NASA mission needs and that the missions are using the
+tools provided to the community in an optimal way to address the science needs of their users.
+This provides a critical pathway for direct feedback from within the NASA centers.
+
 
 # Type of award
 
