@@ -47,7 +47,7 @@ Matplotlib is a comprehensive library for creating static, animated, and interac
 
 Cartopy is a Python package designed as an extension of Matplotlib to make it easy to visualize datasets on maps and project datasets between various map projections. Cartopy is currently used extensively in the Earth Science division for Earth-based maps, but is also used by the Heliophysics and Planetary Science Divisions for maps of solar and other planetary datasets.
 
-We propose three main thrust of work:
+We propose three main thrusts of work:
 
  - the ongoing maintenance and incremental development of both libraries,
  - the adoption of the new Matplotlib data model into Cartopy,
