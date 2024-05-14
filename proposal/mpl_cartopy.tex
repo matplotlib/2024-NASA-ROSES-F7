@@ -43,6 +43,7 @@
 % I don't remember why threeparttable and setspace is here. Inertia.
 \usepackage{threeparttable}
 \usepackage{setspace}
+\usepackage{hyperref}
 %\doublespacing
 %%%
 %% Some packages to handle the figures and captions
@@ -251,35 +252,55 @@
 % include the usage of the tool, framework, or library by the Earth and/or Space
 % communities.
 
-\subsection{Matplotlib and cartopy's role in scientific computing}
+% AKA A clear description of the software, relevance to the SMD science
+% community, and the relationship to NASA SMD scientific vision and data
+% strategic plan. This must include
+\subsection{Matplotlib and Cartopy's role in scientific computing}
+
+% scientific vision strategy 2.5 Ensure NASA’s science data are accessible to
+%   all and produce practical benefits to society.
+% maybe
+% ... strategy 3.3 Actively engage with other federal agencies to make more
+%   informed decisions, cooperate in scientific research, and pursue partnerships
+%   that further national interests. [due to where Caswell sits as a DOE
+%   contractor]
+
 \subsubsection{Matplotlib}
-% - TODO trim this whole section down to make space for cartopy
+%   o the impact of the software in the SMD science community,
+%   o the current usage in the SMD science community,
+%   o how the software is being used by SMD divisions, (check)
+%   o the status of development of the software package, and
+%   o the level of community contributions to the code base. [check)
+
+% - TODO trim this whole section down to make space for Cartopy
 
 % - TODO find a Earth science and/or helio flagship using Matplotlib
 
-Matplotlib~\cite{Hunter:2007} is a comprehensive Python library for
-creating static, animated, and interactive visualizations.  It
-provides the visualization for projects across all SMD divisions,
-including flagship missions like the Hubble Space Telescope (HST) and
-the James Webb Space Telescope~\cite{jwst_pipeline} (JWST), and
-instruments like the Curiosity Rover
+Matplotlib~\cite{Hunter:2007} is a comprehensive Python library for creating
+static, animated, and interactive visualizations.  It provides the
+visualization for projects across all SMD divisions, including flagship
+missions like the Hubble Space Telescope (HST) and the James Webb Space
+Telescope~\cite{jwst_pipeline} (JWST), and instruments like the Curiosity Rover
 Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
 
 
 Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely defined
 community of projects and programmers with the common goal of advancing science
-through the use of the Python programming language.  This development
-historically has been largely volunteer work or work that is sponsored
-implicitly by specific science projects, but recently there has been explicit
-funding.  SPE, shown with a rough schematic in Figure \ref{fig:ecosystem}, has
-a core of general purpose domain-agnostic tools, like NumPy~\cite{Harris2020}
-and SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of specialized,
-but still domain agnostic tools, and is the most prevalent data visualization
+through the use of the Python programming language which emerged in the early
+2000s.  Development in the ecosystem as historically has been largely volunteer
+work or work that is sponsored implicitly by specific science projects, however
+in the last five years there has been explicit funding.  The SPE, shown with a
+rough schematic in Figure \ref{fig:ecosystem}, has a core of general purpose
+domain-agnostic tools, like NumPy~\cite{Harris2020} and
+SciPy~\cite{Virtanen2020}.  Matplotlib is in the next ring of specialized, but
+still domain agnostic tools, and is the most prevalent data visualization
 library for the SPE.  The outer rings are increasingly domain-specific tools,
 like AstroPy~\cite{astropy:2013, astropy:2018} for astrophysics,
 SunPy~\cite{sunpy_community2020} for heliophysics, and MetPy~\cite{metpy} and
-cartopy~\cite{Cartopy} for earth sciences; all of these use Matplotlib for
-specialized plotting.  This layered approach gives scientists and engineers
+Cartopy~\cite{Cartopy} for earth sciences; all of these use Matplotlib for
+specialized plotting.
+% TODO find planetary science library to cite here.
+This layered approach gives scientists and engineers
 convenient and powerful high-level tools while enabling direct access to the
 underlying libraries when needed.
 
@@ -301,20 +322,22 @@ Soon after its start by John D. Hunter in 2002, Matplotlib began growing as an
 open source plotting library with a BSD-compatible license. The first commits
 in the Matplotlib history date to early 2003.  Over the last 21 years
 Matplotlib has been actively developed and maintained by a vibrant, primarily
-volunteer, community.  Matplotlib has over 1,700 individual contributors to the
+volunteer, community.  Matplotlib has over 1,740 individual contributors to the
 code base, with many more individuals having contributed in ways not easily
-tracked, such as answering user questions on the mailing list and reporting
-issues.
+tracked, such as asking and answering questions on the mailing list and forums,
+reporting issues, or doing peer-support and advocacy in their home
+institutions.
 
-% - TODO mention the new work here?
 
-Matplotlib has a high-level API for quick plotting, such as in
-exploratory data analysis, plus a low-level API that gives full control for
-fine-tuned publication-quality plots, for animations, for writing both
-GUI-independent and GUI-specific tools for interactive data plotting, and
-for output to a variety of vector and raster
-formats including \texttt{svg}, \texttt{eps},
-\texttt{pdf}, and \texttt{png}.
+
+Matplotlib has a high-level API for quick plotting, such as in exploratory data
+analysis, plus a low-level API that gives full control for fine-tuned
+publication-quality plots, for animations, for writing both GUI-independent and
+GUI-specific tools for interactive data plotting, and for output to a variety
+of vector and raster formats including \texttt{svg}, \texttt{eps},
+\texttt{pdf}, and \texttt{png}.  With the support of NASA [CITE CURRENT GRANT]
+we are working on overhauling the internal architecture of Matplotlib to better
+support modern highly-structured data.
 
 Matplotlib's generality and flexibility make it readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
@@ -323,7 +346,7 @@ Matplotlib's API: including
 yt~\cite{2011ApJS..192....9T}, AstroPy~\cite{astropy:2013,
   astropy:2018}, ArviZ~\cite{arviz_2019},
 seaborn~\cite{waskom2020seaborn}, xarray~\cite{hoyer2017xarray},
-cartopy~\cite{Cartopy}, corner.py~\cite{corner} and
+Cartopy~\cite{Cartopy}, corner.py~\cite{corner} and
 mpl-scatter-density~\cite{mpl-scatter-density}.
 
 Matplotlib is ubiquitous in scientific computing.  Conservative estimates based
@@ -333,7 +356,9 @@ SMD-sponsored projects rely on this shared infrastructure to some degree, but
 this is hard to quantify.  It is not usual, but becoming more common, to cite
 tool chains in scientific literature, so citation counts are likely to
 under-represent the scientific use of Matplotlib.  Nevertheless, the canonical
-reference for Matplotlib~\cite{Hunter:2007} has over 31,800 citations overall.
+reference for Matplotlib~\cite{Hunter:2007} has over 31,800 citations overall
+%TODO
+[CITE GOOGLE SCHOLAR].
 and has over 12,800 citations in ADS~\cite{ads_mpl}.
 
 
@@ -352,7 +377,7 @@ Figure~\ref{fig:arxiv} shows an empirical measure of usage by looking from at
 metadata in files uploaded to the arXiv.  When saving figures Matplotlib
 inserts a string into the file metadata indicating that it was created by
 Matplotlib (and by what version).  By searching the files uploaded to the arXiv
-for the string ``matplotlib'' we can thus put a rough lower bound, as
+for the string \texttt{'matplotlib'} we can thus put a rough lower bound, as
 post-processing may lose the metadata, on the number of papers that mention or
 have at least one figure generated by Matplotlib.  As of early 2023 over 17\%
 of all new papers uploaded have used Matplotlib and as of 2018Q2 over a third
@@ -361,13 +386,18 @@ Matplotlib~\cite{arxvi_stats}.  All measures of Matplotlib's usage show clear up
 trends.
 
 \subsubsection{Carotpy}
+%   o the impact of the software in the SMD science community,
+%   o the current usage in the SMD science community,
+%   o how the software is being used by SMD divisions,
+%   o the status of development of the software package, and
+%   o the level of community contributions to the code base.
 
-% - TODO write up cartopy description
+% - TODO write up Cartopy description
 
 \subsection{Objectives}
 
 % - keep the lights on
-% - cartopy refactor
+% - Cartopy refactor
 % - partner with NASA mission(s)
 
 Matplotlib is a primarily community-driven project, but we have grown to the
@@ -375,11 +405,12 @@ point where we need supported developers with the time to organize, plan, and
 make decisions.  Supported developers will continue to allow us to take on more
 complex projects than can be implemented by part-time volunteer effort alone,
 while executing critical day-to-day maintenance tasks required to keep the
-project healthy.  \textbf{We propose to split the effort on this grant IN SOME
-  WAY between maintenance and new development}.
+project healthy.  We propose to split the effort on this grant evenly WAY
+between maintenance and new development and 75\% / 25\% between Matplotlib and
+Cartopy.
 
 
-\subsubsection{Refactor cartopy}
+\subsubsection{Refactor Cartopy}
 
 \subsubsection{General maintenance}
 
@@ -698,16 +729,16 @@ available.
 \subsubsection{Collaboration with Related Projects}
 
 
-Much of the communication is through the standard communication
-channels, such as project issue trackers, mailing lists or discussions
-forums, and submitting PRs.  The strongest relationships, both
-historical and current, are with projects where we have shared
-developers.  For example Ryan May and Elliot sales de Andre are both
-core contributors to Matplotlib and Cartopy and David Stansby is a
-maintainer on both Matplotlib and \texttt{SunPy}.  Micheal Droettboom,
-the previous Matplotlib Project lead, was a core developer on Astropy.
-Additionally, through NumFOCUS and domain-specific conferences there
-are regular in-person meetings.
+Much of the communication is through the standard communication channels, such
+as project issue trackers, mailing lists or discussions forums, and submitting
+PRs.  For example P. L. Lim, who is an Astropy contributor at the Space
+Telescope Science Institute, regularly reports bugs to Matplotlib when
+pre-release versions of Matplotlib have an impact on Astropy.  The strongest
+relationships, both historical and current, are with projects where we have
+shared developers.  For example Greg Lucas, Ruth Comer, and Elliot sales de
+Andre are core contributors to Matplotlib and Cartopy while David Stansby is a
+maintainer on both Matplotlib and \texttt{SunPy}.  Additionally, through
+NumFOCUS and domain-specific conferences there are regular in-person meetings.
 
 We will work with down-stream projects to help them improve their test
 coverage of plotting code and to add jobs to their continuous
@@ -920,7 +951,7 @@ to all.  We also maintain a read-only mailing list for announcements
 Matplotlib developers have frequently attended meetings including
 SciPy, PyData, and science conferences.
 
-\paragraph{cartopy}
+\paragraph{Cartopy}
 
 % TODO wriet
 
@@ -1381,7 +1412,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
@@ -1417,7 +1448,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
@@ -1453,7 +1484,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
@@ -1489,7 +1520,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
@@ -1525,7 +1556,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the cartopy aspects of
+\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
