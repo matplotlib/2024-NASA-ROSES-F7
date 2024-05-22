@@ -412,6 +412,8 @@ Cartopy.
 
 \subsubsection{Refactor Cartopy}
 
+\subsubsection{Interactivity in a web context}
+
 \subsubsection{General maintenance}
 
 We need to sustain Matplotlib as a vibrant project and continue to support the
@@ -479,7 +481,7 @@ a direct Matplotlib import~\cite{datalore:2020}.
 
 % - update with more recent examples, sort by division
 
-Exoplanets \cite{2020AJ....160..116G}
+
 
 These measures show broad impact but cover many uses outside of the
 SMD community.  If we restrict the static analysis to
@@ -488,31 +490,8 @@ we see that 53 of the 330 hosted repositories make reference to
 Matplotlib.  Soliciting on social media for examples of Matplotlib in SMD research
 yielded a (non-exhaustive) list including:
 \begin{itemize}[noitemsep]
-\item
-  to study
-  thunderstorms~\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
-  seasonal ocean winds~\cite{https://doi.org/10.1002/2017JD027516} and
-  tropical storms~\cite{Lang_2020};
-\item in the first science paper from the Parker Solar
-  probe~\cite{Bale2019};
-\item in the Martian science program in both
-  orbiter~\cite{https://doi.org/10.1029/2019JE006188} and
-  rover~\cite{https://doi.org/10.1002/2016EA000219} contexts;
-\item as part of ground operations from the Mars Phoenix Lander;
-\item with data from Kepler and K2 missions to study Trojan
-  asteroids~\cite{Nixon_2019} and
-  Titan~\cite{Ryan_2017,2019PASP..131h4505P};
-\item on the New Horizons Kuiper belt extended
-  mission~\cite{Porter_2018};
-\item for visualization of scheduling, safety and constraint checks,
-  and telemetry by the Swift science operations
-  team~\cite{swift_ops,2020ApJ...900...35T};
-\item as part of the HST and JWST~\cite{jwst_pipeline} data processing
-  pipelines;
-\item in Monte, JPL's mission design
-  and navigation software system to support spaceflight operations;
-\item in fundamental research on graphene~\cite{PhysRevLett.120.236802};
-\item and for work on nuclear powered rockets~\cite{leu_cerment}.
+\item  to study Exoplanets \cite{2020AJ....160..116G}
+  % TODO refresh this list
 \end{itemize}
 This list shows the breadth of Matplotlib usage across the SMD
 divisions.  Matplotlib falls under the umbrella of projects which the
@@ -537,20 +516,20 @@ discovery of a super massive compact object at the center of our
 galaxy and the recent observation of Sagittarius A* by the Event
 Horizon Telescope (EHT).
 
-This proposal is another step towards Matplotlib's sustainability, and
-ability to move forward. Given the usage and the scale of the library
-it is not sustainable to continue to maintain Matplotlib as a
-volunteer-only effort.  A core team of full-time developers and
-managers will better co-ordinate and nurture volunteer efforts, with
-the goal of growing and sustaining a diverse community of volunteer
-expert contributors.
+This proposal continues path to Matplotlib's sustainability, and ability to
+move forward.  Over the past 4 years, with funding from CZ and NASA, we have
+shown the benefit of having paid developers.  Given the usage and the scale of
+the library it is not sustainable to return to maintaining Matplotlib as a
+volunteer-only effort.  A core team of full-time developers and managers can
+better co-ordinate and nurture volunteer efforts, with the goal of growing and
+sustaining a diverse community of volunteer expert contributors.
 
 Finally, with explicit support for their time, Matplotlib's core developers
-will better be able to plan the project's future.
-This requires vision, co-ordination with the rest of the scientific
-Python community, including downstream libraries, and getting out in
-the community to get feedback.  It is very hard to provide that
-leadership and vision while working a ``day job''.
+will better be able to plan the project's future.  This requires vision,
+co-ordination with the rest of the scientific Python community, including
+downstream libraries, and getting out in the community to get feedback.  It is
+very hard to provide that leadership and vision while working on the project in
+``nights and weekends''.
 
 \subsection{Technical Approach and Methodology}
 
@@ -563,32 +542,13 @@ will have a positive impact on the project.  We have demonstrated that
 supporting developers for maintenance work is an effective and
 efficient use of resources.
 
-% - need to be very careful about not breaking back-compatibility
-There is also the risk than we are underestimating the amount of work
-that will be required.  There is always a possibility that during
-refactoring the scope of work will rapidly snowball due to unexpected
-internal dependencies or edge cases.
-However, even in the event that we cannot complete the implementation of a new data
-pipeline model within the performance period, throughout the process we will be working towards
-improving library internals and improving our
-documentation.
+% risk is discrete event that would cause grant to fail
 
-We anticipate that all of the work can be done incrementally and will
-be merged to the default branch of Matplotlib throughout the
-performance period.  Frequently merging incremental work reduces the
-risk, and is consistent with our standard development process.  Work
-done under this proposal will be reviewed in our normal fashion, and many
-small PRs are easier to review and merge than a single large PR.
-Large PRs also quickly drift out of sync with the master branch, and
-develop insurmountable rebase requirements.  The improvements, both to
-the code and documentation, will be released to users as part of our
-standard semiannual release cadence.
-
-There is personnel risk in that we have not yet identified the RSEs who will be
-a key individual for carrying out this work.  We are optimistic that we will be
-able to recruit a qualified individuals in reasonable time.  We have now hired
-two individuals as fulltime RSEs through NumFOCUS within reasonable time
-frames.
+There is personnel risk in that we have not yet identified the second RSEs who
+will be a key individual for carrying out this work.  We are optimistic that we
+will be able to recruit a qualified individuals in reasonable time.  We have
+now hired two individuals as fulltime RSEs through NumFOCUS within reasonable
+time frames.
 
 \subsection{Contributions of Principal Investigator and Key Personnel}
 
@@ -625,13 +585,7 @@ user questions, welcoming new contributors to the project, and
 planning for the future.  Dr.\ Caswell will particularly focus on
 the project roadmap and community governance.
 
-% 4 part plan
-%  1. document how units work now, document how it should work, id problems
-%  2. work to adapt the theoretical and prototype datasource work to API stable
-%  3. plan!
-%  4. re-write every Artist sub-class
-
-\subsubsection{Data Model Refactor}
+\subsubsection{Cartopy Refactor}
 
 \subsubsection{Work Process}
 
@@ -820,7 +774,7 @@ efficacy of these efforts at diversifying our contributor base.
 Matplotlib is an established community driven project in the
 ``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.
 We have a core group regular maintainers who take responsibility for
-reviewing and merging proposed changes to the library and  welcome Pull
+reviewing and merging proposed changes to the library and welcome Pull
 Requests from anyone who is interesting in contributing.  We strive
 for consensus and rely on the collective judgment of our maintainers
 to maintain the quality and functionality of the library.
@@ -846,42 +800,35 @@ bug fix that gets merged we also add tests that codify the expected
 behavior.  This gives us the ability to make changes to the library
 with confidence that we will not break existing behavior.
 
-The threshold for merging a PR depends on the reviewer judgment of the
-risk of the changes.  PRs that only change documentation, which cannot
-introduce regressions or introduce new features, may be merged by the
-first reviewer whereas code changes need to be reviewed and approved
-by at least two maintainers (not including the author of the PR).
-However in either case a maintainer may wish to leave a positive
-review but not merge the PR to request additional feed back from other
-maintainers.  If a maintainer objects to a PR, the PR will not be
-merged until their concerns have been addressed.  If consensus cannot
-be reached, the final decision falls back to a Deputy Project Lead or
-the Project Lead.
+The review threshold for merging a PR depends on the risk of the changes.  PRs
+that only change documentation, which cannot introduce regressions or introduce
+new features, may be merged by the first reviewer whereas code changes need to
+be reviewed and approved by at least two maintainers (not including the author
+of the PR).  If consensus cannot be reached, the final decision falls back to a
+Deputy Project Lead or the Project Lead.
 
 Matplotlib is cautious about making backwards-incompatible change that
-intentionally break users existing code.  While in an ideal world,
-future versions of the library would be 100\% backwards compatible
-with previous versions, sometimes we do need to make incompatible
-changes.  As part of the review process we check that any API changes
-are well documented and justified.  When technically possible we
-provide user-visible warnings the version before we actually implement
-a breaking change.  This provides a window for users to either adapt
-to the change or to communicate to us that they cannot adapt so we
-can reconsider the change.  Given this high barrier to changing or
-removing behavior we are careful to make sure that any new API we add
-to the library is well thought out and complete because once we have
-released a version of the library with that code it is hard to take it
-back.  These considerations together are important enough that we have
-a Deputy Project Lead responsible for API consistency.
+intentionally break users existing code.  While in an ideal world, future
+versions of the library would be 100\% backwards compatible with previous
+versions, sometimes we do need to make incompatible changes.  As part of the
+review process we check that any API changes are well documented and justified.
+When technically possible we provide user-visible warnings the version before
+we actually implement a breaking change.  This provides a window for users to
+either adapt to the change or to communicate to us that they cannot adapt so we
+can reconsider the change.  Given this high barrier to changing or removing
+behavior we are careful to make sure that any new API we add to the library is
+well thought out and complete because once we have it is hard to take back or
+change features once released.  These considerations together are important
+enough that we have a Deputy Project Lead responsible for API consistency.
 
-This process works well for incremental contributions and bug fixes,
-new features or bigger changes are typically discussed before
-significant work is done.  In many cases if the feature does not need
-to be in the core library we encourage contributors to create a new
-stand-alone project.  This has several advantages including the giving
-the author more control, allows them to iterate faster than our 6
-month release schedule, and gives them greater flexibility to change
-their APIs.
+This process works well for incremental contributions and bug fixes.  Bigger
+changes, such as major new features or significant refactors, are typically
+discussed before significant work is done.  In many cases if a feature does not
+need to be in the core library we encourage contributors to create a new
+stand-alone project.  This has several advantages including the giving the
+author more control, allows them to iterate faster than our 6 month release
+schedule, and gives them greater flexibility to change their APIs during
+initial development.
 
 \paragraph{Cartopy}
 
@@ -896,11 +843,12 @@ aimed at several, overlapping, audiences.  This includes a
 the source, issue tracker and PRs on GitHub,
 the published documentation (including historical and development versions),
 weekly developer call,
+bi-weekly new contributor calls,
 mailing lists,
 a discourse forum,
-an active chat room on gitter,
-in-person presentations at conferences and pydata events,
-a blog, and several social media accounts.
+a real-time chat platform (gitter),
+in-person presentations and discussions at conferences and pydata events,
+and several social media accounts.
 
 
 The center of gravity of Matplotlib development takes place on GitHub
@@ -913,43 +861,34 @@ governance documents on GitHub
 Pull Request.
 
 We publish extensive prose, example, and API documentation
-(\url{https://matplotilb.org}) that is refreshed with each release.
-In addition to the top-level docs, which always refer to the most
-recent release, we also host historical
-(e.g. \url{https://matplotlib.org/3.1.3} for the v3.1.3 documentation) and
-development versions of the documentation
-(\url{https://dev.matplotlib.org}).  In 2020 we had between 700k-1M
-unique visitors a month to the documentation.
+(\url{https://matplotilb.org}).  We host documentation for for the most recent
+version at (\url{https://matplotilb.org/stable}), historical versions for past
+releases (e.g. \url{https://matplotlib.org/3.8.4} for the v3.8.4 documentation)
+and development versions of the documentation
+(\url{https://matplotlib.org/devdocs}).  In the first Quarter of 2024 we had
+between 1.5-1.8M unique visitors a month to the documentation per a
+Plausible.io analytics.
 
+The weekly developer calls are typically attended by six to eight people and
+are used for high-bandwidth discussions about both the overall direction of the
+project and technical issues.  The agenda and minutes are publicly available
+(\url{https://hackmd.io/team/matplotlib}) and the calls are open to all.
 
-The weekly developer calls are typically attended by six to eight
-people and are used for high-bandwidth discussions about both the
-overall direction of the project and technical issues.  The agenda and
-minutes are publicly available
-(\url{https://hackmd.io/team/matplotlib}) and the calls are open to
-all.
+For real-time chat Matplotlib maintains a Gitter/element
+(\url{https://gitter.im/matplotlib/matplotlib}) chat room which we use for
+general coordination and resolving minor technical discussions.  While the chat
+room's history is technically persistent, we treat it as transient.  For more
+in-depth discussions or anything we want a record of, we move the conversation
+to github, the mailing list, or discourse.
 
-Matplotlib has an active gitter
-(\url{https://gitter.im/matplotlib/matplotlib}) chat room.  Gitter is
-a real-time chat platform that we use for general coordination and
-resolving minor technical discussions.  While the chat room's history
-is technically persistent, we treat it as transient.  For more
-in-depth discussions or anything we want a record of, we move the
-conversation to github, the mailing list, or discourse.
-
-For user support and general discussion we maintain two mailing lists,
-matplotlib-users
-(\url{https://mail.python.org/mailman/listinfo/matplotlib-users}) for
-user support and matplotlib-devel
-(\url{https://mail.python.org/mailman/listinfo/matplotlib-devel}) for
-developer discussion and announcements, and a discourse
-(\url{https://discourse.matplotlib.org}) instance.  While users have
-to subscribe or register respectively to post, these forums are open
-to all.  We also maintain a read-only mailing list for announcements
+For user support and general discussion we maintain a Discourse
+(\url{https://discourse.matplotlib.org}) instance.  While users have to
+subscribe or register respectively to post, this forum is open to all.  We also
+maintain a read-only mailing list for announcements
 (\url{https://mail.python.org/mailman/listinfo/matplotlib-announce}).
 
-Matplotlib developers have frequently attended meetings including
-SciPy, PyData, and science conferences.
+Matplotlib developers have frequently attended in-person events including
+SciPy, PyData regional conferences, and domain science conferences.
 
 \paragraph{Cartopy}
 
@@ -1039,13 +978,13 @@ SciPy, PyData, and science conferences.
 \section{Open Science and Data Management Plan}
 \setcounter{page}{1}
 
-Matplotlib is a software library and does not produce any scientific
-data as defined in E.1.2 that needs to be preserved.  Matplotlib is a
-tool used to visualize data that is acquired through other means.
+Matplotlib and Cartopy are software libraries and do not produce any scientific
+data as defined in E.1.2 that needs to be preserved.  Both are tools used to
+visualize data that is acquired through other means.
 
 Matplotlib is a community library developed in the open on GitHub.
-It is released the Matplotlib license
-(\url{https://matplotlib.org/users/license.html}) is a permissive
+It is released under the Matplotlib license
+(\url{https://matplotlib.org/users/license.html}) which is a permissive
 license that is a derivative of the PSF license
 (\url{https://docs.python.org/3/license.html}) and compatible with the
 BSD-3 license.  All work done on Matplotlib as part of this grant will
@@ -1054,10 +993,24 @@ released under the same license.  Matplotlib uses git for version
 control, thus every developer has the full history on their computer
 which provides significant redundancy.  Tagged releases of the
 software are published to PyPI (in both source and binary forms).  In
-addition, Anaconada, macports, homebrew, and all major Linux
+addition, Anaconada, conda-forge, macports, homebrew, and all major Linux
 distributions independently build, package, and distribute Matplotlib.
 Extensive User facing documentation, including install instructions
 and usage guides, is built and hosted at \url{https://matplotlib.org}.
+
+Cartopy is a community library developed in the open on GitHub.  It is released
+under the BSD 3-Clause License.  All work done on Cartopy as part of this grant
+will be done through the current workflow, will be publicly available, and
+released under the same license.  Cartopy uses git for version control, thus
+every developer has the full history on their computer which provides
+significant redundancy.  Tagged releases of the software are published to PyPI
+(in both source and binary forms).
+%TODO fact-check
+\textbf{IN ADDITION, ANACONADA, CONDA-FORGE, MACPORTS, HOMEBREW, AND SOME MAJOR
+  LINUX DISTRIBUTIONS INDEPENDENTLY BUILD, PACKAGE, AND DISTRIBUTE CARTOPY}.
+Extensive User facing documentation, including install instructions and usage
+guides, is built and hosted at
+\url{https://scitools.org.uk/cartopy/docs/latest/}.
 
 Any new libraries created as part of the ROSES award will be developed
 in the open on GitHub and will released under a permissive license.
@@ -1155,6 +1108,23 @@ process of those projects.
 % Progress in executing the investigation’s Inclusion Plan shall be described in the annual
 % progress report.
 
+
+
+
+  \begin{itemize}
+  \item  ``good first issue'' tag
+  \item https://contributor-experience.org
+  \item incubator
+  \item GSOC participtaion
+  \item welcome bot
+  \item CoC
+
+  \end{itemize}
+
+
+
+
+
 \newpage
 \section{Biographical Sketch}
 \setcounter{page}{1}
@@ -1168,14 +1138,13 @@ process of those projects.
 \end{center}
 
 \subsubsection*{Relevant Experience}
-13+ years working in data intensive experimental science.  8 years of
-experience contributing to Scientific Python, 6 years in leadership
-roles in the open source community.  Current Project lead on
-Matplotlib, past release manager for h5py, has contributed to NumPy,
-Pandas, SciPy, and IPython.  Co-developed \texttt{trackpy}, now widely
-used in soft-matter physics community.  Lead architect and developer
-of Bluesky Suite for data acquisition now being adopted at x-ray
-facilities around the world.
+15+ years working in data intensive experimental science.  8 years of
+experience contributing to Scientific Python, 8 years in leadership roles in
+the open source community.  Current Project lead on Matplotlib, past release
+manager and current core developer for h5py, has contributed to NumPy, Pandas,
+SciPy, and IPython.  Co-developed \texttt{trackpy}, now widely used in
+soft-matter physics community.  Lead architect and developer of Bluesky Suite
+for data acquisition now being adopted at x-ray facilities around the world.
 
 \subsubsection*{Education}
 Ph.D., Physics, University of Chicago \hfill 2014\\
@@ -1188,13 +1157,14 @@ Columbia University, Visiting Associate Research Scientist \hfill 2019 - 2023 \\
 Brookhaven National Laboratory, Associate Computational Scientist \hfill 2017 - 2020\\
 Matplotlib Project Lead \hfill 2016 - Present\\
 Brookhaven National Laboratory, Assistant Computational Scientist \hfill 2015 - 2017\\
+h5py core developer \hfill 2016-\\
 Matplotlib Project Co-Lead \hfill 2014 - 2016\\
 Brookhaven National Laboratory, Research Associate \hfill 2014 - 2015\\
 
 \subsubsection*{Honors/Awards (selected)}
-Brookhaven National Laboratory Spotlight  Award \hfill 2018\\
-Brookhaven National Laboratory Lab Award \hfill 2017\\
-Google Open Source Peer Bonus \hfill 2017
+Brookhaven National Laboratory Engineering Award \hfill 2022\\
+Python Software Foundation (PSF) Fellow \hfill 2022\\
+NumFOCUS Project Sustainability Award \hfill 2022
 
 \subsubsection*{Refereed Publications (selected)}
 
