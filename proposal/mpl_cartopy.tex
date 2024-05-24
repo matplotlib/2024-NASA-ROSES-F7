@@ -409,7 +409,9 @@ while executing critical day-to-day maintenance tasks required to keep the
 project healthy.  We also plan to split the effort 75\% / 25\% between
 Matplotlib and Cartopy.  For Matplotlib we plan to split the effort on this
 grant 65\% / 20\% / 15\% between maintenance, new development, and community
-engagement and community and project management.
+engagement and community and project management.  We intend to target this distribution
+of effort across the lifetime of the grant, but there may be variations in the effort
+on shorter, month to year, timescales.
 % This is (for Matplotlib)
 %  maint: 5.85 FTE
 %  new feature: 1.8 FTE
@@ -432,7 +434,17 @@ In particular, the combined effects of the transformation pipeline and the data 
 \subsubsection{Interactivity in a web context}
 
 Matplotlib has long had both basic interaction, panning and zooming, as well as
-the tools to build rich interactive visualization.  However, these tools
+the tools to build rich interactive visualizations for multi-scale and
+high-dimensional data exploration.  However, there are several challenges with
+sharing these visualizations with collaborators.  First, the may be significant
+amounts of Python code and non-trivial data structures involved.  Second, for the
+figures to be interactive a running Python process, with the correct dependencies
+installed, with access to the data is required.  To address this we propose
+to develop an export functionality for figures that will save the figure, any
+user defined functions, and the data such that the exact same figure can be re-created
+in another process.
+
+However, these tools
 require either a desktop environment, to use a traditional GUI framework, or an
 active server for use in a browser, via either Jupyter or a stand-alone server.
 
@@ -496,8 +508,6 @@ identified.  \textbf{Dedicated full-time developers help ensure that things
   that will steer the future of the library}.
 
 
-%plot?
-
 Historically, pull requests (PRs) and issues have been submitted
 faster than they can be reviewed; Matplotlib has accumulated about 300
 open PRs and 1300 open issues due to this imbalance. There are
@@ -543,7 +553,7 @@ a direct Matplotlib import~\cite{datalore:2020}.
 These measures show broad impact but cover many uses outside of the
 SMD community.  If we restrict the static analysis to
 \url{https://github.com/nasa}, NASA's official organization on GitHub,
-we see that 53 of the 330 hosted repositories make reference to
+we see that XX of the YYY hosted repositories make reference to
 Matplotlib.  Soliciting on social media for examples of Matplotlib in SMD research
 yielded a (non-exhaustive) list including:
 \begin{itemize}[noitemsep]
@@ -564,7 +574,7 @@ particular.  As pointed out above, Matplotlib is the plotting layer
 for much of the Python ecosystem.  It has been used in thousands of
 academic papers, plotting for news and sporting media, technical
 dash-boarding, and most modern data science applications.
-% - TODO re-run this with updated numbers, re-run
+% - TODO do we have any new really high-profile examples?
 Matplotlib has also been used in a number
 of high-profile astronomy projects including the Nobel prize-winning
 observation of black hole merger by the Laser Interferometer
@@ -589,6 +599,9 @@ very hard to provide that leadership and vision while working on the project in
 ``nights and weekends''.
 
 \subsection{Technical Approach and Methodology}
+\subsubsection{Tick Refactor}
+\subsubsection{Cartopy Refactor}
+
 
 \subsection{Risk Management}
 
@@ -605,7 +618,27 @@ There is personnel risk in that we have not yet identified the second RSEs who
 will be a key individual for carrying out this work.  We are optimistic that we
 will be able to recruit a qualified individuals in reasonable time.  We have
 now hired two individuals as fulltime RSEs through NumFOCUS within reasonable
-time frames.
+time frames and have almost 5 years of experience managing and paying
+Research Software Engineers through NumFOCUS.
+
+
+% TODO do we want include this?  I think not, but I typed it out so we could agree
+% to delete it.
+The proposed funding structure is possibly novel and presents risks to managing
+the budget.   We have experience managing a NASA grant through NumFOCUS with a
+direct IAA between NASA and DOE and directly hiring contractors trough NF.
+Additionally, we have experience managing sub-contracts between NF and a
+university.
+
+We may find that refactoring the ticking system is more technically challenging
+than we expect.  However, we have significant experience in the project, we
+recently completed a similar but smaller scale refactor with minimal user
+disruption, and have well established process Matplotlib for communicating
+deprecations to the user.  Ideally we will be able to switch to a more
+efficient implementation in a way that is transparent to the user, if this proves
+intractable we will provide the more efficient implementation as an opt-in feature
+available to users.
+
 
 \subsection{Contributions of Principal Investigator and Key Personnel}
 
@@ -1428,14 +1461,14 @@ of time that is required by this proposal and the awards below.\\
      {\footnotesize\raggedright ROSES 2020 E.7 \\ NASA \\ Steven Crawford }  &
      {\footnotesize SORT OUT} &
      {\footnotesize \$633k} &
-     {\footnotesize 3}\\
+     {\footnotesize 3.0}\\
      \hline
      {\footnotesize Wah Keat Lee} &
      {\footnotesize NEXT-III} &
      {\footnotesize\raggedright ??? \\ DOE \\ ??? }  &
      {\footnotesize 01/2? - 01/35} &
      {\footnotesize ??} &
-     {\footnotesize 6}\\
+     {\footnotesize 6.0}\\
      \hline
      {\footnotesize Jana Thayer} &
      {\footnotesize ILLUMINE - Intelligent Learning for Light Source and Neutron Source User Measurements Including Navigation and Experiment Steering} &
@@ -1515,14 +1548,14 @@ Dr\ Caswell is a CO-I on a NASA ROSES proposal to support HDF.\\
      {\footnotesize\raggedright ROSES 2024 F.7 \\ NASA \\ Steven Crawford }  &
      {\footnotesize 01/24-01/29} &
      {\footnotesize ???} &
-     {\footnotesize .6}\\
+     {\footnotesize 0.6}\\
      \hline
      {\footnotesize Wah Keat Lee} &
      {\footnotesize NEXT-III} &
      {\footnotesize\raggedright ??? \\ DOE \\ ??? }  &
      {\footnotesize 01/2? - 01/35} &
      {\footnotesize ??} &
-     {\footnotesize 0.6}\\
+     {\footnotesize 6.0}\\
      \hline
 \end{tabular}
 
