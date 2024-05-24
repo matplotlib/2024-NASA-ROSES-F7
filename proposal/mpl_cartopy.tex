@@ -405,14 +405,39 @@ point where we need supported developers with the time to organize, plan, and
 make decisions.  Supported developers will continue to allow us to take on more
 complex projects than can be implemented by part-time volunteer effort alone,
 while executing critical day-to-day maintenance tasks required to keep the
-project healthy.  We propose to split the effort on this grant evenly WAY
-between maintenance and new development and 75\% / 25\% between Matplotlib and
-Cartopy.
+project healthy.  We also plan to split the effort 75\% / 25\% between
+Matplotlib and Cartopy.  For Matplotlib we plan to split the effort on this
+grant 65\% / 20\% / 15\% between maintenance, new development, and community
+engagement and community and project management.
+% This is (for Matplotlib)
+%  maint: 5.85 FTE
+%  new feature: 1.8 FTE
+%  community: 1.35 FTE
+For Cartopy we plan to split the effort ?? / ??.  %TODO: how do you want to split this Greg?
 
 
 \subsubsection{Refactor Cartopy}
 
 \subsubsection{Interactivity in a web context}
+
+Matplotlib has long had both basic interaction, panning and zooming, as well as
+the tools to build rich interactive visualization.  However, these tools
+require either a desktop environment, to use a traditional GUI framework, or an
+active server for use in a browser, via either Jupyter or a stand-alone server.
+
+
+\subsubsection{Ticker refactor}
+
+The tick location and formatting machinery in Matplotlib is flexible, but this
+flexibility comes at a performance cost, architecturally prevents hierarchical
+labeling, and reduces API usability by making seemingly simple tasks
+surprisingly complex.  While the work to design the new API is significant, our
+primary concern will be to complete this work while minimizing the impact on
+existing users.  Because tick labeling is so fundamental to plotting, even
+small changes to the API will have significant impact on our users.  Although
+we have had discussion about these issues since at least 2015, it has
+been intractable with volunteer effort.
+
 
 \subsubsection{General maintenance}
 
@@ -432,11 +457,13 @@ Matplotlib's health we must:
 \item and manage community discussions about proposed enhancements, features,
   and API changes.
 \end{itemize}
-These are tasks that are never ``done''; users find new ways to use
-the library, they expose previously un-detected bugs, they request or propose new
-features, and the world continues to changes around us.   \textbf{Dedicated
-full-time developers help ensure that things happen in a consistent and timely
-manner, and provide the crucial roadmaps that will steer the future of the library}.
+These are tasks that are never ``done''; users find new ways to use the
+library, they expose previously un-detected bugs, they request or propose new
+features, and the world continues to changes around us.  This scope also covers
+small-to-medium development of new features that are opportunistically
+identified.  \textbf{Dedicated full-time developers help ensure that things
+  happen in a consistent and timely manner, and provide the crucial roadmaps
+  that will steer the future of the library}.
 
 
 %plot?
@@ -1118,7 +1145,7 @@ process of those projects.
   \item GSOC participtaion
   \item welcome bot
   \item CoC
-
+  \item CSCCE adoption
   \end{itemize}
 
 
