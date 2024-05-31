@@ -415,7 +415,7 @@ on shorter, month to year, timescales.
 % This is (for Matplotlib)
 %  maint: 5.85 FTE
 %  new feature: 1.8 FTE
-%  community: 1.35 FTE
+%  community: 1.35 FTE + .1*5
 For Cartopy we plan to split the effort ?? / ??.  %TODO: how do you want to split this Greg?
 
 
@@ -430,26 +430,75 @@ In particular, Cartopy includes complex and unique data structures/sources such 
 Further, the geographic projections tie in closely to Matplotlibs internal structures and can be reworked to take advantage the new pipeline for data transformations.
 In particular, the combined effects of the transformation pipeline and the data structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
 
+\subsubsection{Sharing Matplotlib Figures}
+
+The current recommended method to write a Python script (or Jupyter notebook)
+that when executed will recreate the figure.  While there are advantages to
+this approach, it does not fit into the preferred workflow of users who would
+prefer a simpler \texttt{save} / \texttt{load} API with a non-executable
+on-disk representation.  Such a serialization would also benefit users who
+currently use \texttt{pickle} to move Matplotlib objects over interprocess
+communication (IPC) channels \footnote{Some users are currently also using
+pickle for long-term serialization but this poses both practical problems (due
+to the incompatibility of pickles between minor Python versions) and the well
+known security concerns.}.  We propose to develop the functionality to save and
+load Matplotlib \texttt{Figures}s to a static representation.
+
+We will build on the work currently being lead by Dr.\ Sunden to overhaul the
+internal structure and data model of Matplotlib (as discussed above).
+Leveraging the updated \texttt{Artist}s, how Maplotlib represents each element
+of the visualization, and the new data layer we will develop an on-disk
+representation and code to safely and reliably recreate an \texttt{Figure} with
+the standard interactivity.  Once loaded, this object can be further modified
+via Python, re-saved to our serialization, or exported to any of the standard
+image formats Matplotib supports.  We will extend the current work to add a
+protocol for serializing each \texttt{Artist} and data container, similar to
+the protocol used for rendering the figure to an output image.  By using this
+standard design pattern, sometimes called ``The Visitor Pattern'', we are able
+to write generic tools to export the full \texttt{Figure}.
+
+A particular challenge is how to serialize the data represented by the
+visualization.  In some cases where the data is small and provide to Matplotlib
+fully materialized it is reasonable to include the data directly in-line with
+the file.  However, in other cases where the data is large or is not fully
+materialized, we will extend the new data representation work to provide
+serializations that point to the location of the data rather the directly
+including it.
 
 
-\subsubsection{Save and Load Interactive Figures}
-Matplotlib has long had both basic interaction, panning and zooming, as well as
-the tools to build rich interactive visualizations for multi-scale and
-high-dimensional data exploration.  The recommended method to write a Python
-script or Jupyter notebook that encompass creating loading the data, creating
-the visualization, and implementing any richer interactivity.  While effective,
-this places all of the burden of wrangling the code, data, and execution
-environment on to the user.  There are four specific barriers to easily sharing
-interactive figures.  First, the Matplotlib \texttt{Figure} object, the top
-level object that completely encodes a visualization, does not have a canonical
-on-disk representation that can be used to recreate an equivalent
-\texttt{Figure}.  Second, the mapping between the data structures the user has
-and data structures that Matplotlib require may be complex and the data
-visualized by our users varies wildly in size.  Third, custom interactions are
-specified by Python code which must also be serialized and reloaded. Finally,
-we must be able to capture information about which packages and their versions
-were installed.  We are proposing to reduce each of these barriers to make it
-easier to save and share interactive Matplotlib figures.
+A second major challenge of sharing \texttt{Figure}s is that the person
+receiving the \texttt{Figure} needs a fully functioning Python environment with
+the correct dependencies installed, be comfortable using Python, and access to
+the data.  One solution is to share figures via a web server, however because
+the rendering and interaction happen in Python any solution like this requires
+an active process on the server per user.  Additionally, because interactions
+and rendering happen on the server there can be significant latency.
+
+We propose to leverage pyodide (\url{https://pyodide.org/en/stable/}), a
+project that uses WASM to run Python in the clients browser.  We will develop a
+tool to turns a python script and requirements file into a static artifact,
+that will provide an interactive \texttt{Figure}s in a browser.  As these the
+Python process for these \texttt{Figure}s is running in the clients browser
+only a simple static webserver is required and the issues with latency are
+reduced.  As part of this work we expect to contribute to the upstream
+projects.
+
+
+
+% that encompass creating loading the data, creating the visualization, and
+% implementing any richer interactivity.  While effective, this places all of the
+% burden of wrangling the code, data, and execution environment on to the user.
+% There are four specific barriers to easily sharing interactive figures.  First,
+% the Matplotlib \texttt{Figure} object, the top level object that completely
+% encodes a visualization, does not have a canonical on-disk representation that
+% can be used to recreate an equivalent \texttt{Figure}.  Second, the mapping
+% between the data structures the user has and data structures that Matplotlib
+% require may be complex and the data visualized by our users varies wildly in
+% size.  Third, custom interactions are specified by Python code which must also
+% be serialized and reloaded. Finally, we must be able to capture information
+% about which packages and their versions were installed.  We are proposing to
+% reduce each of these barriers to make it easier to save and share interactive
+% Matplotlib figures.
 
 
 % It is easy for the files with the code to become disassociated from the data or
@@ -461,25 +510,14 @@ easier to save and share interactive Matplotlib figures.
 % complicate the use of version control is the case of notebooks.
 
 
-We will address the first two barriers by building on the work currently being
-lead by Dr.\ Sunden to overhaul the internal structure and data model of
-Matplotlib.  Leveraging the updated \texttt{Artist}s, how Maplotlib represents
-each element of the visualization, and the new data layer we will develop an
-on-disk representation and code to safely and reliably recreate an
-\texttt{Figure} with the standard interactivity.  We will extend the current work to
-add a protocol for serializing each \texttt{Artist} and data container, similar to
-the protocol used for rendering the figure to an output image.  By using this standard
-design pattern, sometimes called ``The Visitor Pattern'', we are able to write generic tools
+% Matplotlib has long had both basic interaction, panning and zooming, as well as
+% the tools to build rich interactive visualizations for multi-scale and
+% high-dimensional data exploration.
 
-Once loaded, this object can
-be further modified via Python, re-saved to our serialization, or exported to
-any of the standard image formats Matplotib supports.  A particular challenge
-is how to serialize the data represented by the visualization.  In some cases
-where the data is small and provide to Matplotlib fully materialized it is
-reasonable to include the data directly in-line with the file.  However, in
-other cases where the data is large or is not fully materialized, we will
-extend the new data representation work to provide serializations that point to
-the location of the data rather the directly including it.  Taken together
+
+We will address the first two barriers by
+
+
 
 non-trivial data structures involved.  Second, for the figures to
 be interactive a running Python process, with the correct dependencies
@@ -487,10 +525,6 @@ installed, with access to the data is required.  To address this we propose to
 develop an export functionality for figures that will save the figure, any user
 defined functions, and the data such that the exact same figure can be
 re-created in another process.
-
-However, these tools
-require either a desktop environment, to use a traditional GUI framework, or an
-active server for use in a browser, via either Jupyter or a stand-alone server.
 
 
 \subsubsection{Ticker refactor}
