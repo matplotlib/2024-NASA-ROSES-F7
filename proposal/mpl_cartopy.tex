@@ -419,6 +419,16 @@ For Cartopy we plan to split the effort ?? / ??.  %TODO: how do you want to spli
 
 \subsubsection{Refactor Cartopy}
 
+The previous round of ROSES funding for Matplotlib focused primarily on the data pipeline.
+The two main prongs of the refactor were a unified way of ingesting data from rich data structures and an overhaul of the pipeline for data transformation.
+These improvements have provided a toolbox for downstream libraries to use, but have not yet been widely adopted.
+
+Cartopy is a prime candidate for a downstream library which can take advantage of the improvements for Matplotlib.
+In particular, Cartopy includes complex and unique data structures/sources such as shape data for geographic regions and tiled map information.
+Further, the geographic projections tie in closely to Matplotlibs internal structures and can be reworked to take advantage the new pipeline for data transformations.
+In particular, the combined effects of the transformation pipeline and the data structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
+
+
 \subsubsection{Interactivity in a web context}
 
 Matplotlib has long had both basic interaction, panning and zooming, as well as
@@ -430,14 +440,33 @@ active server for use in a browser, via either Jupyter or a stand-alone server.
 \subsubsection{Ticker refactor}
 
 The tick location and formatting machinery in Matplotlib is flexible, but this
-flexibility comes at a performance cost, architecturally prevents hierarchical
-labeling, and reduces API usability by making seemingly simple tasks
-surprisingly complex.  While the work to design the new API is significant, our
-primary concern will be to complete this work while minimizing the impact on
-existing users.  Because tick labeling is so fundamental to plotting, even
-small changes to the API will have significant impact on our users.  Although
-we have had discussion about these issues since at least 2015, it has
-been intractable with volunteer effort.
+flexibility comes at a performance cost, architecturally prevents hierarchical labeling,
+and reduces API usability by making seemingly simple tasks surprisingly complex.
+
+The primary cause of the performance deficit is that each tick is treated individually.
+Treating ticks as a collection would reduce the overhead significantly.
+Ticks for the same hierarchy level are identical in the vast majority of figures, and so
+can take advantage of faster low level drawing routines.
+
+Hierarchical labeling is particularly useful for plots with date/time axes and those with
+hierarchical categories.
+Currently, Matplotlib only supports two levels of ticks on any given axis (called major
+and minor).
+Further levels can be approximated, but doing so requires usage of relatively advanced
+features outside of their normal usage pattern.
+Designing a system that allows additional layers, all with the same API, will be more
+user friendly.
+Additionally, we can enable new positioning modes that allow a tick's label to be
+centered between two ticks, rather than strictly relative to it's own position.
+
+While the work to design the new API is significant, our primary concern will be to
+complete this work while minimizing the impact on existing users.
+Because tick labeling is so fundamental to plotting, even small changes to the API will
+have significant impact on our users.
+For instance, there may be need to fall back to drawing individually if someone edits a
+particular tick, while retaining the performance boost in all other cases.
+Although we have had discussion about these issues since at least 2015, it has been
+intractable with volunteer effort.
 
 
 \subsubsection{General maintenance}
@@ -612,8 +641,6 @@ but is not limited to, fixing bugs, reviewing Pull Requests, answering
 user questions, welcoming new contributors to the project, and
 planning for the future.  Dr.\ Caswell will particularly focus on
 the project roadmap and community governance.
-
-\subsubsection{Cartopy Refactor}
 
 \subsubsection{Consultation Services}
 
