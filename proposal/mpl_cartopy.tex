@@ -623,7 +623,7 @@ Linux and scientific Python distribution.  Another metric to measure
 impact is static analysis of publicly available code.  According to
 GitHub over 299k repositories and over 12k packages hosted on GitHub
 depend on Matplotlib~\cite{gh_deps:2021}. A recent study of the
-almost 10M Jupyter notebooks on github found that over 3M of them have
+almost 10M Jupyter notebooks on GitHub found that over 3M of them have
 a direct Matplotlib import~\cite{datalore:2020}.
 
 % - update with more recent examples, sort by division
@@ -894,7 +894,7 @@ integration that test development snap-shots of Matplotlib.  This is
 particularly useful during the planned refactor as we will be making
 extensive changes to Matplotlib that we believe are backwards
 compatible, but down-stream projects and users exercise the library in
-ways the test suite does not.  While we hope to introduce any
+ways the test suite does not.  While we hope not to introduce any
 regressions, catching them before release is the next best thing.
 
 % wording all NF projects are putting in, please avoid wordsmithing it.
@@ -912,6 +912,9 @@ into consideration when evaluating our proposal.
 
 % - TODO this subsubsection may move to the inclusion plan which is
 % required for foundation level call
+% GML: I agree to move this into the inclusion plan. I think this is a
+% strong case and well written. We can add a sentence or two within the
+% main proposal that references out to this text in the inclusion plan.
 
 Matplotlib strives to be an inclusive and open project, anyone who is
 willing and able to contribute to the project should feel welcome to
@@ -931,19 +934,24 @@ channel on gitter and a Triage Team.
 %
 % It is important for everyone working on the project to feel safe to
 % make mistakes.
+% GML: I agree with this sentiment. I wonder if we can put something in about
+% the project being OK with reverting commits. I actually had an experience in
+% numpy that was kind of funny with having a large-ish PR merged two times and
+% reverted both times because of downstream breakages. But, it was very nice that
+% they were willing to merge and revert and not really a big issue IMO.
 
 The hardest part of getting started to contributing to open source
-projects is can be simply getting started.  Open source communities,
+projects is simply figuring out where and how to begin.  Open source communities,
 particularly big ones, can be intimidating for first time
 contributors.  The incubator is a semi-closed chat room where new
 contributors can get support on any aspect of contributing to
-Matplotlib.  This include the technical aspects of the code they are
-working on, help with git/github, our review process, or the social
+Matplotlib.  This includes the technical aspects of the code they are
+working on, help with git/GitHub, our review process, or the social
 expectations and norms of the community.  The goal is that by
 providing this support to first time contributors we will retain more
 of them as regular contributors and then maintainers.
 
-The issue tracker is important to communication in the project because
+The issue tracker is important to communication on the project because
 it serves as the centralized location for making feature requests,
 reporting bugs, identifying major projects to work on, and discussing
 priorities.  For this reason, it is important to curate the issue
@@ -955,9 +963,10 @@ organization who have power to tag, milestone, and close issues.  In
 addition to the direct benefit of improving the issue triage and
 freeing the core-developers to spend more time reviewing PRs, this
 role will bring more people into the developer community and may
-provide a path way to becoming regular contributors and maintainers.
+provide a pathway to becoming regular contributors and maintainers.
 
-Ongoing work at NumFOCUS to develop metrics will help us evaluate the
+Ongoing work at NumFOCUS to develop metrics on new contributors
+will help us evaluate the
 efficacy of these efforts at diversifying our contributor base.
 
 \subsubsection{Contribution Workflow}
@@ -967,9 +976,9 @@ efficacy of these efforts at diversifying our contributor base.
 \paragraph{Matplotlib}
 Matplotlib is an established community driven project in the
 ``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.
-We have a core group regular maintainers who take responsibility for
+We have a core group of regular maintainers who take responsibility for
 reviewing and merging proposed changes to the library and welcome Pull
-Requests from anyone who is interesting in contributing.  We strive
+Requests from anyone who is interested in contributing.  We strive
 for consensus and rely on the collective judgment of our maintainers
 to maintain the quality and functionality of the library.
 
@@ -977,16 +986,16 @@ Matplotlib uses a variation on the ``git flow'' process~\cite{ghflow}
 to manage proposing and reviewing contributions to the library and
 documentation on GitHub.  Changes are proposed by opening a ``Pull
 Request'' on GitHub; the process is the same for core maintainers,
-regular contributors, and a first time contributors.  The proposed
+regular contributors, and a first time contributor.  The proposed
 changes are reviewed by maintainers who either request changes, which
 starts a cycle of iteration with the contributor, or approve.  In
 addition to human review we have an extensive test suite that is
 automatically run via cloud services and the results are reported to
-the PR.  Once consensus is reached and the test pass the PR is merged
+the PR.  Once consensus is reached and the tests pass the PR is merged
 and the changes will be released as part of the next release.
 
 Matplotlib maintains an extensive suite of automated tests that
-exercises a large fraction of our code base.  The full test suite, and
+exercises a large fraction of our code base (>90\% code coverage).  The full test suite, and
 a build of the documentation, is run against several versions of
 Python on OSX, Windows, and Linux hosts on every PR and merge to the
 default branch via continuous integration.  For every new feature or
@@ -1019,7 +1028,7 @@ This process works well for incremental contributions and bug fixes.  Bigger
 changes, such as major new features or significant refactors, are typically
 discussed before significant work is done.  In many cases if a feature does not
 need to be in the core library we encourage contributors to create a new
-stand-alone project.  This has several advantages including the giving the
+stand-alone project.  This has several advantages including giving the
 author more control, allows them to iterate faster than our 6 month release
 schedule, and gives them greater flexibility to change their APIs during
 initial development.
@@ -1073,7 +1082,7 @@ For real-time chat Matplotlib maintains a Gitter/element
 general coordination and resolving minor technical discussions.  While the chat
 room's history is technically persistent, we treat it as transient.  For more
 in-depth discussions or anything we want a record of, we move the conversation
-to github, the mailing list, or discourse.
+to GitHub, the mailing list, or discourse.
 
 For user support and general discussion we maintain a Discourse
 (\url{https://discourse.matplotlib.org}) instance.  While users have to
