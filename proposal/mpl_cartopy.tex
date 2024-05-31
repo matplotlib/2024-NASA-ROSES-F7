@@ -39,7 +39,6 @@
 % I use color, graphicx, and epstopdf to read in PDFs for my figures.
 \usepackage{color}
 \usepackage{graphicx}
-\usepackage{pdfpages}
 % \usepackage{epstopdf}
 % I don't remember why threeparttable and setspace is here. Inertia.
 \usepackage{threeparttable}
@@ -76,9 +75,10 @@
 %% Nothing to be done about that. You may or may not have the
 %% same problem, so you may or may not have to tweak this.
 \usepackage[nottoc,numbib]{tocbibind}
-\renewcommand{\tocbibname}{References\setcounter{page}{1}}
+\renewcommand{\tocbibname}{References}
 \usepackage{tocloft}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\usepackage{pdfpages}
 
 %%%
 %% These commands get the spacing around the title and section titles right.
@@ -1012,8 +1012,11 @@ SciPy, PyData regional conferences, and domain science conferences.
 \let\apjlett=\apjl
 \let\apjsupp=\apjs
 \let\applopt=\ao
-\setcounter{page}{1}
+
+\let\oldbibsection\bibsection
+\renewcommand\bibsection{\oldbibsection\setcounter{page}{1}}
 \bibliography{highlight,mpl_cartopy}
+
 
 \newpage
 
@@ -1314,7 +1317,7 @@ F.W. Heyl Scholar \hfill 2012-2016\\
     Peter L. Cruz Parrilla, John C. Wright, Blaise J. Thompson
     \textbf{The yaq project: Standardized software enabling flexible instrumentation}
     Rev. Sci. Instrum. 94, 044707 (2023)
-  
+
   \item Blaise J. Thompson, \textbf{Kyle F. Sunden}, Darien J. Morrow,
     Daniel D. Kohler, John C. Wright
     \textbf{WrightTools: a Python package for multidimensional spectroscopy}.
