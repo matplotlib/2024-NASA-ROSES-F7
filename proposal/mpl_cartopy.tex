@@ -335,7 +335,7 @@ analysis, plus a low-level API that gives full control for fine-tuned
 publication-quality plots, for animations, for writing both GUI-independent and
 GUI-specific tools for interactive data plotting, and for output to a variety
 of vector and raster formats including \texttt{svg}, \texttt{eps},
-\texttt{pdf}, and \texttt{png}.  With the support of NASA [CITE CURRENT GRANT]
+\texttt{pdf}, and \texttt{png}.  With the support of NASA (20 ROSES E.7, 20-OSTFL20-0058)
 we are working on overhauling the internal architecture of Matplotlib to better
 support modern highly-structured data.
 
@@ -381,7 +381,7 @@ Matplotlib~\cite{Hunter:2007} has between 12,800~\cite{ads_mpl} and 32,000
   \label{fig:arxiv}
 \end{wrapfigure}
 
-Figure~\ref{fig:arxiv} shows an empirical measure of the large usage 
+Figure~\ref{fig:arxiv} shows an empirical measure of the large usage
 of Matplotlib in the scientific literature by looking at the
 metadata in files uploaded to the arXiv.  When saving figures Matplotlib
 inserts a string into the file metadata indicating that it was created by
@@ -476,7 +476,7 @@ grant 65\% / 20\% / 15\% between maintenance, new development, and community
 engagement and community and project management.  We intend to target this distribution
 of effort across the lifetime of the grant, but there may be variations in the effort
 on shorter, month to year, timescales.
-% This is (for Matplotlib)
+% This is (for Matplotlib over 5 years)
 %  maint: 5.85 FTE
 %  new feature: 1.8 FTE
 %  community: 1.35 FTE + .1*5
@@ -912,26 +912,23 @@ management, and budget issues and is the final authority for this task.
 
 Matplotlib is a NumFOCUS Fiscally Sponsored Project.
 
-Matplotlib is governed by a steering council, a Project Lead (PL), and
-several Deputy Project Leads (DPL)~\cite{gov}.  We are a community
-project and try to make all decisions, both strategic and day-to-day,
-by consensus.  However, if consensus can not be reached, the
-responsibility falls back to the DPLs and ultimately to the PL.  The
-current PL is Dr.\ Caswell.
-
-As Matplotlib has matured we have moved from a single person,
-originally Dr.\ John Hunter, to a ``BDFL'' governance model.  The
-leadership of the project passed to Dr.\ Micheal Droettboom in 2012.
-In 2014 Dr.\ Caswell and Dr.\ Droettboom were co-leads and in 2016
-Dr.\ Caswell took over as the sole project lead.  In 2020 we formally
-adopted the current governance model.
+From 2020 onward Matplotlib is governed by a steering council, a Project Lead
+(PL), and several Deputy Project Leads (DPL)~\cite{gov}.  The current PL is
+Dr.\ Caswell.  We are a community project and try to make all decisions, both
+strategic and day-to-day, by consensus.  However, if consensus can not be
+reached, the responsibility falls back to the DPLs and ultimately to the
+PL.\footnote{Prior to 2020 Matplotlib used a ``BDFL'' model lead by Dr.\ John
+Hunter until 2012, Dr.\ Michael Droettboom from 2012-2014, jointly by
+Dr.\ Caswell and Dr.\ Droettboom from 2014-2016, and by Dr.\ Caswell from
+2016-2020.}
 
 \subsubsection{License}
 
-Matplotlib is licensed under the Matplotlib License~\cite{mpl_lic}
-which is a derivative of the Python Software Foundation
-license~\cite{psf_lic} and is a permissive license compatible with the
-BSD license~\cite{jdh_bsd_opinions}.
+Matplotlib is licensed under the Matplotlib License~\cite{mpl_lic} which is a
+derivative of the Python Software Foundation license~\cite{psf_lic}.  It is a
+permissive license compatible with the BSD-3 clause
+license~\cite{jdh_bsd_opinions}.  Matplotlib include several components which
+are individually license under BSD-3 clause compatible licenses.
 
 Cartopy is licenced under the BSD-3 clause.
 
@@ -979,14 +976,16 @@ available.
 
 Much of the communication is through the standard communication channels, such
 as project issue trackers, mailing lists or discussions forums, and submitting
-PRs.  For example P. L. Lim, who is an Astropy contributor at the Space
-Telescope Science Institute, regularly reports bugs to Matplotlib when
-pre-release versions of Matplotlib have an impact on Astropy.  The strongest
-relationships, both historical and current, are with projects where we have
-shared developers.  For example Greg Lucas, Ruth Comer, and Elliot sales de
-Andre are core contributors to Matplotlib and Cartopy while David Stansby is a
-maintainer on both Matplotlib and \texttt{SunPy}.  Additionally, through
-NumFOCUS and domain-specific conferences there are regular in-person meetings.
+PRs.  For example P. L. Lim, who is a Senior Software Engineer in the Data
+Analysis Tools Branch at the Space Telescope Science Institute and Astropy
+contributor regularly reports bugs to Matplotlib when pre-release versions of
+Matplotlib have an impact on Astropy.  The strongest relationships, both
+historical and current, are with projects where we have shared developers.  For
+example Greg Lucas, Ruth Comer, and Elliot sales de Andre are core contributors
+to Matplotlib and Cartopy while David Stansby is a maintainer on both
+Matplotlib and \texttt{SunPy}.  Additionally, through NumFOCUS and
+domain-specific conferences, there are regular in-person meetings between
+developers .
 
 We will work with down-stream projects to help them improve their test
 coverage of plotting code and to add jobs to their continuous
@@ -1015,6 +1014,11 @@ into consideration when evaluating our proposal.
 % GML: I agree to move this into the inclusion plan. I think this is a
 % strong case and well written. We can add a sentence or two within the
 % main proposal that references out to this text in the inclusion plan.
+% TAC: my concern with moving too much to the inclusion plan is that
+% it listed as a pilot part of the popsoal that will not affect if
+% we are awarded or not so I am not sure if the it will be reviewed by
+% the main panel or a separate panel that only provides feedback on the
+% inclusion plan.
 
 Matplotlib strives to be an inclusive and open project, anyone who is
 willing and able to contribute to the project should feel welcome to
@@ -1663,7 +1667,7 @@ of time that is required by this proposal and the awards below.\\
      {\footnotesize Thomas A.\ Caswell} &
      {\footnotesize Revamping Matplotlib for Modern Data Structures} &
      {\footnotesize\raggedright ROSES 2020 E.7 \\ NASA \\ Steven Crawford }  &
-     {\footnotesize SORT OUT} &
+     {\footnotesize 12/2021 - 12/2024} &
      {\footnotesize \$633k} &
      {\footnotesize 3.0}\\
      \hline
@@ -1697,7 +1701,7 @@ Dr.\ Sunden is fully supported by an on-going ROSES 2020 grant.\\
      {\footnotesize Thomas A.\ Caswell} &
      {\footnotesize Revamping Matplotlib for Modern Data Structures} &
      {\footnotesize\raggedright ROSES 2020 E.7 \\ NASA \\ Steven Crawford }  &
-     {\footnotesize SORT OUT} &
+     {\footnotesize 12/2021 - 12/2024} &
      {\footnotesize \$633k} &
      {\footnotesize 12}\\
      \hline
