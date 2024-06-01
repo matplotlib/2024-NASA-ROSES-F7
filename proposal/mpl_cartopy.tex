@@ -371,8 +371,6 @@ Matplotlib~\cite{Hunter:2007} has between 12,800~\cite{ads_mpl} and 32,000
 (google scholar) citations depending on what works are indexed.
 
 
-
-
 % - TODO re-run this code to get up-to-date numbers
 \begin{wrapfigure}{l}{0.5\textwidth}
   \includegraphics[width=0.45\textwidth]{arXiv_usage}
@@ -404,6 +402,62 @@ trends indicating the growing reliance on Matplotlib by the scientific community
 %   [ ] o the level of community contributions to the code base.
 
 % - TODO write up Cartopy description
+% - Add more citations and referencable material
+
+% Using Cartopy, blog posts from NASA?
+% Tracking microplastics
+% https://www.earthdata.nasa.gov/learn/blog/quantifying-microplastics-brazilian-coast
+% Lightning location
+% https://ghrc.nsstc.nasa.gov/home/data-recipes/otd-lightning-flash-location-quickview-using-python-30-and-gis
+% MERRA-2 NASA reanlaysis datasets
+% https://disc.gsfc.nasa.gov/information/howto?title=How%20to%20read%20and%20plot%20NetCDF%20MERRA-2%20data%20in%20Python
+% 40k downloads per week: https://www.pepy.tech/projects/cartopy
+% 1.4k stars on GitHub
+% 4572 repositories depend on Cartopy, 409 packages depend on Cartopy
+% 100 contributors
+% project started in 2012
+
+Cartopy is an essential Python package designed for geospatial data processing and visualization.
+It extends the capabilities of Matplotlib, a widely-used plotting library,
+to create high-quality maps and complex geospatial visualizations.
+With Cartopy, users can handle a variety of geospatial data formats,
+including shapefiles, GeoTIFFs, and netCDF,
+making it a versatile tool for researchers and scientists working with geographic information.
+
+One of the primary functions of Cartopy is to provide a framework for projecting and visualizing data on maps,
+which is crucial for interpreting spatial patterns and trends.
+The package supports numerous map projections and offers sophisticated tools for
+adding and customizing map features such as coastlines, borders, and gridlines.
+These capabilities are indispensable for visualizing and analyzing data from
+Earth observation satellites, climate models, and other geospatial datasets.
+
+Specifically of relevance to NASA, Cartopy is critical in supporting its Science Mission Directorate (SMD) objectives,
+which include understanding Earth's system and its responses to natural and human-induced changes.
+Cartopy facilitates the visualization of data from NASA's satellite missions,
+such as the Earth Observing System (EOS) and the Joint Polar Satellite System (JPSS).
+% TODO: Citations?
+% EOS is many satellites, should we reference some more specific individual missions?
+% EOS: https://eospso.gsfc.nasa.gov/mission-category/3
+% JPSS: https://science.nasa.gov/mission/jpss/
+Researchers use Cartopy to create detailed maps that display atmospheric, oceanic,
+and terrestrial data, enabling them to track climate change, natural disasters,
+and other environmental phenomena with precision.
+
+Furthermore, Cartopy's integration with other Python-based scientific libraries
+allows for streamlined workflows and enhanced data analysis capabilities.
+This interoperability is crucial for the scientific community,
+where multi-disciplinary collaboration and data sharing are paramount.
+By supporting Cartopy, NASA ensures that its scientists and researchers
+have access to cutting-edge tools that enhance their ability to generate
+insights from complex geospatial data, fostering innovation and discovery.
+
+Sustaining Cartopy is not only beneficial for current scientific endeavors
+but also for the future of geospatial research. Continued support and development
+of Cartopy will ensure that it remains compatible with evolving data standards
+and computational environments. This investment will provide NASA's SMD and the
+broader scientific community with a robust, reliable tool for visualizing and
+interpreting the vast amounts of geospatial data crucial to addressing some
+of the most pressing scientific questions of our time.
 
 \subsection{Objectives}
 
@@ -460,6 +514,29 @@ of the source projection. In Cartopy, a line from A->B may be a straight line in
 a curve in the target projection. The new data model will allow for a more robust way to handle this subsampling
 based on the current view limits, rather than requiring a user to define a threshold that may be too high or too low
 for a given view.
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
+  \caption{\small Example geodetic path from Japan to California demonstrating
+  that the default threshold is currently too large in some cases. Additionally,
+  the line from Japan to California (red) is not the same as the line from
+  California to Japan (blue) due to the current subsampling technique.}
+  \label{fig:cartopy_interpolation}
+\end{wrapfigure}
+Figure~\ref{fig:cartopy_interpolation} shows an example of the current subsampling technique
+used in Cartopy. The red line is a geodetic path from Japan to California, while the blue line
+is the same path but reversed going from California to Japan. The current subsampling technique
+uses a fixed threshold to determine whether chosen points provide a small enough angle indicating
+it is a "smooth enough" curve. The default fixed threshold is not always appropriate for all
+paths as shown in the figure where we'd want to visually see a smooth path (dashed black line) and not two distinct lines.
+The new data model will allow for a more robust way to handle this subsampling based on the current view limits.
+Additionally, we plan to implement a more robust algorithm for subsampling that will ensure all paths from
+A->B and B->A are the same.
+% TODO: Adaptive resampling discussion?
+% https://observablehq.com/@d3/adaptive-sampling
+% https://bost.ocks.org/mike/simplify/
+% Douglas-Peucker algorithm, Visvalingam’s algorithm, and Reumann-Witkam algorithm
+% https://algorithm-wiki.csail.mit.edu/wiki/Line_Simplification
 
 \subsubsection{Sharing Matplotlib Figures}
 % TODO cut this text in half
@@ -709,6 +786,7 @@ very hard to provide that leadership and vision while working on the project dur
 \subsubsection{Tick Refactor}
 \subsubsection{Cartopy Refactor}
 
+% TODO(GML): Work on adding content / descriptions to this section instead of the overview above.
 
 \subsection{Risk Management}
 
@@ -1058,6 +1136,9 @@ initial development.
 \paragraph{Cartopy}
 
 % TODO write
+% GML: What about removing the Cartopy subsection here and just leaving this as a
+% general "contribution workflow" section. They are so similar and doesn't seem to be
+% worthwhile to distinguish them.
 
 \subsubsection{Information Dissemination}
 
@@ -1761,7 +1842,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
+\item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
@@ -1797,7 +1878,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
+\item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
@@ -1833,7 +1914,7 @@ No direct labor
   proposed work.  The time commitment is 0.2FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
-\item Dr.\ Gregory Lucas is a Co-I and will oversee the Cartopy aspects of
+\item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
   proposed work.  The time commitment is 0.2FTE.  His primary appointment is at
   University of Colorado Boulder which will be subcontracted for his effort.
 \item Dr.\ Kyle Sunden is a Co-I and will work on the implementation of all
