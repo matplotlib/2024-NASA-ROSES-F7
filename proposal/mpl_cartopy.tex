@@ -323,13 +323,11 @@ Soon after its start by John D. Hunter in 2002, Matplotlib began growing as an
 open source plotting library with a BSD-compatible license. The first commits
 in the Matplotlib history date to early 2003.  Over the last 21 years
 Matplotlib has been actively developed and maintained by a vibrant, primarily
-volunteer, community.  Matplotlib has over 1,740 individual contributors to the
-code base over the full history of the project and over
-6,800 % TODO
-people have commented on GitHub , with many more
-individuals having contributed in ways not easily tracked, such as asking and
-answering questions on the mailing list and forums or doing peer-support and
-advocacy in their home institutions.
+volunteer, community.  Matplotlib has over 1,720 individual contributors have
+commits in git (from 2003-today) and over 8,500 people have commented on GitHub
+(2011-today).  Many more individuals have contributed in ways not easily
+tracked, such as asking and answering questions on the mailing list and forums
+or doing peer-support and advocacy in their home institutions.
 
 
 Matplotlib has a high-level API for quick plotting, such as in exploratory data
@@ -351,17 +349,27 @@ seaborn~\cite{waskom2020seaborn}, xarray~\cite{hoyer2017xarray},
 Cartopy~\cite{Cartopy}, corner.py~\cite{corner} and
 mpl-scatter-density~\cite{mpl-scatter-density}.
 
-Matplotlib is ubiquitous in scientific computing.  Conservative estimates based
-on downloads and on usage of the documentation website indicate that Matplotlib
-has over a million users.  We expect that a large fraction of NASA
-SMD-sponsored projects rely on this shared infrastructure to some degree, but
-this is hard to quantify.  It is not usual, but becoming more common, to cite
-tool chains in scientific literature, so citation counts are likely to
-under-represent the scientific use of Matplotlib.  Nevertheless, the canonical
-reference for Matplotlib~\cite{Hunter:2007} has over 31,800 citations overall
-%TODO
-[CITE GOOGLE SCHOLAR].
-and has over 12,800 citations in ADS~\cite{ads_mpl}.
+Matplotlib is ubiquitous in scientific computing, however because it is freely
+distributed it is difficult to get accurate numbers on usage.  Conservative
+estimates based on downloads and on usage of the documentation website indicate
+that Matplotlib has over 5 million users.  Matplotlib is in the top 125
+most-downloaded packages from PyPI~\cite{pypi_stats} with over 10 million
+downloads per week and is packaged by every major Linux and scientific Python
+distribution.  Usage and also be estimated from static analysis of publicly
+available code.  According to GitHub over 1.2M repositories and over 34k
+packages hosted on GitHub depend on Matplotlib~\cite{gh_deps:2024},  which is a
+factor of 3-4 growth from early 2021. A 2020 study of the almost 10M Jupyter
+notebooks on GitHub found that over 3M of them have a direct Matplotlib
+import~\cite{datalore:2020}.
+
+We expect that a large fraction of NASA SMD-sponsored projects rely on this
+shared infrastructure to some degree, but this is hard to quantify.  It is not
+usual, but becoming more common, to cite tool chains in scientific literature,
+so citation counts are likely to under-represent the scientific use of
+Matplotlib.  Nevertheless, the canonical reference for
+Matplotlib~\cite{Hunter:2007} has between 12,800~\cite{ads_mpl} and 32,000
+(google scholar) citations depending on what works are indexed.
+
 
 
 
@@ -432,6 +440,7 @@ Further, the geographic projections tie in closely to Matplotlibs internal struc
 In particular, the combined effects of the transformation pipeline and the data structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
 
 \subsubsection{Sharing Matplotlib Figures}
+% TODO cut this text in half
 
 The current recommended method to write a Python script (or Jupyter notebook)
 that when executed will recreate the figure.  While there are advantages to
@@ -465,6 +474,7 @@ the file.  However, in other cases where the data is large or is not fully
 materialized, we will extend the new data representation work to provide
 serializations that point to the location of the data rather the directly
 including it.
+
 
 
 A second major challenge of sharing \texttt{Figure}s is that the person
@@ -567,12 +577,12 @@ hundred of thousands of users and hundreds of downstream packages.  To maintain
 Matplotlib's health we must:
 \begin{itemize}[noitemsep]
 \item fix critical bugs and regressions promptly as they are reported;
+\item entrain new contributors to sustain and diversify the community
+  developer team;
 \item make improvements while maintaining backward compatibility and
   documenting changes;
 \item categorize Issues and PRs in terms of topic, difficulty, and
   urgency;
-\item entrain new contributors to sustain and diversify the community
-  developer team;
 \item maintain the continuous-integration infrastructure;
 \item manage the release process;
 \item and manage community discussions about proposed enhancements, features,
@@ -614,44 +624,30 @@ the health of the project and \textbf{the additional resources
 
 % - TODO re-check these numbers
 
-As mentioned above, it is hard to estimate the prevalence of open
-source software due to it being freely distributed and not
-systematically cited.  Matplotlib is in the top 100 most-downloaded
-packages from PyPI~\cite{pypi_stats} with over 10 million downloads
-per week and is packaged by every major
-Linux and scientific Python distribution.  Another metric to measure
-impact is static analysis of publicly available code.  According to
-GitHub over 299k repositories and over 12k packages hosted on GitHub
-depend on Matplotlib~\cite{gh_deps:2021}. A recent study of the
-almost 10M Jupyter notebooks on GitHub found that over 3M of them have
-a direct Matplotlib import~\cite{datalore:2020}.
-
 % - update with more recent examples, sort by division
 
 
 
 These measures show broad impact but cover many uses outside of the
-SMD community.  If we restrict the static analysis to
-\url{https://github.com/nasa}, NASA's official organization on GitHub,
-we see that XX of the YYY hosted repositories make reference to
-Matplotlib.  Several highlights Matplotlib is used
+SMD community.  Several highlights Matplotlib is used
 \begin{itemize}[noitemsep]
-\item to study galaxy evolution \cite{2022ApJ...940L..14N}
-\item to study exoplanets \cite{2020AJ....160..116G, Barclay_2018,2019AJ....158...27L}
-\item to study the outer solar system \cite{Emran_2023}
+\item to study galaxy evolution~\cite{2022ApJ...940L..14N} with JWST
+\item to study exoplanets~\cite{2020AJ....160..116G, Barclay_2018,2019AJ....158...27L} with TESS
+\item to study the outer solar system~\cite{Emran_2023}
 \item and to study the sun [NEED CITE]
-\item for Martian studies \cite{2022JE007697} and Rover drive planning at JPL (personal communication)
-\item for lunar studies \cite{NESNAS2023163}
+\item for Martian studies~\cite{2022JE007697} and Rover drive planning at JPL (personal communication)
+\item for lunar studies~\cite{NESNAS2023163}
 \item and to study the earth [NEED CITE]
-\end{itemize}
+    % https://github.com/nsidc/NSIDC-Data-Tutorials <- cartopy + direct Matplotlib
 
-This list shows the breadth of Matplotlib usage across the SMD
-divisions.  Matplotlib falls under the umbrella of projects which the
-National Academies of Science recommended for funding in the report
-``Open Source Software Policy Options for NASA Earth and Space
-Sciences (2018)''~\cite{NAP25217} (Option B4).
-\textbf{Small investments in Matplotlib will have returns across the
-  entire SMD portfolio}.
+\end{itemize}
+This list shows the breadth of Matplotlib usage across the Astrophysics,
+Planetary Science, Heliophysics, and Earth Science divisions of SMD.
+Matplotlib falls under the umbrella of projects which the National Academies of
+Science recommended for funding in the report ``Open Source Software Policy
+Options for NASA Earth and Space Sciences (2018)''~\cite{NAP25217} (Option B4).
+\textbf{Small investments in Matplotlib will have returns across the entire SMD
+  portfolio}.
 
 Maintaining Matplotlib's health and engineering for its future will
 have wide-ranging impacts for the scientific community, and for NASA in
