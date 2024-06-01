@@ -948,19 +948,31 @@ the sustainability of the project in several ways; many hands make
 light work and it makes the project resilient to individuals leaving
 the project.
 
-Quantitatively evaluating maintenance work can be tricky --- some
-Issues or PRs take minutes to review while others can take days to
-weeks of effort --- but we believe that there is value at looking at
-the total number of open Issues and PRs and the rate at which they are
-addressed.  We aim to close Issues and PRs faster than they are opened
-until a reasonable equilibrium is reached.  We will aim to hit the
-following metrics:
+The first metric is the volume of work done.  Although quantitatively
+evaluating maintenance work can be tricky --- some Issues or PRs take minutes
+to review while others can take days to weeks of effort --- but we believe that
+there is value at looking at the rate and promptness with which they are
+addressed.  We will aim to hit the following metrics:
 \begin{itemize}[noitemsep]
-\item Initial response to all issues / new PRs within a week
-\item Resolve majority of new issues / PRs within 1 month
-\item Reduce backlog of issues by 25 / quarter
-\item Reduce backlog of PRs by 25 / quarter
+\item Initial response to all issues / new PRs within a week  % general responsiveness
+\item Close or merge a majority of new PRs within 1 month     % improve contributor experience
+  % 3mo/quarter*4wk/mo*((((5.85 total FTE for maint over grant  *.3 fraction for review) / 5 years)*40 hr/week) / 2 [hr/issue or PR])
+  % -> 84 reviews / quarter
+\item Resolve 80 issues to Matplotlib / quarter by supported developers       % numbers we can hit with grant labor only
+\item Review and merge 80 PRs to Matplotlib / quarter by supported developers % numbers we can hit with grant labor only
 \end{itemize}
+
+The second metric we will track is the rate at which we are able to on board
+new regular contributers to the project.  Historically over the past 5 years we
+have average 45-55 PRs from first-time contributors per quarter of which 30-40
+are eventually merged.  Of contributors with at least one merged PR, about 29\%
+have 2 or more merged PRs, but of contributors who have at least 2 merged PRs
+about 59\% have 3 or more.  As we consider the larger numbers of merged PRs,
+the odds of someone with N merged PRs having N+1 continues to improve
+approaches 90\% above 5 merged PRs.  We will aim to increase the number of
+first time contributors with merged PRs by 5 per quarter, to increase the
+fraction who go on to have a second per to 40\%, and to on board 2 new
+core-maintainers with commit rights per year.
 
 Finally, for the user community to benefit from our work we need to do
 regular releases.  We will continue to maintain a bi-yearly release
