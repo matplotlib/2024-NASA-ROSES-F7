@@ -822,15 +822,6 @@ downstream libraries to follow when integrating with the new Matplotlib data mod
 
 \paragraph{Path Transformations}
 
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
-  \caption{\small Example geodetic path from Japan to California demonstrating
-  that the default threshold is currently too large in some cases. Additionally,
-  the line from Japan to California (red) is not the same as the line from
-  California to Japan (blue) due to the current subsampling technique.}
-  \label{fig:cartopy_interpolation}
-\end{wrapfigure}
-
 The second area of focus for the Cartopy refactor is in the handling of path transformations from
 one projection to another. In Cartopy, transforming paths from one map projection to another can
 sometimes result in visually unappealing artifacts or loss of detail,
@@ -844,6 +835,16 @@ is the same path but reversed going from California to Japan. The current subsam
 uses a fixed threshold to determine whether chosen points provide a small enough angle indicating
 it is a "smooth enough" curve. The default fixed threshold is not always appropriate for all
 paths as shown in the figure where we'd want to visually see a smooth path (dashed black line) and not two distinct lines.
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
+  \caption{\small Example geodetic path from Japan to California demonstrating
+  that the default threshold is currently too large in some cases. Additionally,
+  the line from Japan to California (red) is not the same as the line from
+  California to Japan (blue) due to the current subsampling technique.}
+  \label{fig:cartopy_interpolation}
+\end{wrapfigure}
+
 
 To address this, we propose implementing an adaptive path subsampling technique similar to
 the one used in the D3 JavaScript library. This method ensures that additional points are
