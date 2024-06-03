@@ -998,7 +998,7 @@ We will set up a form that is available to users of Matplotlib and Cartopy withi
 
 \subsubsection{Ticker Refactor}
 
-The Ticker refactor will begin at the start of the grant period, Y1Q1.
+The Ticker refactor will begin at the start of the grant period, Y1Q1 and will take place over the course of 18 months, in parallel with general maintenance and community work.
 The initial quarter will focus on planning and API design for the new ticking system.
 This will include gathering examples of plots which could take advantage of the new ticking system.
 The technical implementation of the new ticking system will primarily take place in Y1Q2, with testing and documentation following in Y1Q3.
@@ -1016,12 +1016,18 @@ We expect to be ready for full release in Y2Q2, though may opt to delay for one 
 
 \subsubsection{Sharing Figures: Serialization}
 
+Following the conclusion of the Ticker refactor, another 18 month cycle will focus on the first portion of the sharing figures project, namely a serialization standard for Matplotlib figures.
+The first quarter (Y2Q3) will be primarily focused on planning and design requirements, with small proof of concept developement tasks.
+The second quarter (Y2Q4) will focus on serializing the Matplotlib \texttt{Artist}s and their relationships.
+The third quarter (Y3Q1) will in particular extend that work from the previous ROSES award, allowing serialization of both Data Containers and the transformation pipeline.
+It is expected that data serialization will be of particular technological consideration, as some Data Containers contain large amounts of data and/or reference data hosted in other locations (e.g. local files or remote web services).
+Following thourough documentation and testing, we expect a release to be available in Y3Q3, after which most effort will be in responding to user feedback and interfacing with downstream libraries to disseminate the work.
 % Y2Q3: Planning and Design
-% Y2Q4: Implementation
-% Y3Q1: 
-% Y3Q2: 
-% Y3Q3: 
-% Y3Q4: 
+% Y2Q4: Implementation serializing Artist tree
+% Y3Q1: Implementation serializing Data containers and transformation pipeline
+% Y3Q2: Documentation and testing
+% Y3Q3: Release, respond to user feedback
+% Y3Q4: Bug fexes and use cases
 
 \subsubsection{Sharing Figures: Bundling}
 
