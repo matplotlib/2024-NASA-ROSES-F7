@@ -503,10 +503,14 @@ Further, the geographic projections tie in closely to Matplotlibs internal struc
 and can be reworked to take advantage the new pipeline for data transformations.
 In particular, the combined effects of the transformation pipeline and the data
 structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
-This is particularly evident in the case of the tile sources, where users want data at a specific scale
+The benefits of scale-dependent queries are particularly evident when using tile sources and
+plotting lines from one projection to another.
+
+In the case of the tile sources, where users want data at a specific scale
 for the specific zoom level they are viewing, a global map will have a much coarser tile than a highly
-localized map of an individual city. The new Matplotlib data will allow this to be achieved in an interactive
-manner for Cartopy to request the correct data for the current view.
+localized map of an individual city. The new Matplotlib data model will allow this to be achieved in an interactive
+manner with Cartopy able to request the correct quantity and resolutions of the tiles for the current view.
+
 Additionally, the new data model will provide a more robust way to handle subsampling of curves. Currently,
 the curves are subsampled based on a fixed threshold to ensure smoothness of a line as it follows the curvature
 of the source projection. In Cartopy, a line from A->B may be a straight line in the source projection, but
@@ -514,28 +518,6 @@ a curve in the target projection. The new data model will allow for a more robus
 based on the current view limits, rather than requiring a user to define a threshold that may be too high or too low
 for a given view.
 
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
-  \caption{\small Example geodetic path from Japan to California demonstrating
-  that the default threshold is currently too large in some cases. Additionally,
-  the line from Japan to California (red) is not the same as the line from
-  California to Japan (blue) due to the current subsampling technique.}
-  \label{fig:cartopy_interpolation}
-\end{wrapfigure}
-Figure~\ref{fig:cartopy_interpolation} shows an example of the current subsampling technique
-used in Cartopy. The red line is a geodetic path from Japan to California, while the blue line
-is the same path but reversed going from California to Japan. The current subsampling technique
-uses a fixed threshold to determine whether chosen points provide a small enough angle indicating
-it is a "smooth enough" curve. The default fixed threshold is not always appropriate for all
-paths as shown in the figure where we'd want to visually see a smooth path (dashed black line) and not two distinct lines.
-The new data model will allow for a more robust way to handle this subsampling based on the current view limits.
-Additionally, we plan to implement a more robust algorithm for subsampling that will ensure all paths from
-A->B and B->A are the same.
-% TODO: Adaptive resampling discussion?
-% https://observablehq.com/@d3/adaptive-sampling
-% https://bost.ocks.org/mike/simplify/
-% Douglas-Peucker algorithm, Visvalingam’s algorithm, and Reumann-Witkam algorithm
-% https://algorithm-wiki.csail.mit.edu/wiki/Line_Simplification
 
 \subsubsection{Sharing Matplotlib Figures}
 % TODO cut this text in half
@@ -785,7 +767,108 @@ very hard to provide that leadership and vision while working on the project dur
 \subsubsection{Tick Refactor}
 \subsubsection{Cartopy Refactor}
 
-% TODO(GML): Work on adding content / descriptions to this section instead of the overview above.
+The Cartopy refactor will be a multi-step process that will involve updating the
+Cartopy codebase to take advantage of the new Matplotlib data model. This will
+involve updating the Cartopy transform stack to use the new Matplotlib transforms
+and data structures. Additionally, we will update the Cartopy documentation to
+reflect these changes and provide new examples that demonstrate the performance
+improvements and new features that are possible with the new data model. We will
+also work on improving the performance of the underlying geographic transforms within Cartopy
+by reducing the number of calls to the underlying projection library and optimizing
+the transform stack to cache intermediate results where possible. All of these items
+can be broken up into smaller PRs that can be reviewed and merged incrementally providing
+a way to keep progress on the grant moving forward and not become blocked on a single
+large PR/idea that may take longer to implement. The two specific features that we are
+focusing on enhancing with the work in this proposal are tile sources and path transformations.
+
+\paragraph{Tile Sources}
+
+Tile sources are a way to display map data that is
+tiled at different zoom levels to provide a more detailed view of the map as the user zooms
+in. Map tiles are essentially small images that, when assembled, create a seamless map at
+different zoom levels and locations. These tiles are often fetched from online servers
+that provide map imagery, such as NASA, USGS, OpenStreetMap or other commercial map providers,
+allowing users to visualize geographic data overlaid on detailed base maps.
+
+Currently, Cartopy has a \texttt{SlippyImageArtist} class is responsible for handling the
+logistics of requesting these tiles. It calculates which tiles are needed based on the
+map's extent and zoom level, makes requests to the tile server, and assembles the retrieved
+tiles into a cohesive map. This functionality is crucial for users who need to overlay geospatial
+data on top of dynamic and high-resolution basemaps, enhancing the clarity and context of
+their visualizations.
+
+However, the current implementation of \texttt{SlippyImageArtist} can be improved by leveraging
+Matplotlib's new data model. This refactoring would allow the class to automatically determine
+the tile scale and dimensions required for any given map projection and zoom level. By integrating
+with Matplotlib's data model, \texttt{SlippyImageArtist} can become more efficient and accurate in
+its tile requests, reducing redundancy and improving performance.
+
+With an automated tile source system, Cartopy will become more accessible to a broader range of
+scientists and researchers who rely on high-quality maps for their work without them having to learn
+a complicated API or manually manage the tile requests. This can also be a great example use-case for other
+downstream libraries to follow when integrating with the new Matplotlib data model.
+
+\paragraph{Path Transformations}
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
+  \caption{\small Example geodetic path from Japan to California demonstrating
+  that the default threshold is currently too large in some cases. Additionally,
+  the line from Japan to California (red) is not the same as the line from
+  California to Japan (blue) due to the current subsampling technique.}
+  \label{fig:cartopy_interpolation}
+\end{wrapfigure}
+
+The second area of focus for the Cartopy refactor is in the handling of path transformations from
+one projection to another. In Cartopy, transforming paths from one map projection to another can
+sometimes result in visually unappealing artifacts or loss of detail,
+especially along curved lines and coastlines. This is due to the insufficient
+number of points used to represent the path, leading to jagged edges or inaccurate
+representations in the target projection.
+Figure~\ref{fig:cartopy_interpolation} shows an example of the current subsampling technique
+used in Cartopy that produces some unwanted representations.
+The red line is a geodetic path from Japan to California, while the blue line
+is the same path but reversed going from California to Japan. The current subsampling technique
+uses a fixed threshold to determine whether chosen points provide a small enough angle indicating
+it is a "smooth enough" curve. The default fixed threshold is not always appropriate for all
+paths as shown in the figure where we'd want to visually see a smooth path (dashed black line) and not two distinct lines.
+
+To address this, we propose implementing an adaptive path subsampling technique similar to
+the one used in the D3 JavaScript library. This method ensures that additional points are
+added along the path, preserving the smooth curvature and detail during the
+transformation between projections. The smoothness required for a curve will depend on the current
+zoom level when rendering which we will be able to leverage the new Matplotlib data model for easily
+accessing the current data limits and requirements on rendering. The proposed method also ensures that
+the direction between the paths from
+A->B or B->A produce the same result and we don't have the situation with the blue and red curves
+shown in the figure where different users may get different results depending on the order of their data.
+% TODO: Adaptive resampling discussion?
+% https://observablehq.com/@d3/adaptive-sampling
+% https://bost.ocks.org/mike/simplify/
+% Douglas-Peucker algorithm, Visvalingam’s algorithm, and Reumann-Witkam algorithm
+% https://algorithm-wiki.csail.mit.edu/wiki/Line_Simplification
+
+
+The adaptive sampling algorithm operates by recursively subdividing path segments,
+adding points where the curvature is high and fewer where it is low.
+This technique is essentially the inverse of line simplification algorithms,
+which reduce the number of points in a path while retaining its overall shape.
+In adaptive sampling, the goal is to increase the number of points, enhancing the
+fidelity of the path in the target projection. The algorithm works by evaluating
+the distance between the path's original line segments and the straight line
+connecting the endpoints in the target projection. If this distance exceeds a
+certain threshold, a midpoint is added, and the process repeats recursively until
+the desired level of detail is achieved.
+
+Implementing this in Cartopy involves integrating a recursive function that checks
+each segment of a path during the transformation process. For each segment, the
+function calculates the distance of the segment from the straight line connecting
+its endpoints. If the distance is greater than a predefined tolerance, the algorithm
+adds a new point at the midpoint of the segment. This new point is then used to further subdivide
+the segment. By doing so, the algorithm dynamically adjusts the density of points along the path,
+ensuring smooth transitions and accurate representations in the target projection.
+This adaptive approach not only enhances the visual quality of transformed paths
+but also improves the accuracy of spatial data analysis and visualization in Cartopy.
 
 \subsection{Risk Management}
 
@@ -813,6 +896,19 @@ the budget.   We have experience managing a NASA grant through NumFOCUS with a
 direct IAA between NASA and DOE and directly hiring contractors trough NF.
 Additionally, we have experience managing sub-contracts between NF and a
 university.
+
+Within the Cartopy refactor, the primary risk is that the new Matplotlib data
+model may not be as beneficial as we anticipate or not provide the necessary
+functionality to support the new features we are planning to implement. This is
+a minor risk as we have been involved in the development of the new data model
+and can push changes upstream to the Matplotlib codebase if necessary.
+The proposed adaptive resampling technique for path transformations may also
+present challenges in terms of implementation and performance. The algorithm
+is non-trivial when moving between different projections and may require additional
+thought and testing to ensure that it works correctly in all cases.
+However, Dr.\ Lucas has an experimental branch where he has tried some of these
+techniques with some success and we are confident that we can implement this
+feature in Cartopy.
 
 We may find that refactoring the ticking system is more technically challenging
 than we expect.  However, we have significant experience in the project, we
@@ -851,7 +947,6 @@ at the Laboratory for Atmospheric and Space Physics (LASP) managing a science da
 processing team working directly with NASA mission data. He is an open-science advocate
 and is NASA TOPS certified.
 
-% - TODO WRITE
 Dr.\ Kyle Sunden will be the primary developer for the improvements to Matplotlib.
 This includes the ticker refactor and making Matplotlib figures more sharable.
 In addition, Dr.\ Sunden will perform maintenance for Matplotlib.
@@ -936,10 +1031,10 @@ Dr.\ Caswell and Dr.\ Droettboom from 2014-2016, and by Dr.\ Caswell from
 Matplotlib is licensed under the Matplotlib License~\cite{mpl_lic} which is a
 derivative of the Python Software Foundation license~\cite{psf_lic}.  It is a
 permissive license compatible with the BSD-3 clause
-license~\cite{jdh_bsd_opinions}.  Matplotlib include several components which
-are individually license under BSD-3 clause compatible licenses.
+license~\cite{jdh_bsd_opinions}.  Matplotlib includes several components which
+are individually licensed under BSD-3 clause compatible licenses.
 
-Cartopy is licenced under the BSD-3 clause.
+Cartopy is licensed under the BSD-3 clause.
 
 
 \subsubsection{Sustainability Metrics}
@@ -987,7 +1082,7 @@ Finally, for the user community to benefit from our work we need to do
 regular releases.  We will continue to maintain a bi-yearly release
 cycle for feature releases with 1-3 bug-fix releases as needed.
 Holding to a time-based release schedule is advantageous because it
-provides predictability to our users and reduce the lag between when a
+provides predictability to our users and reduces the lag between when a
 new feature is merged to the default branch and when it is generally
 available.
 
@@ -1098,7 +1193,6 @@ efficacy of these efforts at diversifying our contributor base.
 %check that this is not a required title
 %\subsection{Technical approach and methodology}
 
-\paragraph{Matplotlib}
 Matplotlib is an established community driven project in the
 ``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.
 We have a core group of regular maintainers who take responsibility for
@@ -1158,16 +1252,7 @@ author more control, allows them to iterate faster than our 6 month release
 schedule, and gives them greater flexibility to change their APIs during
 initial development.
 
-\paragraph{Cartopy}
-
-% TODO write
-% GML: What about removing the Cartopy subsection here and just leaving this as a
-% general "contribution workflow" section. They are so similar and doesn't seem to be
-% worthwhile to distinguish them.
-
 \subsubsection{Information Dissemination}
-
-\paragraph{Matplotlib}
 
 As a project Matplotlib maintains a range of communication channels
 aimed at several, overlapping, audiences.  This includes a
@@ -1198,7 +1283,7 @@ releases (e.g. \url{https://matplotlib.org/3.8.4} for the v3.8.4 documentation)
 and development versions of the documentation
 (\url{https://matplotlib.org/devdocs}).  In the first Quarter of 2024 we had
 between 1.5-1.8M unique visitors a month to the documentation per a
-Plausible.io analytics.
+Plausible.io site analytics.
 
 The weekly developer calls are typically attended by six to eight people and
 are used for high-bandwidth discussions about both the overall direction of the
@@ -1220,10 +1305,6 @@ maintain a read-only mailing list for announcements
 
 Matplotlib developers have frequently attended in-person events including
 SciPy, PyData regional conferences, and domain science conferences.
-
-\paragraph{Cartopy}
-
-% TODO wriet
 
 \newpage
 % Here's how I get references.
@@ -1339,18 +1420,17 @@ released under the same license.  Cartopy uses git for version control, thus
 every developer has the full history on their computer which provides
 significant redundancy.  Tagged releases of the software are published to PyPI
 (in both source and binary forms).
-%TODO fact-check
-\textbf{IN ADDITION, ANACONADA, CONDA-FORGE, MACPORTS, HOMEBREW, AND SOME MAJOR
-  LINUX DISTRIBUTIONS INDEPENDENTLY BUILD, PACKAGE, AND DISTRIBUTE CARTOPY}.
+In addition, Anaconada, conda-forge, and some major Linux
+distributions independently build, package, and distribute Cartopy.
 Extensive User facing documentation, including install instructions and usage
 guides, is built and hosted at
 \url{https://scitools.org.uk/cartopy/docs/latest/}.
 
 Any new libraries created as part of the ROSES award will be developed
-in the open on GitHub and will released under a permissive license.
+in the open on GitHub and will be released under a permissive license.
 
 Any incidental work on other software packages, either upstream or
-downstream of Matplotlib, will follow the license and development of
+downstream of Matplotlib, will follow the license and development
 process of those projects.
 
 \newpage
