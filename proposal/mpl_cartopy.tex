@@ -996,6 +996,51 @@ We expect to meet with approximately two NASA Missions per month.
 Appointments will be held via video conference.
 We will set up a form that is available to users of Matplotlib and Cartopy within NASA Missions which provides a space for them to give a brief description of their problem, along with their rough availability and contact information to schedule a specific appointment.
 
+\subsubsection{Ticker Refactor}
+
+The Ticker refactor will begin at the start of the grant period, Y1Q1.
+The initial quarter will focus on planning and API design for the new ticking system.
+This will include gathering examples of plots which could take advantage of the new ticking system.
+The technical implementation of the new ticking system will primarily take place in Y1Q2, with testing and documentation following in Y1Q3.
+It is expected that the design and integration with existing APIs will be a significant portion of the total effort.
+The initial release as an opt-in feature will be in Y1Q4.
+This will be followed by bug fixes and additional integration of pre-existing APIs.
+We expect to be ready for full release in Y2Q2, though may opt to delay for one or two more releases to allow additional time for feedback from our users.
+
+% Y1Q1: Planning and Design
+% Y1Q2: Implementation
+% Y1Q3: Testing and Documentation
+% Y1Q4: Initial release as opt-in behavior
+% Y2Q1: Bug fixes and integration
+% Y2Q2: Release as default
+
+\subsubsection{Sharing Figures: Serialization}
+
+% Y2Q3: Planning and Design
+% Y2Q4: Implementation
+% Y3Q1: 
+% Y3Q2: 
+% Y3Q3: 
+% Y3Q4: 
+
+\subsubsection{Sharing Figures: Bundling}
+
+The last major feature enhancement to Matplotlib is to create a standardized bundle for sharing fully functional, interactive figures.
+The goal is to have statically distrubutable assets that provide a Python runtime, dependencies, and allow a web browser to display the figures.
+This will be built heavily on top of the serialization efforts described above.
+This portion of the figure sharing project relies on upstream libraries, including Pyodide.
+As this project is not anticipated to be started until year 4 of the award, a significant step will be to survey the available libraries, which could easily have changed by that time.
+As such, the first quarter (Y4Q1) will focus on a technilogical survey of existing technologies and their comparitive suitability for providing a bundled python runtime, dependencies, and graphical user interface.
+The following four quarters (Y4Q2-Y5Q2) will conist of the active planning, implementation, documentation and testing.
+This will culminate in the initial feature release in Y5Q2.
+To mitigate risk and avoid unnecessarily adding dependencies for users who do not need this feature, it will be released as a separately installable package, rather than integrated into the main Matplotlib codebase.
+
+% Y4Q1: Survey of upstream library options
+% Y4Q2: Planning and Design
+% Y4Q3: Implementation
+% Y4Q4: Implementation
+% Y5Q1: Documentation and Testing
+% Y5Q2: Release and Bug fixes
 
 \subsubsection{Work Process}
 
