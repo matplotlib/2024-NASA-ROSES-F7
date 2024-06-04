@@ -407,18 +407,6 @@ growing reliance on Matplotlib by the scientific community.}
 % - TODO write up Cartopy description
 % - Add more citations and referencable material
 
-% Using Cartopy, blog posts from NASA?
-% Tracking microplastics
-% https://www.earthdata.nasa.gov/learn/blog/quantifying-microplastics-brazilian-coast
-% Lightning location
-% https://ghrc.nsstc.nasa.gov/home/data-recipes/otd-lightning-flash-location-quickview-using-python-30-and-gis
-% MERRA-2 NASA reanlaysis datasets
-% https://disc.gsfc.nasa.gov/information/howto?title=How%20to%20read%20and%20plot%20NetCDF%20MERRA-2%20data%20in%20Python
-% 40k downloads per week: https://www.pepy.tech/projects/cartopy
-% 1.4k stars on GitHub
-% 4572 repositories depend on Cartopy, 409 packages depend on Cartopy
-% 100 contributors
-% project started in 2012
 
 Cartopy is an essential Python package designed for geospatial data processing and visualization.
 It extends the capabilities of Matplotlib
@@ -426,6 +414,12 @@ to create high-quality maps and complex geospatial visualizations.
 With Cartopy, users can handle a variety of geospatial data formats,
 including shapefiles, GeoTIFFs, and netCDF,
 making it a versatile tool for researchers and scientists working with geographic information.
+There are over 100 contributors to the Cartopy codebase, and the project has received
+significant community support since its inception in 2012. Cartopy is widely used in the
+scientific community, with over 40,000 weekly downloads from the Python Package Index (PyPI)
+and 1,400 stars on GitHub. Additionally, Cartopy is used in over 4,500 repositories and
+over 400 packages depend on Cartopy for geospatial data visualization and analysis.
+
 
 One of the primary functions of Cartopy is to provide a framework for projecting and visualizing data on maps,
 which is crucial for interpreting spatial patterns and trends.
@@ -436,16 +430,18 @@ Earth observation satellites, climate models, and other geospatial datasets.
 
 Specifically of relevance to NASA, Cartopy is critical in supporting its Science Mission Directorate (SMD) objectives,
 which include understanding Earth's system and its responses to natural and human-induced changes.
-Cartopy facilitates the visualization of data from NASA's satellite missions,
-such as the Earth Observing System (EOS) and the Joint Polar Satellite System (JPSS).
-% TODO: Citations?
-% EOS is many satellites, should we reference some more specific individual missions?
-% EOS: https://eospso.gsfc.nasa.gov/mission-category/3
-% JPSS: https://science.nasa.gov/mission/jpss/
-% TAC: I think naming a specific mission that we know use Cartopy
+Cartopy facilitates the visualization of data from many of NASA's Earth Science satellite missions,
+such as the Earth Observing System (EOS) series and the Joint Polar Satellite System (JPSS).
+The American Meteorological Society (AMS) held a short course focused on making
+plots with satellite data using Cartopy and Matplotlib titled
+"Making Beautiful Images of NOAA Satellite Data Using Python"~\cite{noaa_short_course}.
+
 Researchers use Cartopy to create detailed maps that display atmospheric, oceanic,
 and terrestrial data, enabling them to track climate change, natural disasters,
-and other environmental phenomena with precision.
+and other environmental phenomena with precision. For example, Cartopy
+has been used to track microplastics off the brazilian coast~\cite{tracking_microplastics},
+plot lightning location data~\cite{lightning_location}, and browse MERRA-2
+reanalysis datasets~\cite{merra2_plotting}.
 
 Furthermore, Cartopy's integration with other Python-based scientific libraries
 allows for streamlined workflows and enhanced data analysis capabilities.
