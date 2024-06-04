@@ -456,7 +456,7 @@ of the most pressing scientific questions of our time.
 % - Cartopy refactor
 % - partner with NASA mission(s)
 
-% move to workplan
+% move to work plan
 % shorten these sections to be just the objectives
 %  have two parts / levels
 %    - general objective
@@ -472,12 +472,62 @@ of the most pressing scientific questions of our time.
 %  - opportunity for significntaly improved UX for cartopy by leveraging data work
 %    - can be made more efficient and responsive to user
 %    - fix long standing limitation in paths
-%  - implement new feature in Matplotlib (serialization) consider killing
+%  - implement new feature in Matplotlib (serialization) killing
 %- keep the lights on, incremental improvements, extensions, make life better for users
 %  - example of adding typing
 %  - prompt handling of critical bugs
 %  - ticker here
 
+The objective of Matplotlib and Cartopy is provide and continuously improve
+visualization tools for NASA researchers and engineers to enable them to complete
+their missions.  To achieve this objective we will work directly with NASA
+researchers and engineers to understand and advise on their visualization
+challenges, implement new features in both Matplotlib and Cartopy, and continue
+to carry on the routine tasks needed to maintain both the code and community
+of large open source projects.
+
+To facilitate direct communication between NASA researches and engineers and
+the core Matplotlib team we will set up by-appointment consultations with staff
+associated with NASA missions, Center, or data repository.  During these
+consolations we will both gather information about the challenges facing NASA
+researchers and engineers and provide guidance on how to use the libraries,
+including whose development is being supported by NASA and those completed under
+this grant.  This will ensure that Matplotlib's and Cartopy's development is
+responsive to NASA needs and in same case a few hours working with an expert
+can save days of effort.  In both cases NASA mission is made more efficient.
+
+Matplotlib is currently being supported in part by 20-OSTFL20-0058 (20 ROSES
+E.7) to refactor how data and data transformations pipelines are handled
+internally.  This refactor will have several significant improvements for users
+including uniform support for physical units, native support for complex data
+structures, dynamic data resampling, and support for cloud-data.  These tools
+also provide significant opportunities for down-stream libraries that depend on
+Matplotlib to adopt the new tools and provide similar benefits to their users.
+In particular we work to refactor Cartopy to use these new tools which will in
+turn improve both improve the performance, fix a long standing limitation, and
+enable new features.
+
+As actively used, developed and maintained libraries there is always
+incremental improvements being made to Matplotlib and Cartopy.  One such
+example completed under 20-OSTFL20-0058 was the addition of type stubs to
+Matplotlib which were critical to any NASA users who wish to have a fully typed
+Python code base.  This work was unlikely to have been completed using only
+volunteer effort and NASA's support was critical the work being completed.
+Within this proposal we identify two additional projects: a refactoring of the
+ticker system and a redesign of the legend generation system.  We expect the
+tick refactor to greatly improve the performance in Figures with many Axes as
+well as unlock new capabilities while we expect the legend redesign to streamline
+the user API for common customizations and to also unlock additional capabilities.
+
+Finally, maintaining actively used and developed libraries requires a baseline
+amount of work.  This work includes: community management, reviewing code,
+fixing bugs, and managing releases.  These tasks can be hard, time critical,
+and thankless, which but all essential for the continued overall health of the
+project.  Thus by having supported developers we will ensure that these tasks
+are completed in a timely manner and the supported developers act as enablers
+of the larger volunteer developer communities.
+
+\subsection{Objectives OLD}
 
 Matplotlib is a primarily community-driven project, but we have grown to the
 point where we need supported developers with the time to organize, plan, and
