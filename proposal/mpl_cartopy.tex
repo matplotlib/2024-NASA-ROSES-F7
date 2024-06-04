@@ -677,12 +677,8 @@ of the larger volunteer developer communities.
 \subsection{Impact and Relevance to Science Mission Directorate}
 
 
-% - TODO re-check these numbers
 
 % - update with more recent examples, sort by division
-
-
-
 These measures show broad impact but cover many uses outside of the
 SMD community.  Several highlights showing where Matplotlib is used
 to study galaxy evolution~\cite{2022ApJ...940L..14N} with JWST,
@@ -717,6 +713,18 @@ that report.  \textbf{Investments in Matplotlib will have returns across the
 % galaxy and the recent observation of Sagittarius A* by the Event
 % Horizon Telescope (EHT).
 
+Arranging direct meetings with NASA missions, centers, and data repositories
+will produce very localized but very high-value impact.  A few hours of
+consultation could save mission scientists days of figuring out how to do
+something, due to the Matplotlib team's expertise in the visualization
+libraries.  In particular, we expect to provide advice on how to use new
+developments, including on-going refactoring under a previous ROSES award as
+discussed above and the new development resulting from this award, and how to
+use the libraries as efficiently as possible.  In cases where the libraries do
+not yet meet the needs of the missions we use collected feedback to prioritize
+development under this grant, ensuring that the libraries are responsive to the
+needs of SMD researchers and engineers.
+
 This proposal continues the path to Matplotlib's sustainability, and provides the means to
 move Matplotlib forward.  Over the past 4 years, with funding from CZI and NASA, we have
 shown the benefit of having paid developers.
@@ -738,16 +746,26 @@ very hard to provide that leadership and vision while working on the project dur
 
 \subsubsection{Consultation Services}
 
-We will offer dedicated time to consult with NASA funded missions on usage of Matplotlib and Cartopy.
-NASA Missions will be able to bring their problems and ideas directly to the grant team to get tailored solutions for their problems.
-A few hours of consultation could save mission scientists 10-20 hours figuring out how to do something, due to the Matplotlib team's expertise in the visualization libraries.
-This will end up saving missions time and money.
-In particular, we expect to provide advice on how to use new developments, including the data refactor from the previous ROSES award and the new development work resulting from this award, and using the libraries as efficiently as possible.
-Additionally, this will feedback into our maintenance efforts, highlighting areas for improvements in documentation and providing context to new feature development.
+We will offer dedicated time to consult with NASA missions, centers, and data
+repositories on usage of Matplotlib and Cartopy.  These will be structured as
+virtual meetings between supported members of the Matplotlib and Cartopy teams
+and representatives of individual NASA missions, center, or data repository.
+The agenda of these calls will be relatively open with the goal of
+understanding the unmet needs of the missions.  In some cases we expect to be
+able to assist the missions to better use the existing tools to address their
+needs, but in other cases we expect these discussions to drive new development
+in either supported library.  This will feedback into our
+maintenance efforts, highlighting areas for improvements in documentation and
+providing context to new feature development.
 
-We expect to meet with approximately two NASA Missions per month.
-Appointments will be held via video conference.
-We will set up a form that is available to users of Matplotlib and Cartopy within NASA Missions which provides a space for them to give a brief description of their problem, along with their rough availability and contact information to schedule a specific appointment.
+
+We plan to run these consultations approximately twice a month -- which over
+the lifetime of the grant should allow us to meet with representatives of up to
+120 missions -- but will adjust based on demand.  The initial meetings will be
+set by leveraging existing professional relationships to identify interested
+missions.  We will develop an outreach plan to disseminate the existence of
+this effort to the broader SMD community.
+
 
 
 \subsubsection{General Maintenance}
@@ -785,17 +803,16 @@ identified.  \textbf{Dedicated full-time developers help ensure that things
   that will steer the future of the library}.
 
 
-Historically, pull requests (PRs) and issues have been submitted
-faster than they can be reviewed; Matplotlib has accumulated about 300
-open PRs and 1300 open issues due to this imbalance. There are
-critical bug reports and insightful feature requests among the issue
-backlog, while among the PR backlog there are useful contributions or
-bug fixes that would improve the library for direct users and
-downstream packages.  The large backlog is discouraging for new and
-occasional contributors and distracting for core developers.
+% Historically, pull requests (PRs) and issues have been submitted
+% faster than they can be reviewed; Matplotlib has accumulated about 300
+% open PRs and 1300 open issues due to this imbalance. There are
+% critical bug reports and insightful feature requests among the issue
+% backlog, while among the PR backlog there are useful contributions or
+% bug fixes that would improve the library for direct users and
+% downstream packages.  The large backlog is discouraging for new and
+% occasional contributors and distracting for core developers.
 
 % - TODO update to include rest of CZI grants + current ROSES grant
-
 In 2020, with a grant from CZI supporting a Research Software Engineer
 (RSE) working on Matplotlib for 10 month, we resolved 2,056 PRs and
 999 issues.  However, even at this rate we only reduced the PR backlog
@@ -806,49 +823,6 @@ the health of the project and \textbf{the additional resources
   requested here will further reduce, but not eliminate, the
   maintenance backlog}.
 
-
-\subsubsection{Legend Redesign}
-
-- Move ``what legend handler'' registry directly onto the Artists
-  - reduces spooky action-at-a-distance configuration/customization
-- allow that call to return more than one entry
-  - plays well with composite artists
-
-\subsubsection{Ticker refactor}
-
-The tick location and formatting machinery in Matplotlib is flexible, but this
-flexibility comes at a performance cost, architecturally prevents hierarchical
-labeling, and reduces API usability by making seemingly simple tasks
-surprisingly complex.  Currently each individual each individual ``tick''
-represents the union of a single tick label, tick, and grid line.  We propose to instead
-represent the ticks as three collections  -- for the tick labels, the ticks, and
-the grid lines -- would reduce the overhead significantly,  leverage more
-efficient low-level drawing routines than are currently used, enable complex and hierarchical
-tick labeling, and simplify the overall API.
-
-A significant performance bottleneck when both creating and rendering figures with many Axes
-is the creation
-%TODO: This was left hanging
-
-Hierarchical labeling is particularly useful for plots with date/time axes and those with
-hierarchical categories.
-Currently, Matplotlib only supports two levels of ticks on any given axis (called major
-and minor).
-Further levels can be approximated, but doing so requires usage of relatively advanced
-features outside of their normal usage pattern.
-Designing a system that allows additional layers, all with the same API, will be more
-user friendly.
-Additionally, we can enable new positioning modes that allow a tick's label to be
-centered between two ticks, rather than strictly relative to it's own position.
-
-While the work to design the new API is significant, our primary concern will be to
-complete this work while minimizing the impact on existing users.
-Because tick labeling is so fundamental to plotting, even small changes to the API will
-have significant impact on our users.
-For instance, there may be a need to fall back to drawing individually if someone edits a
-particular tick, while retaining the performance boost in all other cases.
-Although we have had discussion about these issues since at least 2015, it has been
-intractable to make significant progress with volunteer effort alone.
 
 %TODO: Move some of the technical content from the objectives section to here
 % where we can talk about technical details of how you'll execute the plan
@@ -959,6 +933,69 @@ the segment. By doing so, the algorithm dynamically adjusts the density of point
 ensuring smooth transitions and accurate representations in the target projection.
 This adaptive approach not only enhances the visual quality of transformed paths
 but also improves the accuracy of spatial data analysis and visualization in Cartopy.
+
+\subsubsection{Legend Redesign}
+
+Legends are a fundamental component of a data visualization.  The existing API
+for generating legends in Matplotlib is powerful and flexible, however it has
+some limitations and there are opportunities to streamline in several aspects.
+
+Currently, the simplest way to create a legend in Matplotlib is to provide a
+string label to the plotting functions and then ask the Axes to discover the
+labeled artists and automatically create an legend.  With a slightly more code
+more complex and custom legend entries can be
+generated\footnote{\url{https://matplotlib.org/stable/users/explain/axes/legend\_guide.html}}.
+However, the mapping between \texttt{Artist} classes and the function to
+automatically create the legend entry is external to the \textt{Artist} which
+reduces the discoverability of these features.  Additionally, the current
+implementation only allows one legend entry per element in the figure, however
+there are many cases where you want many entries in the legend for a single
+\textt{Arist}\footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html#automated-legend-creation}}.
+
+We propose to make two changes to how the automatically generated
+
+
+
+- Move ``what legend handler'' registry directly onto the Artists
+  - reduces spooky action-at-a-distance configuration/customization
+- allow that call to return more than one entry
+  - plays well with composite artists
+
+\subsubsection{Ticker refactor}
+
+The tick location and formatting machinery in Matplotlib is flexible, but this
+flexibility comes at a performance cost, architecturally prevents hierarchical
+labeling, and reduces API usability by making seemingly simple tasks
+surprisingly complex.  Currently each individual each individual ``tick''
+represents the union of a single tick label, tick, and grid line.  We propose to instead
+represent the ticks as three collections  -- for the tick labels, the ticks, and
+the grid lines -- would reduce the overhead significantly,  leverage more
+efficient low-level drawing routines than are currently used, enable complex and hierarchical
+tick labeling, and simplify the overall API.
+
+A significant performance bottleneck when both creating and rendering figures with many Axes
+is the creation
+%TODO: This was left hanging
+
+Hierarchical labeling is particularly useful for plots with date/time axes and those with
+hierarchical categories.
+Currently, Matplotlib only supports two levels of ticks on any given axis (called major
+and minor).
+Further levels can be approximated, but doing so requires usage of relatively advanced
+features outside of their normal usage pattern.
+Designing a system that allows additional layers, all with the same API, will be more
+user friendly.
+Additionally, we can enable new positioning modes that allow a tick's label to be
+centered between two ticks, rather than strictly relative to it's own position.
+
+While the work to design the new API is significant, our primary concern will be to
+complete this work while minimizing the impact on existing users.
+Because tick labeling is so fundamental to plotting, even small changes to the API will
+have significant impact on our users.
+For instance, there may be a need to fall back to drawing individually if someone edits a
+particular tick, while retaining the performance boost in all other cases.
+Although we have had discussion about these issues since at least 2015, it has been
+intractable to make significant progress with volunteer effort alone.
 
 
 \subsection{Risk Management}
