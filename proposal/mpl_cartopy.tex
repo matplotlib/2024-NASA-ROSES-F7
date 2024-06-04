@@ -355,7 +355,7 @@ estimates based on downloads and on usage of the documentation website indicate
 that Matplotlib has over 5 million users.  Matplotlib is in the top 125
 most-downloaded packages from PyPI~\cite{pypi_stats} with over 10 million
 downloads per week and is packaged by every major Linux and scientific Python
-distribution.  Usage and also be estimated from static analysis of publicly
+distribution.  Usage can also be estimated from static analysis of publicly
 available code.  According to GitHub over 1.2M repositories and over 34k
 packages hosted on GitHub depend on Matplotlib~\cite{gh_deps:2024},  which is a
 factor of 3-4 growth from early 2021. A 2020 study of the almost 10M Jupyter
@@ -380,7 +380,7 @@ so citation counts are likely to under-represent the scientific use of
 Matplotlib.  Nevertheless, the canonical reference for
 Matplotlib~\cite{Hunter:2007} has between 12,800~\cite{ads_mpl} and
 32,700~\cite{gs_cites} citations depending on what works are indexed.  A direct
-way to measure Matplotlib usage is scientific papers is to looki at the files
+way to measure Matplotlib usage in scientific papers is to look at the files
 uploaded to the arXiv~\cite{arxiv_stats}.  When saving figures Matplotlib
 inserts a string into the file metadata indicating that it was created by
 Matplotlib (and by what version).  By searching the files uploaded to the arXiv
@@ -398,15 +398,6 @@ over 50\% of new papers uploaded in the \texttt{astro-ph} categories -- and
 growing reliance on Matplotlib by the scientific community.}
 
 \subsubsection{Cartopy}
-%   [ ] o the impact of the software in the SMD science community,
-%   [ ] o the current usage in the SMD science community,
-%   [ ] o how the software is being used by SMD divisions,
-%   [ ] o the status of development of the software package, and
-%   [ ] o the level of community contributions to the code base.
-
-% - TODO write up Cartopy description
-% - Add more citations and referencable material
-
 
 Cartopy is an essential Python package designed for geospatial data processing and visualization.
 It extends the capabilities of Matplotlib
@@ -498,13 +489,12 @@ downstream libraries to use, but have not yet been widely adopted.
 
 Cartopy is a prime candidate for a downstream library which can take advantage
 of the improvements to Matplotlib's data pipelines.
-In particular, Cartopy includes complex %and unique
-data structures/sources
+In particular, Cartopy includes complex data structures/sources
 such as shape data for geographic regions and tiled map information, all potentially
 referenced in multiple non-linear coordinate systems that need to be plotted together
 in a common reference frame.
-Further, the geographic projections tie in closely to Matplotlibs internal structures
-and can be reworked to take advantage the new pipeline for data transformations.
+Further, the geographic projections tie in closely to Matplotlib's internal structures
+and can be reworked to take advantage of the new pipeline for data transformations.
 In particular, the combined effects of the transformation pipeline and the data
 structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
 The benefits of scale-dependent queries are particularly evident when using tile sources and
@@ -639,6 +629,7 @@ tick labeling, and simplify the overall API.
 
 A significant performance bottleneck when both creating and rendering figures with many Axes
 is the creation
+%TODO: This was left hanging
 
 Hierarchical labeling is particularly useful for plots with date/time axes and those with
 hierarchical categories.
@@ -773,6 +764,11 @@ very hard to provide that leadership and vision while working on the project dur
 
 \subsection{Technical Approach and Methodology}
 \subsubsection{Tick Refactor}
+
+%TODO: Move some of the technical content from the objectives section to here
+% where we can talk about technical details of how you'll execute the plan
+% to complete the objective
+
 \subsubsection{Cartopy Refactor}
 
 The Cartopy refactor will be a multi-step process that will involve updating the
@@ -1002,6 +998,20 @@ We expect to meet with approximately two NASA Missions per month.
 Appointments will be held via video conference.
 We will set up a form that is available to users of Matplotlib and Cartopy within NASA Missions which provides a space for them to give a brief description of their problem, along with their rough availability and contact information to schedule a specific appointment.
 
+\subsubsection{Cartopy Refactor}
+
+The Cartopy refactor will begin at the start of the grant period
+and the work effort will be evenly split across all years in the grant.
+During the first two years of the grant there will be an emphasis on
+integrating the new Matplotlib data model into the Cartopy codebase.
+The third and fourth years will focus on implementing the specific
+features of tile sources and path transformations utilizing the new
+Matplotlib data model as appropriate. The final year will be spent on
+improving the performance of the methods. Throughout the grant, general
+maintenance and community work will be performed in parallel with the
+explicit Cartopy refactor tasks.
+
+
 \subsubsection{Ticker Refactor}
 
 The Ticker refactor will begin at the start of the grant period, Y1Q1 and will take place over the course of 18 months, in parallel with general maintenance and community work.
@@ -1170,7 +1180,7 @@ example Greg Lucas, Ruth Comer, and Elliot sales de Andre are core contributors
 to Matplotlib and Cartopy while David Stansby is a maintainer on both
 Matplotlib and \texttt{SunPy}.  Additionally, through NumFOCUS and
 domain-specific conferences, there are regular in-person meetings between
-developers .
+developers.
 
 We will work with down-stream projects to help them improve their test
 coverage of plotting code and to add jobs to their continuous
