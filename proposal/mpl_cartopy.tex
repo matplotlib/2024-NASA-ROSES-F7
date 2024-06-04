@@ -527,122 +527,102 @@ project.  Thus by having supported developers we will ensure that these tasks
 are completed in a timely manner and the supported developers act as enablers
 of the larger volunteer developer communities.
 
-\subsection{Objectives OLD}
-
-Matplotlib is a primarily community-driven project, but we have grown to the
-point where we need supported developers with the time to organize, plan, and
-make decisions.  Supported developers will continue to allow us to take on more
-complex projects than can be implemented by part-time volunteer effort alone,
-while executing critical day-to-day maintenance tasks required to keep the
-project healthy.  We also plan to split the effort 75\% / 25\% between
-Matplotlib and Cartopy.  For Matplotlib we plan to split the effort on this
-grant 65\% / 20\% / 15\% between maintenance, new development, and community
-engagement and community and project management.  We intend to target this distribution
-of effort across the lifetime of the grant, but there may be variations year-to-year.
-% This is (for Matplotlib over 5 years)
-%  maint: 5.85 FTE
-%  new feature: 1.8 FTE
-%  community: 1.35 FTE + .1*5
-For Cartopy, the proposed split in effort will be roughly 30\% / 60\% / 10\%
-between maintenance, new development, and community engagement and community
-and project management.  We plan to focus more on new development efforts and
-integrating the new Matplotlib data model which will take a fair amount of
-effort to develop the proper transforms and data structures to take advantage
-of the new data model.
+%\subsection{Objectives OLD}
 
 
-\subsubsection{Refactor Cartopy}
 
-There is on-going work, supported by ROSES 2020 E.7, to refactor and modernize
-Matplotlib's internal handling of data.  The two main prongs of the refactor are unified
-way of ingesting data from rich data structures and an overhaul of the pipeline
-for data transformation.  These improvements will provide a toolbox for
-downstream libraries to use, but have not yet been widely adopted.
+%\subsubsection{Refactor Cartopy}
 
-Cartopy is a prime candidate for a downstream library which can take advantage
-of the improvements to Matplotlib's data pipelines.
-In particular, Cartopy includes complex data structures/sources
-such as shape data for geographic regions and tiled map information, all potentially
-referenced in multiple non-linear coordinate systems that need to be plotted together
-in a common reference frame.
-Further, the geographic projections tie in closely to Matplotlib's internal structures
-and can be reworked to take advantage of the new pipeline for data transformations.
-In particular, the combined effects of the transformation pipeline and the data
-structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
-The benefits of scale-dependent queries are particularly evident when using tile sources and
-plotting lines from one projection to another.
-
-In the case of the tile sources, where users want data at a specific scale
-for the specific zoom level they are viewing, a global map will have a much coarser tile than a highly
-localized map of an individual city. The new Matplotlib data model will allow this to be achieved in an interactive
-manner with Cartopy able to request the correct quantity and resolutions of the tiles for the current view.
-
-Additionally, the new data model will provide a more robust way to handle subsampling of curves. Currently,
-the curves are subsampled based on a fixed threshold to ensure smoothness of a line as it follows the curvature
-of the source projection. In Cartopy, a line from A->B may be a straight line in the source projection, but
-a curve in the target projection. The new data model will allow for a more robust way to handle this subsampling
-based on the current view limits, rather than requiring a user to define a threshold that may be too high or too low
-for a given view.
-
-
-\subsubsection{Sharing Matplotlib Figures}
-% TODO cut this text in half
-
-The current recommended method to ``save'' a figure to be recreated later is to
-write a Python script (or Jupyter notebook)
-that when executed will reproduce the figure.
-While there are advantages to
-this approach, it does not fit into the preferred workflow of users who would
-prefer a simpler \texttt{save} / \texttt{load} API with a (non-executable)
-on-disk representation.  Such a serialization would also benefit users who
-currently use \texttt{pickle} to move Matplotlib objects over interprocess
-communication (IPC) channels \footnote{Some users are currently also using
-pickle for long-term serialization but this poses both practical problems (due
-to the incompatibility of pickles between minor Python versions) and the well
-known security concerns.}.  We propose to develop the functionality to save to
-Matplotlib \texttt{Figures}s and load from a static representation.
-
-We will build on the work currently being led by Dr.\ Sunden to overhaul the
-internal structure and data model of Matplotlib.
-Leveraging the updated \texttt{Artist}s -- how Maplotlib represents each element
-of the visualization -- and the new data layer we will develop an on-disk
-representation and code to safely and reliably recreate a \texttt{Figure}.
-Once loaded, this object can be further modified
-via Python or interactively and then re-saved or exported to any of the
-image formats Matplotib supports.  We will extend the current work to add a
-protocol for serializing each \texttt{Artist} and data container, similar to
-the protocol used for rendering the figure to an output image.  By using this
-standard design pattern, sometimes called ``The Visitor Pattern'', we are able
-to write generic tools to export the full \texttt{Figure}.
-
-A particular challenge is how to serialize the data represented by the
-visualization.  In some cases where the data is small and provided to Matplotlib
-fully materialized it may be reasonable to include the data directly in-line with
-the file.  However, in other cases where the data is large or is not fully
-materialized (e.g. delayed database or network queries),
-we will extend the new data representation work to provide
-serializations that point to the location of the data rather the directly
-including it which would blow up the size of the serialized \texttt{Figure}.
+% There is on-going work, supported by ROSES 2020 E.7, to refactor and modernize
+% Matplotlib's internal handling of data.  The two main prongs of the refactor are unified
+% way of ingesting data from rich data structures and an overhaul of the pipeline
+% for data transformation.  These improvements will provide a toolbox for
+% downstream libraries to use, but have not yet been widely adopted.
+%
+% Cartopy is a prime candidate for a downstream library which can take advantage
+% of the improvements to Matplotlib's data pipelines.
+% In particular, Cartopy includes complex data structures/sources
+% such as shape data for geographic regions and tiled map information, all potentially
+% referenced in multiple non-linear coordinate systems that need to be plotted together
+% in a common reference frame.
+% Further, the geographic projections tie in closely to Matplotlib's internal structures
+% and can be reworked to take advantage of the new pipeline for data transformations.
+% In particular, the combined effects of the transformation pipeline and the data
+% structures enables scale-dependent queries of data which is important for the kinds of data Cartopy provides.
+% The benefits of scale-dependent queries are particularly evident when using tile sources and
+% plotting lines from one projection to another.
+%
+% In the case of the tile sources, where users want data at a specific scale
+% for the specific zoom level they are viewing, a global map will have a much coarser tile than a highly
+% localized map of an individual city. The new Matplotlib data model will allow this to be achieved in an interactive
+% manner with Cartopy able to request the correct quantity and resolutions of the tiles for the current view.
+%
+% Additionally, the new data model will provide a more robust way to handle subsampling of curves. Currently,
+% the curves are subsampled based on a fixed threshold to ensure smoothness of a line as it follows the curvature
+% of the source projection. In Cartopy, a line from A->B may be a straight line in the source projection, but
+% a curve in the target projection. The new data model will allow for a more robust way to handle this subsampling
+% based on the current view limits, rather than requiring a user to define a threshold that may be too high or too low
+% for a given view.
 
 
-% think in dropping these two paragraphs and replacing with a pitch of overhaul
-% of legend handlers
-A second major challenge of sharing \texttt{Figure}s is that the person
-receiving the \texttt{Figure} needs a fully functioning Python environment with
-the correct dependencies installed, be comfortable using Python, and access to
-the data.  One solution is to share figures via a web server, however because
-the rendering and interaction happen in Python any solution like this requires
-an active process on the server per user.  Additionally, because interactions
-and rendering happen on the server there can be significant latency.
-
-We propose to leverage pyodide (\url{https://pyodide.org/en/stable/}), a
-project that uses WASM to run Python in the client's browser.  We will develop a
-tool that turns a python script and requirements file into a static artifact,
-that will provide interactive \texttt{Figure}s in a browser.  As the
-Python process for these \texttt{Figure}s is running in the client's browser
-only a simple static webserver is required and the issues with latency are
-reduced.  As part of this work we expect to contribute to the upstream
-projects like pyodide.
+% \subsubsection{Sharing Matplotlib Figures}
+% % TODO cut this text in half
+%
+% The current recommended method to ``save'' a figure to be recreated later is to
+% write a Python script (or Jupyter notebook)
+% that when executed will reproduce the figure.
+% While there are advantages to
+% this approach, it does not fit into the preferred workflow of users who would
+% prefer a simpler \texttt{save} / \texttt{load} API with a (non-executable)
+% on-disk representation.  Such a serialization would also benefit users who
+% currently use \texttt{pickle} to move Matplotlib objects over interprocess
+% communication (IPC) channels \footnote{Some users are currently also using
+% pickle for long-term serialization but this poses both practical problems (due
+% to the incompatibility of pickles between minor Python versions) and the well
+% known security concerns.}.  We propose to develop the functionality to save to
+% Matplotlib \texttt{Figures}s and load from a static representation.
+%
+% We will build on the work currently being led by Dr.\ Sunden to overhaul the
+% internal structure and data model of Matplotlib.
+% Leveraging the updated \texttt{Artist}s -- how Maplotlib represents each element
+% of the visualization -- and the new data layer we will develop an on-disk
+% representation and code to safely and reliably recreate a \texttt{Figure}.
+% Once loaded, this object can be further modified
+% via Python or interactively and then re-saved or exported to any of the
+% image formats Matplotib supports.  We will extend the current work to add a
+% protocol for serializing each \texttt{Artist} and data container, similar to
+% the protocol used for rendering the figure to an output image.  By using this
+% standard design pattern, sometimes called ``The Visitor Pattern'', we are able
+% to write generic tools to export the full \texttt{Figure}.
+%
+% A particular challenge is how to serialize the data represented by the
+% visualization.  In some cases where the data is small and provided to Matplotlib
+% fully materialized it may be reasonable to include the data directly in-line with
+% the file.  However, in other cases where the data is large or is not fully
+% materialized (e.g. delayed database or network queries),
+% we will extend the new data representation work to provide
+% serializations that point to the location of the data rather the directly
+% including it which would blow up the size of the serialized \texttt{Figure}.
+%
+%
+% % think in dropping these two paragraphs and replacing with a pitch of overhaul
+% % of legend handlers
+% A second major challenge of sharing \texttt{Figure}s is that the person
+% receiving the \texttt{Figure} needs a fully functioning Python environment with
+% the correct dependencies installed, be comfortable using Python, and access to
+% the data.  One solution is to share figures via a web server, however because
+% the rendering and interaction happen in Python any solution like this requires
+% an active process on the server per user.  Additionally, because interactions
+% and rendering happen on the server there can be significant latency.
+%
+% We propose to leverage pyodide (\url{https://pyodide.org/en/stable/}), a
+% project that uses WASM to run Python in the client's browser.  We will develop a
+% tool that turns a python script and requirements file into a static artifact,
+% that will provide interactive \texttt{Figure}s in a browser.  As the
+% Python process for these \texttt{Figure}s is running in the client's browser
+% only a simple static webserver is required and the issues with latency are
+% reduced.  As part of this work we expect to contribute to the upstream
+% projects like pyodide.
 
 
 
@@ -688,90 +668,7 @@ projects like pyodide.
 % re-created in another process.
 
 
-\subsubsection{Ticker refactor}
 
-The tick location and formatting machinery in Matplotlib is flexible, but this
-flexibility comes at a performance cost, architecturally prevents hierarchical
-labeling, and reduces API usability by making seemingly simple tasks
-surprisingly complex.  Currently each individual each individual ``tick''
-represents the union of a single tick label, tick, and grid line.  We propose to instead
-represent the ticks as three collections  -- for the tick labels, the ticks, and
-the grid lines -- would reduce the overhead significantly,  leverage more
-efficient low-level drawing routines than are currently used, enable complex and hierarchical
-tick labeling, and simplify the overall API.
-
-A significant performance bottleneck when both creating and rendering figures with many Axes
-is the creation
-%TODO: This was left hanging
-
-Hierarchical labeling is particularly useful for plots with date/time axes and those with
-hierarchical categories.
-Currently, Matplotlib only supports two levels of ticks on any given axis (called major
-and minor).
-Further levels can be approximated, but doing so requires usage of relatively advanced
-features outside of their normal usage pattern.
-Designing a system that allows additional layers, all with the same API, will be more
-user friendly.
-Additionally, we can enable new positioning modes that allow a tick's label to be
-centered between two ticks, rather than strictly relative to it's own position.
-
-While the work to design the new API is significant, our primary concern will be to
-complete this work while minimizing the impact on existing users.
-Because tick labeling is so fundamental to plotting, even small changes to the API will
-have significant impact on our users.
-For instance, there may be a need to fall back to drawing individually if someone edits a
-particular tick, while retaining the performance boost in all other cases.
-Although we have had discussion about these issues since at least 2015, it has been
-intractable to make significant progress with volunteer effort alone.
-
-
-\subsubsection{General maintenance}
-
-We need to sustain Matplotlib as a vibrant project and continue to support the
-hundreds of thousands of users and hundreds of downstream packages.  To maintain
-Matplotlib's health we must:
-\begin{itemize}[noitemsep]
-\item fix critical bugs and regressions promptly as they are reported;
-\item entrain new contributors to sustain and diversify the community
-  developer team;
-\item make improvements while maintaining backward compatibility and
-  documenting changes;
-\item categorize Issues and PRs in terms of topic, difficulty, and
-  urgency;
-\item maintain the continuous-integration infrastructure;
-\item manage the release process;
-\item and manage community discussions about proposed enhancements, features,
-  and API changes.
-\end{itemize}
-These are tasks that are never ``done''; users find new ways to use the
-library, they expose previously un-detected bugs, they request or propose new
-features, and the world continues to changes around us.  This scope also covers
-small-to-medium development of new features that are opportunistically
-identified.  \textbf{Dedicated full-time developers help ensure that things
-  happen in a consistent and timely manner, and provide the crucial roadmaps
-  that will steer the future of the library}.
-
-
-Historically, pull requests (PRs) and issues have been submitted
-faster than they can be reviewed; Matplotlib has accumulated about 300
-open PRs and 1300 open issues due to this imbalance. There are
-critical bug reports and insightful feature requests among the issue
-backlog, while among the PR backlog there are useful contributions or
-bug fixes that would improve the library for direct users and
-downstream packages.  The large backlog is discouraging for new and
-occasional contributors and distracting for core developers.
-
-% - TODO update to include rest of CZI grants + current ROSES grant
-
-In 2020, with a grant from CZI supporting a Research Software Engineer
-(RSE) working on Matplotlib for 10 month, we resolved 2,056 PRs and
-999 issues.  However, even at this rate we only reduced the PR backlog
-by 70 open PRs and held the issue backlog even.  As part of reducing
-the backlog, we were able to fix several long-standing bugs.  We have
-demonstrated that supporting maintenance work has a positive effect on
-the health of the project and \textbf{the additional resources
-  requested here will further reduce, but not eliminate, the
-  maintenance backlog}.
 
 
 \subsection{Impact and Relevance to Science Mission Directorate}
@@ -836,7 +733,106 @@ very hard to provide that leadership and vision while working on the project dur
 ``nights and weekends''.
 
 \subsection{Technical Approach and Methodology}
-\subsubsection{Tick Refactor}
+
+\subsubsection{General Maintenance}
+
+Matplotlib is a primarily community-driven project, but we have grown to the
+point where we need supported developers with the time to organize, plan, and
+make decisions.  Supported developers will continue to allow us to take on more
+complex projects than can be implemented by part-time volunteer effort alone,
+while executing critical day-to-day maintenance tasks required to keep the
+project healthy.
+
+
+We need to sustain Matplotlib as a vibrant project and continue to support the
+hundreds of thousands of users and hundreds of downstream packages.  To maintain
+Matplotlib's health we must:
+\begin{itemize}[noitemsep]
+\item fix critical bugs and regressions promptly as they are reported;
+\item entrain new contributors to sustain and diversify the community
+  developer team;
+\item make improvements while maintaining backward compatibility and
+  documenting changes;
+\item categorize Issues and PRs in terms of topic, difficulty, and
+  urgency;
+\item maintain the continuous-integration infrastructure;
+\item manage the release process;
+\item and manage community discussions about proposed enhancements, features,
+  and API changes.
+\end{itemize}
+These are tasks that are never ``done''; users find new ways to use the
+library, they expose previously un-detected bugs, they request or propose new
+features, and the world continues to changes around us.  This scope also covers
+small-to-medium development of new features that are opportunistically
+identified.  \textbf{Dedicated full-time developers help ensure that things
+  happen in a consistent and timely manner, and provide the crucial roadmaps
+  that will steer the future of the library}.
+
+
+Historically, pull requests (PRs) and issues have been submitted
+faster than they can be reviewed; Matplotlib has accumulated about 300
+open PRs and 1300 open issues due to this imbalance. There are
+critical bug reports and insightful feature requests among the issue
+backlog, while among the PR backlog there are useful contributions or
+bug fixes that would improve the library for direct users and
+downstream packages.  The large backlog is discouraging for new and
+occasional contributors and distracting for core developers.
+
+% - TODO update to include rest of CZI grants + current ROSES grant
+
+In 2020, with a grant from CZI supporting a Research Software Engineer
+(RSE) working on Matplotlib for 10 month, we resolved 2,056 PRs and
+999 issues.  However, even at this rate we only reduced the PR backlog
+by 70 open PRs and held the issue backlog even.  As part of reducing
+the backlog, we were able to fix several long-standing bugs.  We have
+demonstrated that supporting maintenance work has a positive effect on
+the health of the project and \textbf{the additional resources
+  requested here will further reduce, but not eliminate, the
+  maintenance backlog}.
+
+
+\subsubsection{Legend Redesign}
+
+- Move ``what legend handler'' registry directly onto the Artists
+  - reduces spooky action-at-a-distance configuration/customization
+- allow that call to return more than one entry
+  - plays well with composite artists
+
+\subsubsection{Ticker refactor}
+
+The tick location and formatting machinery in Matplotlib is flexible, but this
+flexibility comes at a performance cost, architecturally prevents hierarchical
+labeling, and reduces API usability by making seemingly simple tasks
+surprisingly complex.  Currently each individual each individual ``tick''
+represents the union of a single tick label, tick, and grid line.  We propose to instead
+represent the ticks as three collections  -- for the tick labels, the ticks, and
+the grid lines -- would reduce the overhead significantly,  leverage more
+efficient low-level drawing routines than are currently used, enable complex and hierarchical
+tick labeling, and simplify the overall API.
+
+A significant performance bottleneck when both creating and rendering figures with many Axes
+is the creation
+%TODO: This was left hanging
+
+Hierarchical labeling is particularly useful for plots with date/time axes and those with
+hierarchical categories.
+Currently, Matplotlib only supports two levels of ticks on any given axis (called major
+and minor).
+Further levels can be approximated, but doing so requires usage of relatively advanced
+features outside of their normal usage pattern.
+Designing a system that allows additional layers, all with the same API, will be more
+user friendly.
+Additionally, we can enable new positioning modes that allow a tick's label to be
+centered between two ticks, rather than strictly relative to it's own position.
+
+While the work to design the new API is significant, our primary concern will be to
+complete this work while minimizing the impact on existing users.
+Because tick labeling is so fundamental to plotting, even small changes to the API will
+have significant impact on our users.
+For instance, there may be a need to fall back to drawing individually if someone edits a
+particular tick, while retaining the performance boost in all other cases.
+Although we have had discussion about these issues since at least 2015, it has been
+intractable to make significant progress with volunteer effort alone.
 
 %TODO: Move some of the technical content from the objectives section to here
 % where we can talk about technical details of how you'll execute the plan
@@ -1054,6 +1050,22 @@ available to users.
 
 \subsection{Work Plan}
 
+We also plan to split the effort 75\% / 25\% between
+Matplotlib and Cartopy.  For Matplotlib we plan to split the effort on this
+grant 65\% / 20\% / 15\% between maintenance, new development, and community
+engagement and community and project management.  We intend to target this distribution
+of effort across the lifetime of the grant, but there may be variations year-to-year.
+% This is (for Matplotlib over 5 years)
+%  maint: 5.85 FTE
+%  new feature: 1.8 FTE
+%  community: 1.35 FTE + .1*5
+For Cartopy, the proposed split in effort will be roughly 30\% / 60\% / 10\%
+between maintenance, new development, and community engagement and community
+and project management.  We plan to focus more on new development efforts and
+integrating the new Matplotlib data model which will take a fair amount of
+effort to develop the proper transforms and data structures to take advantage
+of the new data model.
+
 
 \subsubsection{General Maintenance}
 
@@ -1108,40 +1120,40 @@ We expect to be ready for full release in Y2Q2, though may opt to delay for one 
 % Y2Q1: Bug fixes and integration
 % Y2Q2: Release as default
 
-\subsubsection{Sharing Figures: Serialization}
-
-Following the conclusion of the Ticker refactor, another 18 month cycle will focus on the first portion of the sharing figures project, namely a serialization standard for Matplotlib figures.
-The first quarter (Y2Q3) will be primarily focused on planning and design requirements, with small proof of concept developement tasks.
-The second quarter (Y2Q4) will focus on serializing the Matplotlib \texttt{Artist}s and their relationships.
-The third quarter (Y3Q1) will in particular extend that work from the previous ROSES award, allowing serialization of both Data Containers and the transformation pipeline.
-It is expected that data serialization will be of particular technological consideration, as some Data Containers contain large amounts of data and/or reference data hosted in other locations (e.g. local files or remote web services).
-Following thourough documentation and testing, we expect a release to be available in Y3Q3, after which most effort will be in responding to user feedback and interfacing with downstream libraries to disseminate the work.
-% Y2Q3: Planning and Design
-% Y2Q4: Implementation serializing Artist tree
-% Y3Q1: Implementation serializing Data containers and transformation pipeline
-% Y3Q2: Documentation and testing
-% Y3Q3: Release, respond to user feedback
-% Y3Q4: Bug fexes and use cases
-
-\subsubsection{Sharing Figures: Bundling}
-
-The last major feature enhancement to Matplotlib is to create a standardized bundle for sharing fully functional, interactive figures.
-The goal is to have statically distrubutable assets that provide a Python runtime, dependencies, and allow a web browser to display the figures.
-This will be built heavily on top of the serialization efforts described above.
-This portion of the figure sharing project relies on upstream libraries, including Pyodide.
-As this project is not anticipated to be started until year 4 of the award, a significant step will be to survey the available libraries, which could easily have changed by that time.
-As such, the first quarter (Y4Q1) will focus on a technilogical survey of existing technologies and their comparitive suitability for providing a bundled python runtime, dependencies, and graphical user interface.
-The following four quarters (Y4Q2-Y5Q2) will conist of the active planning, implementation, documentation and testing.
-This will culminate in the initial feature release in Y5Q2.
-To mitigate risk and avoid unnecessarily adding dependencies for users who do not need this feature, it will be released as a separately installable package, rather than integrated into the main Matplotlib codebase.
-
-% Y4Q1: Survey of upstream library options
-% Y4Q2: Planning and Design
-% Y4Q3: Implementation
-% Y4Q4: Implementation
-% Y5Q1: Documentation and Testing
-% Y5Q2: Release and Bug fixes
-
+% \subsubsection{Sharing Figures: Serialization}
+%
+% Following the conclusion of the Ticker refactor, another 18 month cycle will focus on the first portion of the sharing figures project, namely a serialization standard for Matplotlib figures.
+% The first quarter (Y2Q3) will be primarily focused on planning and design requirements, with small proof of concept developement tasks.
+% The second quarter (Y2Q4) will focus on serializing the Matplotlib \texttt{Artist}s and their relationships.
+% The third quarter (Y3Q1) will in particular extend that work from the previous ROSES award, allowing serialization of both Data Containers and the transformation pipeline.
+% It is expected that data serialization will be of particular technological consideration, as some Data Containers contain large amounts of data and/or reference data hosted in other locations (e.g. local files or remote web services).
+% Following thourough documentation and testing, we expect a release to be available in Y3Q3, after which most effort will be in responding to user feedback and interfacing with downstream libraries to disseminate the work.
+% % Y2Q3: Planning and Design
+% % Y2Q4: Implementation serializing Artist tree
+% % Y3Q1: Implementation serializing Data containers and transformation pipeline
+% % Y3Q2: Documentation and testing
+% % Y3Q3: Release, respond to user feedback
+% % Y3Q4: Bug fexes and use cases
+%
+% \subsubsection{Sharing Figures: Bundling}
+%
+% The last major feature enhancement to Matplotlib is to create a standardized bundle for sharing fully functional, interactive figures.
+% The goal is to have statically distrubutable assets that provide a Python runtime, dependencies, and allow a web browser to display the figures.
+% This will be built heavily on top of the serialization efforts described above.
+% This portion of the figure sharing project relies on upstream libraries, including Pyodide.
+% As this project is not anticipated to be started until year 4 of the award, a significant step will be to survey the available libraries, which could easily have changed by that time.
+% As such, the first quarter (Y4Q1) will focus on a technilogical survey of existing technologies and their comparitive suitability for providing a bundled python runtime, dependencies, and graphical user interface.
+% The following four quarters (Y4Q2-Y5Q2) will conist of the active planning, implementation, documentation and testing.
+% This will culminate in the initial feature release in Y5Q2.
+% To mitigate risk and avoid unnecessarily adding dependencies for users who do not need this feature, it will be released as a separately installable package, rather than integrated into the main Matplotlib codebase.
+%
+% % Y4Q1: Survey of upstream library options
+% % Y4Q2: Planning and Design
+% % Y4Q3: Implementation
+% % Y4Q4: Implementation
+% % Y5Q1: Documentation and Testing
+% % Y5Q2: Release and Bug fixes
+%
 \subsubsection{Work Process}
 
 All work under this proposal will undergo the same review process
