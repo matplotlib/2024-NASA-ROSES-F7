@@ -219,7 +219,7 @@
 % and the relationship to NASA SMD scientific vision and data strategic plan. This
 % must include:
 %   [x] o the impact of the software in the SMD science community,
-%   [ ] o the current usage in the SMD science community, [NEED UPDATED GRAPH] [NEED BETTER CITES]
+%   [x] o the current usage in the SMD science community, [NEED UPDATED GRAPH] [NEED BETTER CITES]
 %   [x] o how the software is being used by SMD divisions,
 %   [x] o the status of development of the software package, and
 %   [x] o the level of community contributions to the code base.
@@ -456,6 +456,29 @@ of the most pressing scientific questions of our time.
 % - Cartopy refactor
 % - partner with NASA mission(s)
 
+% move to workplan
+% shorten these sections to be just the objectives
+%  have two parts / levels
+%    - general objective
+%    - second is specific sub objectives
+% one of the objectives is to build on current work
+
+%overall goal: facility scientific and technical work
+%
+%- consultation
+%  - facility NASA guidance where additional
+%  - help educate NASA users about new and existing features including improved unit support
+%- bring advantages of refactor to the users
+%  - opportunity for significntaly improved UX for cartopy by leveraging data work
+%    - can be made more efficient and responsive to user
+%    - fix long standing limitation in paths
+%  - implement new feature in Matplotlib (serialization) consider killing
+%- keep the lights on, incremental improvements, extensions, make life better for users
+%  - example of adding typing
+%  - prompt handling of critical bugs
+%  - ticker here
+
+
 Matplotlib is a primarily community-driven project, but we have grown to the
 point where we need supported developers with the time to organize, plan, and
 make decisions.  Supported developers will continue to allow us to take on more
@@ -465,8 +488,7 @@ project healthy.  We also plan to split the effort 75\% / 25\% between
 Matplotlib and Cartopy.  For Matplotlib we plan to split the effort on this
 grant 65\% / 20\% / 15\% between maintenance, new development, and community
 engagement and community and project management.  We intend to target this distribution
-of effort across the lifetime of the grant, but there may be variations in the effort
-on shorter, month to year, timescales.
+of effort across the lifetime of the grant, but there may be variations year-to-year.
 % This is (for Matplotlib over 5 years)
 %  maint: 5.85 FTE
 %  new feature: 1.8 FTE
@@ -481,8 +503,8 @@ of the new data model.
 
 \subsubsection{Refactor Cartopy}
 
-There is on-going work supported by ROSES 2020 E.7 to refactor and modernize
-Matplotlib's handling of data.  The two main prongs of the refactor are unified
+There is on-going work, supported by ROSES 2020 E.7, to refactor and modernize
+Matplotlib's internal handling of data.  The two main prongs of the refactor are unified
 way of ingesting data from rich data structures and an overhaul of the pipeline
 for data transformation.  These improvements will provide a toolbox for
 downstream libraries to use, but have not yet been widely adopted.
@@ -516,26 +538,27 @@ for a given view.
 \subsubsection{Sharing Matplotlib Figures}
 % TODO cut this text in half
 
-The current recommended method to write a Python script (or Jupyter notebook)
-that when executed will recreate the figure is XXX. %TODO: This was left out
+The current recommended method to ``save'' a figure to be recreated later is to
+write a Python script (or Jupyter notebook)
+that when executed will reproduce the figure.
 While there are advantages to
 this approach, it does not fit into the preferred workflow of users who would
-prefer a simpler \texttt{save} / \texttt{load} API with a non-executable
+prefer a simpler \texttt{save} / \texttt{load} API with a (non-executable)
 on-disk representation.  Such a serialization would also benefit users who
 currently use \texttt{pickle} to move Matplotlib objects over interprocess
 communication (IPC) channels \footnote{Some users are currently also using
 pickle for long-term serialization but this poses both practical problems (due
 to the incompatibility of pickles between minor Python versions) and the well
-known security concerns.}.  We propose to develop the functionality to save and
-load Matplotlib \texttt{Figures}s to a static representation.
+known security concerns.}.  We propose to develop the functionality to save to
+Matplotlib \texttt{Figures}s and load from a static representation.
 
 We will build on the work currently being led by Dr.\ Sunden to overhaul the
-internal structure and data model of Matplotlib (as discussed above).
-Leveraging the updated \texttt{Artist}s, how Maplotlib represents each element
-of the visualization, and the new data layer we will develop an on-disk
-representation and code to safely and reliably recreate a \texttt{Figure}, including
-the standard interactivity.  Once loaded, this object can be further modified
-via Python, re-saved to our serialization, or exported to any of the standard
+internal structure and data model of Matplotlib.
+Leveraging the updated \texttt{Artist}s -- how Maplotlib represents each element
+of the visualization -- and the new data layer we will develop an on-disk
+representation and code to safely and reliably recreate a \texttt{Figure}.
+Once loaded, this object can be further modified
+via Python or interactively and then re-saved or exported to any of the
 image formats Matplotib supports.  We will extend the current work to add a
 protocol for serializing each \texttt{Artist} and data container, similar to
 the protocol used for rendering the figure to an output image.  By using this
@@ -875,6 +898,7 @@ ensuring smooth transitions and accurate representations in the target projectio
 This adaptive approach not only enhances the visual quality of transformed paths
 but also improves the accuracy of spatial data analysis and visualization in Cartopy.
 
+
 \subsection{Risk Management}
 
 There is minimal risk in the maintenance work.  There is a large volume
@@ -934,45 +958,49 @@ available to users.
 % to cut text I think we could consolidate some of this, but IMO it is important to indicate
 % who will be in charge of what tasks and that we've thought it through and have the
 % know how to successfully do this project.
+% Eric agreed this was an odd section.  I think I templated this from a propsoal that was
+% making the case why that team was the right team for the project out of a bunch of
+% similar teams.  comment out for now, agree the that the responsibilities need to be covered
+% somewhere else.
 
-\subsection{Contributions of Principal Investigator and Key Personnel}
-
-Dr.\ Thomas A.\ Caswell has the sole individual responsibility for directing
-and supervising the execution of this work.  He has extensive experience
-developing and maintaining Python libraries for scientists.  He has been
-involved with Matplotlib from 2012 and had a leadership role in the project
-from 2014.  He is also a core developer of h5py and has contributed to many of
-the other core projects of the SPE.  He is currently a group leader of the Data
-Acquisition and Detectors group in the Data Science and Systems Integration
-program at the National Synchrotron Light Source II (NSLS-II) at Brookhaven
-National Labratory and the technical lead of a new beamline at NSLS-II.  He is
-also the lead architect and developer of the Bluesky Suite, an ecosystem of
-co-developed libraries and applications for data acquisition and management,
-which is being adopted for beamline operations at synchrotrons in the US and
-across the world.
-
-Dr.\ Greg Lucas is currently a maintainer of both Matplotlib and Cartopy.
-He will lead the integration of the new Matplotlib Data Model into the Cartopy package.
-He will be updating documentation, adding new examples, and improving the performance of
-the geographic transforms within Cartopy as a part of this work. He has experience
-with the transform stack of both Matplotlib and Cartopy, including a major refactor
-of the Cartopy transform stack to switch to using the pyproj library. He is currently
-the Science Data Center lead for the Interstellar Mapping and Acceleration Probe (IMAP)
-at the Laboratory for Atmospheric and Space Physics (LASP) managing a science data
-processing team working directly with NASA mission data. He is an open-science advocate
-and is NASA TOPS certified.
-
-Dr.\ Kyle Sunden will be the primary developer for the improvements to Matplotlib.
-This includes the ticker refactor and making Matplotlib figures more sharable.
-In addition, Dr.\ Sunden will perform maintenance for Matplotlib.
-Maintenance encompasses reviewing and responding to incoming pull reqests and issues, fixing known bugs, and smaller feature development tasks.
-As an active member of the development team, Dr.\ Sunden will participate in planning discussions regarding future improvements to the library.
-Finally, maintenance also includes interfacing with both upstream and downstream scientific python projects to ensure continued interoperability.
-Dr.\ Sunden will also participate in community building for the project.
-He will participate in the majority of the consultation sessions provided to NASA funded Missions.
-He will mentor new contributors, including participation with the Google Summer of Code project.
-Finally, Dr.\ Sunden will attend events such as the SciPy Conference and Scientific Python Developer Summit, where he will engage in high bandwith discussions with maintainers of related projects and users of Matplotlib.
-This will include presentations and/or tutorial sessions at these events.
+% \subsection{Contributions of Principal Investigator and Key Personnel}
+%
+% Dr.\ Thomas A.\ Caswell has the sole individual responsibility for directing
+% and supervising the execution of this work.  He has extensive experience
+% developing and maintaining Python libraries for scientists.  He has been
+% involved with Matplotlib from 2012 and had a leadership role in the project
+% from 2014.  He is also a core developer of h5py and has contributed to many of
+% the other core projects of the SPE.  He is currently a group leader of the Data
+% Acquisition and Detectors group in the Data Science and Systems Integration
+% program at the National Synchrotron Light Source II (NSLS-II) at Brookhaven
+% National Labratory and the technical lead of a new beamline at NSLS-II.  He is
+% also the lead architect and developer of the Bluesky Suite, an ecosystem of
+% co-developed libraries and applications for data acquisition and management,
+% which is being adopted for beamline operations at synchrotrons in the US and
+% across the world.
+%
+% Dr.\ Greg Lucas is currently a maintainer of both Matplotlib and Cartopy.
+% He will lead the integration of the new Matplotlib Data Model into the Cartopy package.
+% He will be updating documentation, adding new examples, and improving the performance of
+% the geographic transforms within Cartopy as a part of this work. He has experience
+% with the transform stack of both Matplotlib and Cartopy, including a major refactor
+% of the Cartopy transform stack to switch to using the pyproj library. He is currently
+% the Science Data Center lead for the Interstellar Mapping and Acceleration Probe (IMAP)
+% at the Laboratory for Atmospheric and Space Physics (LASP) managing a science data
+% processing team working directly with NASA mission data. He is an open-science advocate
+% and is NASA TOPS certified.
+%
+% Dr.\ Kyle Sunden will be the primary developer for the improvements to Matplotlib.
+% This includes the ticker refactor and making Matplotlib figures more sharable.
+% In addition, Dr.\ Sunden will perform maintenance for Matplotlib.
+% Maintenance encompasses reviewing and responding to incoming pull reqests and issues, fixing known bugs, and smaller feature development tasks.
+% As an active member of the development team, Dr.\ Sunden will participate in planning discussions regarding future improvements to the library.
+% Finally, maintenance also includes interfacing with both upstream and downstream scientific python projects to ensure continued interoperability.
+% Dr.\ Sunden will also participate in community building for the project.
+% He will participate in the majority of the consultation sessions provided to NASA funded Missions.
+% He will mentor new contributors, including participation with the Google Summer of Code project.
+% Finally, Dr.\ Sunden will attend events such as the SciPy Conference and Scientific Python Developer Summit, where he will engage in high bandwith discussions with maintainers of related projects and users of Matplotlib.
+% This will include presentations and/or tutorial sessions at these events.
 
 \subsection{Work Plan}
 
@@ -1123,7 +1151,7 @@ open source project.  We propose to focus on growing our developer
 community, reducing our Issue and PR backlogs, and maintaining a
 regular release cadence.
 
-Matplotlib is a community driven project with a vast majority of the
+Matplotlib is a community driven project with a majority of the
 work done by volunteers.  The thing we are shortest on is the time of
 maintainers who are able and willing to review Pull Requests.
 Increasing the number of regular contributors and maintainers improves
