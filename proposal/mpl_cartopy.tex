@@ -939,69 +939,80 @@ ensuring smooth transitions and accurate representations in the target projectio
 This adaptive approach not only enhances the visual quality of transformed paths
 but also improves the accuracy of spatial data analysis and visualization in Cartopy.
 
-\subsubsection{Legend Redesign}
+\subsubsection{Matplotlib Enhancements}
 
-Legends are a fundamental component of a data visualization.  The existing API
-for generating legends in Matplotlib is powerful and flexible, however it has
-some limitations and there are opportunities to streamline in several aspects.
-
-Currently, the simplest way to create a legend in Matplotlib is to provide a
-string label to the plotting functions and then ask the Axes to discover the
-labeled artists and automatically create an legend.  With a slightly more code
-more complex and custom legend entries can be
-generated\footnote{\url{https://matplotlib.org/stable/users/explain/axes/legend\_guide.html}}.
-However, the mapping between \texttt{Artist} classes and the function to
-automatically create the legend entry is external to the \textt{Artist} which
-reduces the discoverability of these features.  Additionally, the current
-implementation only allows one legend entry per element in the figure, however
-there are many cases where you want many entries in the legend for a single
-\textt{Arist}\footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html#automated-legend-creation}}.
-
-We propose to make two changes to how the automatically generated
+Ticks and tick labels are a fundamental part of what differentiates a
+visualization from an illustration and allow the viewer to extract quantitative
+information from the figure.  To this end Matplotlib has extensive and flexible
+machinery for place and labeling ticks.  However, this flexibility comes at a
+performance cost, the current design architecturally prevents hierarchical
+labeling, and reduces API usability by making some seemingly simple tasks
+surprisingly complex. Although we have had discussion about these issues since
+at least 2015, it has been intractable to make significant progress with
+volunteer effort alone.
 
 
+Currently each individual each individual ``tick''
+represents the union of a single tick label, tick, and grid line.  For
+figures that have many axes simply creating the individual objects required
+to represent all of the ticks can be a significant performance bottle neck.
+Because each tick is independent it makes in extremely difficult to place a label
+between, rather than at, ticks.  Finally, the current implementation only supports
+two levels of ticks and tick labels (major and minor) cases where three or more layers --
+such as labeling year, month, and day -- require significant work to achieve.
 
-- Move ``what legend handler'' registry directly onto the Artists
-  - reduces spooky action-at-a-distance configuration/customization
-- allow that call to return more than one entry
-  - plays well with composite artists
+To address this we propose two changes to the library.  First, we will use
+three collections -- for the tick labels, the ticks, and the grid lines --
+essentially transposing the representation which will greatly reduce the
+overhead at creation time and enable use to leverage more efficient drawing
+routines already in the library to speed up rendering.  Additionally, by
+representing all of the tick labels together it will be possible to implement
+labeling ``between'' ticks rather than ``at'' ticks because we will have access
+to the positions of more than one tick at draw time.
+The second is to generalize
+the current two level system to an arbitrary number of levels.
 
-\subsubsection{Ticker refactor}
+While the work to design the new API is significant, our primary concern will
+be to complete this work while minimizing the impact on existing users.
+Because tick labeling is so fundamental to plotting, even small changes to the
+API will have significant impact on our users.  Along with the code we will
+develop completed documentation of the new system, including a migration guide.
 
-The tick location and formatting machinery in Matplotlib is flexible, but this
-flexibility comes at a performance cost, architecturally prevents hierarchical
-labeling, and reduces API usability by making seemingly simple tasks
-surprisingly complex.  Currently each individual each individual ``tick''
-represents the union of a single tick label, tick, and grid line.  We propose to instead
-represent the ticks as three collections  -- for the tick labels, the ticks, and
-the grid lines -- would reduce the overhead significantly,  leverage more
-efficient low-level drawing routines than are currently used, enable complex and hierarchical
-tick labeling, and simplify the overall API.
 
-A significant performance bottleneck when both creating and rendering figures with many Axes
-is the creation
-%TODO: This was left hanging
+Similar to ticks, legends are another fundamental component of data
+visualization where the API in Matplotlib is both very flexible but still has
+an architectural limitation we plan to address.  Matplotlib has functionality
+to automatically generate a legend based on what is plotted in the figure.
+Generating a legend is as simple as providing a string label when plotting and
+then calling a single method.  However, the configuration of how to generate
+the legend entries automatically is in an external registry which is not
+discoverable and complicated to modify.  Further, the machinery assumes that
+each \texttt{Artist} will only need to put a single entry in the legend.  This
+is already not true in some scatter
+plots\ \footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html\#automated-legend-creation}}. and
+is likely to become a bigger problem going forward as we expect to begin
+generating additional composite \texttt{Artist}s.
 
-Hierarchical labeling is particularly useful for plots with date/time axes and those with
-hierarchical categories.
-Currently, Matplotlib only supports two levels of ticks on any given axis (called major
-and minor).
-Further levels can be approximated, but doing so requires usage of relatively advanced
-features outside of their normal usage pattern.
-Designing a system that allows additional layers, all with the same API, will be more
-user friendly.
-Additionally, we can enable new positioning modes that allow a tick's label to be
-centered between two ticks, rather than strictly relative to it's own position.
 
-While the work to design the new API is significant, our primary concern will be to
-complete this work while minimizing the impact on existing users.
-Because tick labeling is so fundamental to plotting, even small changes to the API will
-have significant impact on our users.
-For instance, there may be a need to fall back to drawing individually if someone edits a
-particular tick, while retaining the performance boost in all other cases.
-Although we have had discussion about these issues since at least 2015, it has been
-intractable to make significant progress with volunteer effort alone.
+We propose to make two changes to how legend are automatically generated: first
+to move the generation of the legend entry from an external registry to a
+method on each \texttt{Artist} and second to extend the API of that method to
+allow the return of multiple legend entries rather than a single entry.  By
+putting the code to generate the legend entry on the \texttt{Artist} we will
+increase the locality of the code, make it easier to override the default, and
+make it possible to ensure legend entries are updated to stay in-sync with any
+style changes to the \texttt{Artist} the refer to.  The second change will
+allow support for \texttt{Artist} to trivial participate in the standard automatic
+legend support.
 
+As with the work on ticking described above, the technical implementation is not
+challenging, however ensuring that we have covered all of the use cases of the current
+implementation and back-compatilibilty for our users.  The same as the tick work described above
+we will generate completed documentation of the new system including a migration guide.
+
+We expect that through the consultations we will be able to identify several
+similar scale projects that directly address the needs of one or more NASA
+mission.
 
 \subsection{Risk Management}
 
