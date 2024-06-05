@@ -289,9 +289,11 @@ Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely defined
 community of projects and programmers with the common goal of advancing science
 through the use of the Python programming language which emerged in the early
 2000s.  Development in the ecosystem as historically has been largely volunteer
-effort or sponsored implicitly by specific science projects.  Starting round
-2020 there is a growing recognition of the importance of this software and the
-availability of explicit funding.  The SPE, shown with a rough schematic in
+effort or sponsored implicitly by specific science projects.
+% Starting around
+% 2020 there is a growing recognition of the importance of this software and the
+% availability of explicit funding.
+The SPE, shown with a rough schematic in
 Figure \ref{fig:ecosystem}, has a core of general purpose domain-agnostic
 tools, like NumPy~\cite{Harris2020} and SciPy~\cite{Virtanen2020}.  Matplotlib
 is in the second ring of specialized, but still domain agnostic tools, and is
@@ -373,11 +375,12 @@ import~\cite{datalore:2020}.
 \end{wrapfigure}
 
 
-We expect that a large fraction of NASA SMD-sponsored projects rely on this
-shared infrastructure to some degree, but this is hard to quantify.  It is not
-usual, but becoming more common, to cite tool chains in scientific literature,
-so citation counts are likely to under-represent the scientific use of
-Matplotlib.  Nevertheless, the canonical reference for
+% We expect that a large fraction of NASA SMD-sponsored projects rely on this
+% shared infrastructure to some degree, but this is hard to quantify.  It is not
+% usual, but becoming more common, to cite tool chains in scientific literature,
+% so citation counts are likely to under-represent the scientific use of
+% Matplotlib.  Nevertheless,
+The canonical reference for
 Matplotlib~\cite{Hunter:2007} has between 12,800~\cite{ads_mpl} and
 32,700~\cite{gs_cites} citations depending on what works are indexed.  A direct
 way to measure Matplotlib usage in scientific papers is to look at the files
@@ -419,7 +422,7 @@ adding and customizing map features such as coastlines, borders, and gridlines.
 These capabilities are indispensable for visualizing and analyzing data from
 Earth observation satellites, climate models, and other geospatial datasets.
 
-Specifically of relevance to NASA, Cartopy is critical in supporting its Science Mission Directorate (SMD) objectives,
+Cartopy is critical in supporting NASA SMD objectives,
 which include understanding Earth's system and its responses to natural and human-induced changes.
 Cartopy facilitates the visualization of data from many of NASA's Earth Science satellite missions,
 such as the Earth Observing System (EOS) series and the Joint Polar Satellite System (JPSS).
@@ -433,22 +436,22 @@ and other environmental phenomena with precision. For example, Cartopy
 has been used to track microplastics off the brazilian coast~\cite{tracking_microplastics},
 plot lightning location data~\cite{lightning_location}, and browse MERRA-2
 reanalysis datasets~\cite{merra2_plotting}.
-
-Furthermore, Cartopy's integration with other Python-based scientific libraries
-allows for streamlined workflows and enhanced data analysis capabilities.
-This interoperability is crucial for the scientific community,
-where multi-disciplinary collaboration and data sharing are paramount.
 By supporting Cartopy, NASA ensures that its scientists and researchers
 have access to cutting-edge tools that enhance their ability to generate
 insights from complex geospatial data, fostering innovation and discovery.
 
-Sustaining Cartopy is not only beneficial for current scientific endeavors
-but also for the future of geospatial research. Continued support and development
-of Cartopy will ensure that it remains compatible with evolving data standards
-and computational environments. This investment will provide NASA's SMD and the
-broader scientific community with a robust, reliable tool for visualizing and
-interpreting the vast amounts of geospatial data crucial to addressing some
-of the most pressing scientific questions of our time.
+% Furthermore, Cartopy's integration with other Python-based scientific libraries
+% allows for streamlined workflows and enhanced data analysis capabilities.
+% This interoperability is crucial for the scientific community,
+% where multi-disciplinary collaboration and data sharing are paramount.
+
+% Sustaining Cartopy is not only beneficial for current scientific endeavors
+% but also for the future of geospatial research. Continued support and development
+% of Cartopy will ensure that it remains compatible with evolving data standards
+% and computational environments. This investment will provide NASA's SMD and the
+% broader scientific community with a robust, reliable tool for visualizing and
+% interpreting the vast amounts of geospatial data crucial to addressing some
+% of the most pressing scientific questions of our time.
 
 \subsection{Objectives}
 
@@ -855,7 +858,7 @@ different zoom levels and locations. These tiles are often fetched from online s
 that provide map imagery, such as NASA, USGS, OpenStreetMap or other commercial map providers,
 allowing users to visualize geographic data overlaid on detailed base maps.
 
-Currently, Cartopy has a \texttt{SlippyImageArtist} class is responsible for handling the
+Currently, Cartopy has a \texttt{SlippyImageArtist} class that is responsible for handling the
 logistics of requesting these tiles. It calculates which tiles are needed based on the
 map's extent and zoom level, makes requests to the tile server, and assembles the retrieved
 tiles into a cohesive map. This functionality is crucial for users who need to overlay geospatial
