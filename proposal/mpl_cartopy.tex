@@ -760,8 +760,8 @@ needs, but in other cases we expect these discussions to drive new development
 in either supported library.  This will feed back into our maintenance efforts,
 highlighting areas for improvements in documentation and providing context to
 new feature development.  In planning for this grant we have had productive early
-conversations with personnel from NASA-ISRO SAR (NISAR) and Geospace Dynamics Constellation
-(GDC); we are confident this approach will continue to be useful.
+conversations with personnel from the NASA-ISRO SAR (NISAR) and Geospace Dynamics Constellation
+(GDC) missions; we are confident this approach will continue to be useful.
 
 
 We plan to run these consultations approximately twice a month -- which over
@@ -819,7 +819,7 @@ identified.  \textbf{Dedicated full-time developers help ensure that things
 
 % - TODO update to include rest of CZI grants + current ROSES grant
 In 2020, with a grant from CZI supporting a Research Software Engineer
-(RSE) working on Matplotlib for 10 month, we resolved 2,056 PRs and
+(RSE) working on Matplotlib for 10 months, we resolved 2,056 PRs and
 999 issues.  However, even at this rate we only reduced the PR backlog
 by 70 open PRs and held the issue backlog even.  As part of reducing
 the backlog, we were able to fix several long-standing bugs.  We have
@@ -928,24 +928,13 @@ connecting the endpoints in the target projection. If this distance exceeds a
 certain threshold, a midpoint is added, and the process repeats recursively until
 the desired level of detail is achieved.
 
-%%EF: I commented this out because I think it is saying almost exactly what the
-%paragraph above has already said.  Either one could be kept, but we don't need both.
-% Implementing this in Cartopy involves integrating a recursive function that checks
-% each segment of a path during the transformation process. For each segment, the
-% function calculates the distance of the segment from the straight line connecting
-% its endpoints. If the distance is greater than a predefined tolerance, the algorithm
-% adds a new point at the midpoint of the segment. This new point is then used to further subdivide
-% the segment. By doing so, the algorithm dynamically adjusts the density of points along the path,
-% ensuring smooth transitions and accurate representations in the target projection.
-% This adaptive approach not only enhances the visual quality of transformed paths
-% but also improves the accuracy of spatial data analysis and visualization in Cartopy.
 
 \subsubsection{Matplotlib Enhancements}
 
 Ticks and tick labels are a fundamental part of what differentiates a
 visualization from an illustration and allow the viewer to extract quantitative
 information from the figure.  To this end Matplotlib has extensive and flexible
-machinery for place and labeling ticks.  However, this flexibility comes at a
+machinery for placing and labeling ticks.  However, this flexibility comes at a
 performance cost, the current design architecturally prevents hierarchical
 labeling, and reduces API usability by making some seemingly simple tasks
 surprisingly complex. Although we have had discussion about these issues since
@@ -953,24 +942,24 @@ at least 2015, it has been intractable to make significant progress with
 volunteer effort alone.
 
 
-Currently each individual each individual ``tick''
+Currently each individual ``tick''
 represents the union of a single tick label, tick, and grid line.  For
 figures that have many axes simply creating the individual objects required
 to represent all of the ticks can be a significant performance bottle neck.
-Because each tick is independent it makes in extremely difficult to place a label
+Because each tick is independent it makes it extremely difficult to place a label
 between, rather than at, ticks.  Finally, the current implementation only supports
 two levels of ticks and tick labels (major and minor) cases where three or more layers --
 such as labeling year, month, and day -- require significant work to achieve.
 
 To address this we propose two changes to the library.  First, we will use
-three collections -- for the tick labels, the ticks, and the grid lines --
+three collections -- one each for the tick labels, the ticks, and the grid lines --
 essentially transposing the representation which will greatly reduce the
-overhead at creation time and enable use to leverage more efficient drawing
+overhead at creation time and enable us to leverage more efficient drawing
 routines already in the library to speed up rendering.  Additionally, by
 representing all of the tick labels together it will be possible to implement
 labeling ``between'' ticks rather than ``at'' ticks because we will have access
 to the positions of more than one tick at draw time.
-The second is to generalize
+The second change to the library is to generalize
 the current two level system to an arbitrary number of levels.
 
 While the work to design the new API is significant, our primary concern will
@@ -981,7 +970,7 @@ develop completed documentation of the new system, including a migration guide.
 
 
 Similar to ticks, legends are another fundamental component of data
-visualization where the API in Matplotlib is both very flexible but still has
+visualization where the API in Matplotlib is very flexible but still has
 an architectural limitation we plan to address.  Matplotlib has functionality
 to automatically generate a legend based on what is plotted in the figure.
 Generating a legend is as simple as providing a string label when plotting and
@@ -995,25 +984,28 @@ is likely to become a bigger problem going forward as we expect to begin
 generating additional composite \texttt{Artist}s.
 
 
-We propose to make two changes to how legend are automatically generated: first
+We propose to make two changes to how legends are automatically generated: first
 to move the generation of the legend entry from an external registry to a
 method on each \texttt{Artist} and second to extend the API of that method to
 allow the return of multiple legend entries rather than a single entry.  By
 putting the code to generate the legend entry on the \texttt{Artist} we will
 increase the locality of the code, make it easier to override the default, and
 make it possible to ensure legend entries are updated to stay in-sync with any
-style changes to the \texttt{Artist} the refer to.  The second change will
-allow support for \texttt{Artist} to trivial participate in the standard automatic
+style changes to the \texttt{Artist}s.  The second change will
+allow support for \texttt{Artist} to trivially participate in the standard automatic
 legend support.
 
 As with the work on ticking described above, the technical implementation is not
+expected to be
 challenging, however ensuring that we have covered all of the use cases of the current
-implementation and back-compatilibilty for our users.  The same as the tick work described above
+implementation and back-compatilibilty for our users will add to the development time.
+As with the tick work described above
 we will generate completed documentation of the new system including a migration guide.
 
 We expect that through the consultations we will be able to identify several
 similar scale projects that directly address the needs of one or more NASA
-mission.
+missions that would fall within the scope of this grant to implement as well
+as the two explicit tasks identified above.
 
 \subsection{Risk Management}
 
