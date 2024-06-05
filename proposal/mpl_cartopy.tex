@@ -1319,21 +1319,22 @@ PRs.  For example P. L. Lim, who is a Senior Software Engineer in the Data
 Analysis Tools Branch at the Space Telescope Science Institute and Astropy
 contributor regularly reports bugs to Matplotlib when pre-release versions of
 Matplotlib have an impact on Astropy.  The strongest relationships, both
-historical and current, are with projects where we have shared developers.  For
-example Greg Lucas, Ruth Comer, and Elliot sales de Andre are core contributors
-to Matplotlib and Cartopy while David Stansby is a maintainer on both
-Matplotlib and \texttt{SunPy}.  Additionally, through NumFOCUS and
-domain-specific conferences, there are regular in-person meetings between
+historical and current, are with projects where we have shared developers.
+% should not use cartopy as an example of
+%For
+%example Greg Lucas, Ruth Comer, and Elliot sales de Andre are core contributors
+%to Matplotlib and Cartopy while
+For example Ryan May is an maintainer of both Matplotlib and Metpy and David
+Stansby is a maintainer on both Matplotlib and \texttt{SunPy}Through NumFOCUS
+and domain-specific conferences, there are regular in-person meetings between
 developers.
 
-We will work with down-stream projects to help them improve their test
-coverage of plotting code and to add jobs to their continuous
-integration that test development snap-shots of Matplotlib.  This is
-particularly useful during the planned refactor as we will be making
-extensive changes to Matplotlib that we believe are backwards
-compatible, but down-stream projects and users exercise the library in
-ways the test suite does not.  While we hope not to introduce any
-regressions, catching them before release is the next best thing.
+We also regularly communicate with our upstream dependencies.  As Numpy
+prepared for a 2.0 release we were in constant communication to ensure that we
+were able to smoothly support users through the upgrade.  One of the flagship
+new features in Python 3.13 is a re-implemneted prompt.  When we brought to the
+CPython developers attention that it was missing a feature of the old prompt it
+was promptly addressed and considered a blocking issue for beta2.
 
 % wording all NF projects are putting in, please avoid wordsmithing it.
 As a NumFOCUS project, we recognize the importance of every project
