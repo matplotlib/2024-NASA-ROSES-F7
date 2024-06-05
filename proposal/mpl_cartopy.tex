@@ -286,17 +286,18 @@ Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
 
 
 Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely defined
-community of projects and programmers with the common goal of advancing science
-through the use of the Python programming language which emerged in the early
-2000s.  Development in the ecosystem as historically has been largely volunteer
-effort or sponsored implicitly by specific science projects.
+community of projects and programmers that emerged in the early 2000s with the
+common goal of advancing science
+through the use of the Python programming language.
+Historically, development in the ecosystem has been largely a volunteer
+effort, sometimes sponsored implicitly by specific science projects.
 % Starting around
 % 2020 there is a growing recognition of the importance of this software and the
 % availability of explicit funding.
 The SPE, shown with a rough schematic in
 Figure \ref{fig:ecosystem}, has a core of general purpose domain-agnostic
 tools, like NumPy~\cite{Harris2020} and SciPy~\cite{Virtanen2020}.  Matplotlib
-is in the second ring of specialized, but still domain agnostic tools, and is
+is in the second ring of specialized, but still domain agnostic, tools, and is
 the most prevalent data visualization library for the SPE.  The outer rings are
 increasingly domain-specific tools, like AstroPy~\cite{astropy:2013,
   astropy:2018} for astrophysics, SunPy~\cite{sunpy_community2020} for
@@ -325,7 +326,7 @@ Soon after its start by John D. Hunter in 2002, Matplotlib began growing as an
 open source plotting library with a BSD-compatible license. The first commits
 in the Matplotlib history date to early 2003.  Over the last 21 years
 Matplotlib has been actively developed and maintained by a vibrant, primarily
-volunteer, community.  Matplotlib has over 1,720 individual contributors have
+volunteer, community.  Matplotlib has over 1,720 individual contributors with
 commits in git (from 2003-today) and over 8,500 people have commented on GitHub
 (2011-today).  Many more individuals have contributed in ways not easily
 tracked, such as asking and answering questions on the mailing list and forums
@@ -344,7 +345,7 @@ support modern highly-structured data.
 Matplotlib's generality and flexibility make it readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
 Matplotlib as their base, providing domain-specific streamlining of
-Matplotlib's API: including
+Matplotlib's API.  These include, for example,
 yt~\cite{2011ApJS..192....9T}, AstroPy~\cite{astropy:2013,
   astropy:2018}, ArviZ~\cite{arviz_2019},
 seaborn~\cite{waskom2020seaborn}, xarray~\cite{hoyer2017xarray},
@@ -355,23 +356,18 @@ mpl-scatter-density~\cite{mpl-scatter-density}.
 
 \subsubsection{Cartopy}
 
-Cartopy is an essential Python package designed for geospatial data processing and visualization.
-It extends the capabilities of Matplotlib
+Cartopy is a Python package that extends the capabilities of Matplotlib
 to create high-quality maps and complex geospatial visualizations.
 With Cartopy, users can handle a variety of geospatial data formats,
-including shapefiles, GeoTIFFs, and netCDF,
-making it a versatile tool for researchers and scientists working with geographic information.
-
-One of the primary functions of Cartopy is to provide a framework for projecting and visualizing data on maps,
-which is crucial for interpreting spatial patterns and trends.
+including shapefiles, GeoTIFFs, and netCDF.
 The package supports numerous map projections and offers sophisticated tools for
-adding and customizing map features such as coastlines, borders, and gridlines.
+adding and customizing features such as coastlines, borders, and gridlines.
 These capabilities are indispensable for visualizing and analyzing data from
 Earth observation satellites, climate models, and other geospatial datasets.
 
 Cartopy is critical in supporting NASA SMD objectives,
 which include understanding Earth's system and its responses to natural and human-induced changes.
-Cartopy facilitates the visualization of data from many of NASA's Earth Science satellite missions,
+For example, it facilitates the visualization of data from many of NASA's Earth Science satellite missions,
 such as the Earth Observing System (EOS) series and the Joint Polar Satellite System (JPSS).
 The American Meteorological Society (AMS) held a short course focused on making
 plots with satellite data using Cartopy and Matplotlib titled
@@ -380,7 +376,7 @@ plots with satellite data using Cartopy and Matplotlib titled
 Researchers use Cartopy to create detailed maps that display atmospheric, oceanic,
 and terrestrial data, enabling them to track climate change, natural disasters,
 and other environmental phenomena with precision. For example, Cartopy
-has been used to track microplastics off the brazilian coast~\cite{tracking_microplastics},
+has been used to track microplastics off the Brazilian coast~\cite{tracking_microplastics},
 plot lightning location data~\cite{lightning_location}, and browse MERRA-2
 reanalysis datasets~\cite{merra2_plotting}.
 % By supporting Cartopy, NASA ensures that its scientists and researchers
@@ -428,56 +424,59 @@ reanalysis datasets~\cite{merra2_plotting}.
 %  - prompt handling of critical bugs
 %  - ticker here
 
-The objective of this work effort is to provide and continuously improve
-visualization tools for NASA researchers and engineers to enable them to
-successfuly and efficiently complete their missions.
+%%EF This section still seems like a mix of objectives and work plan; maybe OK.
+
+The objective of our proposed work is to help NASA (and other) researchers and
+engineers to accomplish their missions.
 To achieve this objective we will work directly with NASA
 researchers and engineers to understand and advise on their visualization
-challenges, implement new features in both Matplotlib and Cartopy, and continue
-to carry on the routine tasks needed to maintain both the code and community
-of large open source projects.
+challenges, implement new features in both Matplotlib and Cartopy, while continuing
+to carry on the routine tasks needed to maintain both the code and the community
+of our large open source projects.
 
 To facilitate direct communication between NASA researches and engineers and
 the core Matplotlib team we will set up by-appointment consultations with staff
 associated with NASA missions, Centers, or data repositories.  During these
 consultations we will both gather information about the challenges facing NASA
 researchers and engineers and provide guidance on how to best make use of the
-libraries.
+libraries. A few hours working with an expert
+can save days of effort by staff; and the information we get
 %including whose development is being supported by NASA and those completed under
 %this grant.
-This will ensure that Matplotlib's and Cartopy's development is
-responsive to NASA needs and often a few hours working with an expert
-can save days of effort.  In both cases the NASA mission is carried out more efficiently.
+will help guide Matplotlib's and Cartopy's development in
+response to NASA needs.
 
 Matplotlib is currently being supported in part by 20-OSTFL20-0058 (20 ROSES
 E.7) to refactor how data and data transformation pipelines are handled
-internally.  This refactor will have several significant improvements for users
-including uniform support for physical units, native support for complex data
-structures, dynamic data resampling, and support for cloud-data.  These tools
-also provide significant opportunities for down-stream libraries that depend on
-Matplotlib to adopt the new tools and provide similar benefits to their users.
-In particular we will work to refactor Cartopy to use these new tools which will in
+internally.  This refactor will provide improvements for users, such as
+uniform support for physical units, native support for complex data
+structures, dynamic data resampling, and support for cloud-data.  The benefits
+will be available to down-stream libraries.
+In particular we will work to refactor Cartopy to use these new capabilities which will in
 turn improve the performance, fix a long standing limitation, and
 enable new features.
 
-As actively used, developed, and maintained libraries there is always
-incremental improvements being made to Matplotlib and Cartopy.  One such
+As actively used, developed, and maintained libraries, Matplotlib and Cartopy
+are always undergoing
+incremental improvements.  An
 example completed under 20-OSTFL20-0058 was the addition of type stubs to
-Matplotlib which were critical to any NASA users who wish to have a fully typed
-Python code base.  This work was unlikely to have been completed using only
-volunteer effort and NASA's support was critical to the work being completed.
+Matplotlib, a major modernization to be consistent with many other libraries,
+and to support any NASA users who wish to have a fully typed
+Python code base.  This painstaking work was unlikely to have been completed using only
+volunteer effort; NASA's support was critical.
 Within this proposal we identify two additional projects: a refactoring of the
 ticker system and a redesign of the legend generation system.  We expect the
 tick refactor to greatly improve the performance in Figures with many Axes as
-well as unlock new capabilities while we expect the legend redesign to streamline
+well as unlock new capabilities, while we expect the legend redesign to streamline
 the user API for common customizations and to also unlock additional capabilities.
 
-Finally, maintaining actively used and developed libraries requires a baseline
-amount of work.  This work includes: community management, reviewing code,
+Finally, maintaining actively used and developed libraries requires consistent,
+relatively routine, work.  This includes: community management, reviewing code,
 fixing bugs, and managing releases.  These tasks can be hard, time critical,
 and thankless, but they are all essential for the continued overall health of the
 project.  Thus by having supported developers we will ensure that these tasks
-are completed in a timely manner and the supported developers act as enablers
+are completed in a timely manner.  Equally important is the role of the
+supported developers in fostering and mentoring
 of the larger volunteer developer communities.
 
 %\subsection{Objectives OLD}
@@ -626,7 +625,7 @@ of the larger volunteer developer communities.
 
 \subsection{Impact and Relevance to Science Mission Directorate}
 
-Matplotlib is ubiquitous in scientific computing, however because it is freely
+Matplotlib is ubiquitous in scientific computing, but because it is freely
 distributed it is difficult to get accurate numbers on usage.  Conservative
 estimates based on downloads and on usage of the documentation website indicate
 that Matplotlib has over 5 million users.  Matplotlib is in the top 125
