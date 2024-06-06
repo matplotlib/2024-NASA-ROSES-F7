@@ -399,29 +399,36 @@ reanalysis datasets~\cite{merra2_plotting}.
 
 This proposal is a continuation of the currently running grant ``Revamping
 Matplotlib for Modern Data Structures'' (20-OSTFL20-0058) under ROSES 2020 E.7
-which partially supports Dr.\ Caswell and fully support Dr.\ Sunden.  The main
-goals of active grant are to support general maintenance of Matplotlib and to
+which partially supports Dr.\ Caswell and fully supports Dr.\ Sunden.  The main
+goals of the active grant are to support general maintenance of Matplotlib and to
 overhaul how Matplotlib internally represents and processes user data.  Both
-thrusts of the grant are preceding well.
+thrusts of the grant are progressing well.
 
 With respect to maintenance both Dr.\ Sunden and Dr.\ Caswell are participating
 in the day-to-day of running the library including issue triage, PR review, and
 user support.  Their efforts along with hardware purchased under the grant were
-critical in promptly debugging and fixing a fatal bug due to a bug exposed by
-changes to both macOS and CPython.  In addition one major improvement, adding
-type hints to the public facing API, was completed, two additional projects are
-expected to be completed by the end of the 24Q3, and Dr.\ Sunden was release
-manager for one release (3.8 in 23Q3) and will be release manager for an
-upcoming release (3.10 targetted for 24Q3).
+critical in promptly debugging and fixing a fatal bug exposed by changes to
+both macOS and CPython.  In addition one major improvement, adding type hints
+to the public facing API, was completed.  The addition of type stubs to
+Matplotlib, a major modernization to be consistent with many other libraries,
+and to support any NASA users who wish to have a fully typed Python code base.
+This painstaking work was unlikely to have been completed using only volunteer
+effort.  Two additional projects are expected to be completed by the end of the
+24Q3, and Dr.\ Sunden was release manager for one release (3.8 in 23Q3) and
+will be release manager for an upcoming release (3.10 targeted for 24Q3).
 
 Work led by Dr.\ Sunden to revamp how Matplotlib manages user supplied data for
-plotting is also preceding well.  We have a functioning
+plotting is also progressing well.  We have a functioning
 prototype\footnote{\url{https://github.com/matplotlib/data-prototype}} that
-demonstrates both the new data handling structures and the new processing
-pipeline.  We have demonstrated the ability to dynamically query or re-sample
-data based on the view limits of the graph and a generalized implementation of
-the internal data processing pipelines.  We expect to able to deliver a release
-candidate suitable as a foundation for the Cartopy work proposed here by 25Q1.
+demonstrates both the new data structures and the new processing pipeline.  We
+have demonstrated the ability to dynamically query or re-sample data based on
+the view limits of the graph and a generalized implementation of the internal
+data processing pipelines.  This refactor will provide improvements for users,
+such as uniform support for physical units, native support for complex data
+structures, dynamic data resampling, and support for cloud-data.  The benefits
+will be available to down-stream libraries.  We expect to able to deliver a
+release candidate suitable as a foundation for the Cartopy work proposed here
+by 25Q1.
 
 
 \subsection{Objectives}
@@ -464,7 +471,7 @@ of our large open source projects.
 
 To facilitate direct communication between NASA researches and engineers and
 the core Matplotlib team we will set up by-appointment consultations with staff
-associated with NASA missions, Centers, or data repositories.  During these
+associated with NASA Missions, Centers, or data repositories.  During these
 consultations we will both gather information about the challenges facing NASA
 researchers and engineers and provide guidance on how to best make use of the
 libraries. A few hours working with an expert
@@ -474,29 +481,14 @@ can save days of effort by staff; and the information we get
 will help guide Matplotlib's and Cartopy's development in
 response to NASA needs.
 
-Matplotlib is currently being supported in part by 20-OSTFL20-0058 (20 ROSES
-E.7) to refactor how data and data transformation pipelines are handled
-internally.  This refactor will provide improvements for users, such as
-uniform support for physical units, native support for complex data
-structures, dynamic data resampling, and support for cloud-data.  The benefits
-will be available to down-stream libraries.
-In particular we will work to refactor Cartopy to use these new capabilities which will in
-turn improve the performance, fix a long standing limitation, and
-enable new features.
-
 As actively used, developed, and maintained libraries, Matplotlib and Cartopy
-are always undergoing
-incremental improvements.  An
-example completed under 20-OSTFL20-0058 was the addition of type stubs to
-Matplotlib, a major modernization to be consistent with many other libraries,
-and to support any NASA users who wish to have a fully typed
-Python code base.  This painstaking work was unlikely to have been completed using only
-volunteer effort; NASA's support was critical.
-Within this proposal we identify two additional projects: a refactoring of the
-ticker system and a redesign of the legend generation system.  We expect the
-tick refactor to greatly improve the performance in Figures with many Axes as
-well as unlock new capabilities, while we expect the legend redesign to streamline
-the user API for common customizations and to also unlock additional capabilities.
+are always undergoing incremental improvements.  Although many projects can be
+completed by volunteers, some can not.  Within this proposal we identify two
+projects: a refactoring of the ticker system and a redesign of the
+legend generation system.  We expect the tick refactor to greatly improve the
+performance in Figures with many Axes as well as unlock new capabilities, while
+we expect the legend redesign to streamline the user API for common
+customizations and to also unlock additional capabilities.
 
 Finally, maintaining actively used and developed libraries requires consistent,
 relatively routine, work.  This includes: community management, reviewing code,
@@ -657,7 +649,7 @@ Matplotlib is ubiquitous in scientific computing, but because it is freely
 distributed it is difficult to get accurate numbers on usage.  Conservative
 estimates based on downloads and on usage of the documentation website indicate
 that Matplotlib has over 5 million users.  Matplotlib is in the top 125
-most-downloaded packages from PyPI,~\cite{pypi_stats} with over 10 million
+most-downloaded packages from PyPI,~\cite{pypi_stats} with over 15 million
 downloads per week, and is packaged by every major Linux and scientific Python
 distribution.  Usage can also be estimated from static analysis of publicly
 available code.  According to GitHub over 1.2M repositories and over 34k
@@ -710,7 +702,7 @@ growing reliance on Matplotlib by the scientific community.}
 
 % - update with more recent examples, sort by division
 These measures show broad impact but cover many uses outside of the
-SMD community.  Examples of usage within the community include
+SMD community.  Specific examples of usage within the community include
 studies of galaxy evolution~\cite{2022ApJ...940L..14N} with JWST,
 of exoplanets~\cite{2020AJ....160..116G, Barclay_2018,2019AJ....158...27L} with TESS,
 of the outer solar system~\cite{Emran_2023},
@@ -718,10 +710,12 @@ of the sun~\cite{Stangalini2022},
 of Mars~\cite{2022JE007697} and the planning of Rover drives at JPL~\cite{acurtis},
 of the moon~\cite{NESNAS2023163},
 and of the Earth~\cite{paolo_2024}.
-    % https://github.com/nsidc/NSIDC-Data-Tutorials <- cartopy + direct Matplotlib
-This shows the breadth of Matplotlib usage across the Astrophysics,
-Planetary Science, Heliophysics, and Earth Science divisions of SMD.
-Maintaining Matplotlib's health and engineering for its future will
+% https://github.com/nsidc/NSIDC-Data-Tutorials <- cartopy + direct Matplotlib
+Additionally, Matplotlib is an essential part of the workflow and the
+scientific community served by the Mikulski Archive for Space
+Telescopes~\cite{Tollerud}.  This shows the breadth of Matplotlib usage across
+the Astrophysics, Planetary Science, Heliophysics, and Earth Science divisions
+of SMD.  Maintaining Matplotlib's health and engineering for its future will
 have wide-ranging impacts for the scientific community, and for NASA in
 particular.
 %It has been used in tens of thousands of
@@ -789,7 +783,7 @@ in either supported library.  This will feed back into our maintenance efforts,
 highlighting areas for improvements in documentation and providing context to
 new feature development.  In planning for this grant we have had productive early
 conversations with personnel from the NASA-ISRO SAR (NISAR) and Geospace Dynamics Constellation
-(GDC) missions; we are confident this approach will continue to be useful.
+(GDC) missions; we are confident this approach will be useful.
 
 
 We plan to run these consultations approximately twice a month -- which over
@@ -818,8 +812,7 @@ Matplotlib's health we must:
 \item fix critical bugs and regressions promptly as they are reported;
 \item entrain new contributors to sustain and diversify the community
   developer team;
-\item make improvements while maintaining backward compatibility and
-  documenting changes;
+\item make improvements while maintaining backward compatibility;
 \item categorize Issues and PRs in terms of topic, difficulty, and
   urgency;
 \item maintain the continuous-integration infrastructure;
@@ -832,7 +825,7 @@ library, they expose previously un-detected bugs, they request or propose new
 features, and the world continues to changes around us.  This scope also covers
 small-to-medium development of new features that are opportunistically
 identified.  \textbf{Dedicated full-time developers help ensure that things
-  happen in a consistent and timely manner, and provide the crucial roadmaps
+  happen in a consistent and timely manner, and maintain the crucial roadmaps
   that will steer the future of the library}.
 
 
@@ -846,15 +839,15 @@ identified.  \textbf{Dedicated full-time developers help ensure that things
 % occasional contributors and distracting for core developers.
 
 % - TODO update to include rest of CZI grants + current ROSES grant
-In 2020, with a grant from CZI supporting a Research Software Engineer
-(RSE) working on Matplotlib for 10 months, we resolved 2,056 PRs and
-999 issues.  However, even at this rate we only reduced the PR backlog
-by 70 open PRs and held the issue backlog even.  As part of reducing
-the backlog, we were able to fix several long-standing bugs.  We have
-demonstrated that supporting maintenance work has a positive effect on
-the health of the project and \textbf{the additional resources
-  requested here will further reduce, but not eliminate, the
-  maintenance backlog}.
+% In 2020, with a grant from CZI supporting a Research Software Engineer
+% (RSE) working on Matplotlib for 10 months, we resolved 2,056 PRs and
+% 999 issues.  However, even at this rate we only reduced the PR backlog
+% by 70 open PRs and held the issue backlog even.  As part of reducing
+% the backlog, we were able to fix several long-standing bugs.
+
+We have demonstrated that supporting maintenance work has a positive effect on
+the health of the project and \textbf{the additional resources requested here
+  will further reduce, but not eliminate, the maintenance backlog}.
 
 
 %TODO: Move some of the technical content from the objectives section to here
@@ -905,6 +898,15 @@ downstream libraries, illustrating how to take advantage of the new Matplotlib d
 
 \paragraph{Path Transformations}
 
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
+  \caption{\small Example geodetic path from Japan to California demonstrating
+  that the default threshold is currently too large in some cases. Additionally,
+  the line from Japan to California (red) is not the same as the line from
+  California to Japan (blue) due to the current subsampling technique.}
+  \label{fig:cartopy_interpolation}
+\end{wrapfigure}
+
 The second area of focus for the Cartopy refactor is in the handling of path transformations from
 one projection to another. Currently, these transformations sometimes result in
 visually unappealing artifacts or loss of detail,
@@ -919,15 +921,6 @@ a "smooth enough" curve. The default threshold does not work well in this
 example; we would want to see a smooth curve (dashed black line) and not the
 two straight line segments in each of the blue and red curves that Cartopy produces
 by default.
-
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
-  \caption{\small Example geodetic path from Japan to California demonstrating
-  that the default threshold is currently too large in some cases. Additionally,
-  the line from Japan to California (red) is not the same as the line from
-  California to Japan (blue) due to the current subsampling technique.}
-  \label{fig:cartopy_interpolation}
-\end{wrapfigure}
 
 
 To address this, we propose implementing an adaptive path subsampling technique similar to
@@ -1051,12 +1044,12 @@ efficient use of resources.
 
 % risk is discrete event that would cause grant to fail
 
-There is personnel risk in that we have not yet identified the second RSEs who
-will be a key individual for carrying out this work.  We are optimistic that we
-will be able to recruit a qualified individuals in reasonable time.  We have
-now hired two individuals as fulltime RSEs through NumFOCUS within reasonable
-time frames and have almost 5 years of experience managing and paying
-Research Software Engineers through NumFOCUS.
+There is personnel risk in that we have not yet identified the second Research
+Software Engineer (RSE) who will be a key individual for carrying out this
+work.  We are optimistic that we will be able to recruit a qualified
+individuals in reasonable time.  We have now hired two individuals as fulltime
+RSEs through NumFOCUS within reasonable time frames and have almost 5 years of
+experience managing and paying RSEs through NumFOCUS.
 
 
 Within the Cartopy refactor, the primary risk is that the new Matplotlib data
@@ -1151,6 +1144,12 @@ integrating the new Matplotlib data model which will take a fair amount of
 effort to develop the proper transforms and data structures to take advantage
 of the new data model.
 
+\subsubsection{Consultation}
+Throughout the project both Dr.\ Caswell, Dr.\ Sunden, Dr.\ Lucas, and the RSE
+will conduct consultation meetings.  We will start Y1Q1 with NASA researchers
+identified through our professional networks.  By the end of Y1Q2 we will
+develop and deploy a plan to publicize these meetings more widely to talk to
+all NASA projects who are interested.
 
 \subsubsection{General Maintenance}
 
@@ -1178,14 +1177,27 @@ explicit Cartopy refactor tasks.
 
 \subsubsection{Matplotlib Enhancements}
 
-The Ticker refactor will begin at the start of the grant period, Y1Q1 and will take place over the course of 18 months, in parallel with general maintenance and community work.
-The initial quarter will focus on planning and API design for the new ticking system.
-This will include gathering examples of plots which could take advantage of the new ticking system.
-The technical implementation of the new ticking system will primarily take place in Y1Q2, with testing and documentation following in Y1Q3.
-It is expected that the design and integration with existing APIs will be a significant portion of the total effort.
-The initial release as an opt-in feature will be in Y1Q4.
-This will be followed by bug fixes and additional integration of pre-existing APIs.
-We expect to be ready for full release in Y2Q2, though may opt to delay for one or two more releases to allow additional time for feedback from our users.
+For both the Ticker and Legend enhancement we will follow an approximately 18
+month development cycle in parallel with consultation, general maintenance and
+community work.  The first 1 quarter months for planning and design and then
+two quarters for implementation, testing, and documentation.  Once the feature
+is finished we will include it in a feature release as an experimental opt-in
+feature, followed by improvements and bug fixes based on user feedback.
+gathering and designing the extended APIs.  If the feedback is positive, the
+feature will be made default in the next release.
+
+We will sequence the enhancements with the ticker improvements first then
+starting the legend enhancements once ticking is included in Matplotlib as an
+optional feature.
+
+% The Ticker refactor will begin at the start of the grant period, Y1Q1 and will take place over the course of 18 months, in parallel with general maintenance and community work.
+% The initial quarter will focus on planning and API design for the new ticking system.
+% This will include gathering examples of plots which could take advantage of the new ticking system.
+% The technical implementation of the new ticking system will primarily take place in Y1Q2, with testing and documentation following in Y1Q3.
+% It is expected that the design and integration with existing APIs will be a significant portion of the total effort.
+% The initial release as an opt-in feature will be in Y1Q4.
+% This will be followed by bug fixes and additional integration of pre-existing APIs.
+% We expect to be ready for full release in Y2Q2, though may opt to delay for one or two more releases to allow additional time for feedback from our users.
 
 % Y1Q1: Planning and Design
 % Y1Q2: Implementation
@@ -1354,16 +1366,17 @@ historical and current, are with projects where we have shared developers.
 %example Greg Lucas, Ruth Comer, and Elliot sales de Andre are core contributors
 %to Matplotlib and Cartopy while
 For example Ryan May is an maintainer of both Matplotlib and Metpy and David
-Stansby is a maintainer on both Matplotlib and \texttt{SunPy}Through NumFOCUS
+Stansby is a maintainer on both Matplotlib and \texttt{SunPy}.  Through NumFOCUS
 and domain-specific conferences, there are regular in-person meetings between
 developers.
 
 We also regularly communicate with our upstream dependencies.  As Numpy
 prepared for a 2.0 release we were in constant communication to ensure that we
 were able to smoothly support users through the upgrade.  One of the flagship
-new features in Python 3.13 is a re-implemneted prompt.  When we brought to the
-CPython developers attention that it was missing a feature of the old prompt it
-was promptly addressed and considered a blocking issue for beta2.
+new features in Python 3.13 is a re-implemented terminal prompt.  When we
+brought to the CPython developers attention that it was missing a feature of
+the old prompt that was critical to Matplotlib, it considered a blocking issue
+for beta2 and the feature was promptly implemented.
 
 % wording all NF projects are putting in, please avoid wordsmithing it.
 As a NumFOCUS project, we recognize the importance of every project
@@ -1435,7 +1448,7 @@ of them as regular contributors and then maintainers.
 We have adopted the Contributor Covenant V2.0 as our Code of
 Conduct~\cite{CoC}.  Ongoing work at NumFOCUS to develop metrics on new
 contributors will help us evaluate the efficacy of these efforts to make the
-community more inclusive.
+community more inclusive and following current best-practices.
 
 \subsubsection{Contribution Workflow}
 %check that this is not a required title
