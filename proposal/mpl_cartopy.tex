@@ -925,87 +925,92 @@ which reduce the number of points in a path while retaining its overall shape.
 The algorithm works by evaluating
 the distance between the path's original line segments and the straight line
 connecting the endpoints in the target projection. If this distance exceeds a
-certain threshold, a midpoint is added, and the process repeats recursively until
+threshold, a midpoint is added, and the process repeats recursively until
 the desired level of detail is achieved.
 
 
 \subsubsection{Matplotlib Enhancements}
 
+\paragraph{Ticks}
+
 Ticks and tick labels are a fundamental part of what differentiates a
-visualization from an illustration and allow the viewer to extract quantitative
+visualization from an illustration, allowing the viewer to extract quantitative
 information from the figure.  To this end Matplotlib has extensive and flexible
 machinery for placing and labeling ticks.  However, this flexibility comes at a
-performance cost, the current design architecturally prevents hierarchical
+performance cost. The current design prevents hierarchical
 labeling, and reduces API usability by making some seemingly simple tasks
 surprisingly complex. Although we have had discussion about these issues since
-at least 2015, it has been intractable to make significant progress with
+at least 2015, we have been unable to make progress with
 volunteer effort alone.
 
 
 Currently each individual ``tick''
 represents the union of a single tick label, tick, and grid line.  For
-figures that have many axes simply creating the individual objects required
-to represent all of the ticks can be a significant performance bottle neck.
-Because each tick is independent it makes it extremely difficult to place a label
-between, rather than at, ticks.  Finally, the current implementation only supports
-two levels of ticks and tick labels (major and minor) cases where three or more layers --
-such as labeling year, month, and day -- require significant work to achieve.
+figures that have many axes, simply creating the individual objects required
+for all of the ticks can be a performance bottleneck.
+Because each tick is independent, placing a label (e.g., for the year) between
+ticks is not straightforward.  Finally, the current implementation only supports
+two levels of ticks and tick labels (major and minor), so in cases where three or
+more layers are desired ---
+such as labeling year, month, and day --- considerable custom code is required.
 
 To address this we propose two changes to the library.  First, we will use
-three collections -- one each for the tick labels, the ticks, and the grid lines --
-essentially transposing the representation which will greatly reduce the
-overhead at creation time and enable us to leverage more efficient drawing
-routines already in the library to speed up rendering.  Additionally, by
-representing all of the tick labels together it will be possible to implement
-labeling ``between'' ticks rather than ``at'' ticks because we will have access
-to the positions of more than one tick at draw time.
-The second change to the library is to generalize
-the current two level system to an arbitrary number of levels.
+\texttt{Collection}s, Matplotlib \texttt{Artist}s that efficiently handle sets of plot
+elements: an \texttt{Axis} will have one \texttt{Collection} for the tick labels, one for the
+ticks, and one for the grid lines.  This will speed up both the creation and
+the rendering of each \texttt{Axis}.
+Additionally, it will be easier to implement
+labeling ``between'' ticks rather than ``at'' ticks because the labels can be
+generated and placed based on the entire set of ticks; the one-to-one
+correspondence between ticks and labels will be relaxed.
+The second change is to generalize
+the current two-level system to an arbitrary number of levels.
 
-While the work to design the new API is significant, our primary concern will
-be to complete this work while minimizing the impact on existing users.
 Because tick labeling is so fundamental to plotting, even small changes to the
-API will have significant impact on our users.  Along with the code we will
-develop completed documentation of the new system, including a migration guide.
+API could cause difficulty for our users. Therefore, while developing the
+new API, we will take pains to minimize the effects on existing code. Along with the code we will
+develop documentation of the new system, including a migration guide.
 
+\paragraph{Legends}
 
-Similar to ticks, legends are another fundamental component of data
+Like ticks, legends are another fundamental component of data
 visualization where the API in Matplotlib is very flexible but still has
-an architectural limitation we plan to address.  Matplotlib has functionality
-to automatically generate a legend based on what is plotted in the figure.
-Generating a legend is as simple as providing a string label when plotting and
-then calling a single method.  However, the configuration of how to generate
-the legend entries automatically is in an external registry which is not
-discoverable and complicated to modify.  Further, the machinery assumes that
+an architectural limitation we plan to address.
+Generating a legend can be as simple as providing a string label when plotting and
+then calling a single method.  However, the configuration of this automatic
+legend generation capability is in an external registry which is hard to find
+and complicated to modify.  Further, the machinery assumes that
 each \texttt{Artist} will only need to put a single entry in the legend.  This
-is already not true in some scatter
-plots\ \footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html\#automated-legend-creation}}. and
-is likely to become a bigger problem going forward as we expect to begin
-generating additional composite \texttt{Artist}s.
+assumption is too restictive; in
+some scatter plots, for example, one might want the legend to show the same
+symbol at several
+sizes\
+\footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html\#automated-legend-creation}}
+to encode information on a third dimension.
+The demand for easier customization like this will grow as more complex
+composite \texttt{Artist}s are created.
 
 
-We propose to make two changes to how legends are automatically generated: first
+We propose to make two changes to how legends are automatically generated: first,
 to move the generation of the legend entry from an external registry to a
-method on each \texttt{Artist} and second to extend the API of that method to
+method on each \texttt{Artist}; and second, to extend the API of that method to
 allow the return of multiple legend entries rather than a single entry.  By
 putting the code to generate the legend entry on the \texttt{Artist} we will
 increase the locality of the code, make it easier to override the default, and
-make it possible to ensure legend entries are updated to stay in-sync with any
-style changes to the \texttt{Artist}s.  The second change will
-allow support for \texttt{Artist} to trivially participate in the standard automatic
-legend support.
+make it possible to ensure each legend entry is updated to stay in sync with any
+style changes to its \texttt{Artist}.
 
 As with the work on ticking described above, the technical implementation is not
-expected to be
-challenging, however ensuring that we have covered all of the use cases of the current
-implementation and back-compatilibilty for our users will add to the development time.
-As with the tick work described above
-we will generate completed documentation of the new system including a migration guide.
+challenging, but effort will be required to ensure that we have covered all of the use cases of the current
+implementation and have provided back-compatilibilty for our users.
+Documentation,
+including a migration guide, will be included in the work.
+
+\paragraph{Additional improvements}
 
 We expect that through the consultations we will be able to identify several
 similar scale projects that directly address the needs of one or more NASA
-missions that would fall within the scope of this grant to implement as well
-as the two explicit tasks identified above.
+missions.
 
 \subsection{Risk Management}
 
