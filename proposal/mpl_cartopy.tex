@@ -394,7 +394,7 @@ reanalysis datasets~\cite{merra2_plotting}.
 % interpreting the vast amounts of geospatial data crucial to addressing some
 % of the most pressing scientific questions of our time.
 
-\subsusection{Progress Report}
+\subsubsection{Progress Report}
 
 
 This proposal is a continuation of the currently running grant ``Revamping
@@ -762,7 +762,7 @@ Given the usage and the scale of
 the library it is not sustainable to return to maintaining Matplotlib as a
 volunteer-only effort.  A core team of full-time developers and managers can
 better coordinate and nurture volunteer efforts, with the goal of growing and
-sustaining a diverse community of volunteer expert contributors.
+sustaining an inclusive community of volunteer expert contributors.
 
 %TODO: GML: These following paragraph overlaps with the one above, I think we can cut the one below here
 % With explicit support for their time, Matplotlib's core developers
@@ -1290,7 +1290,7 @@ Cartopy is licensed under the BSD 3-clause license.
 
 
 \subsubsection{Sustainability Metrics}
-
+\label{sec:sm}
 There are many possible ways to measure the sustainability of an
 open source project.  We propose to focus on growing our developer
 community, reducing our Issue and PR backlogs, and maintaining a
@@ -1377,7 +1377,7 @@ into consideration when evaluating our proposal.
 
 
 \subsubsection{Inclusive Community Development}
-
+\label{sec:icd}
 % - TODO this subsubsection may move to the inclusion plan which is
 % required for foundation level call
 % GML: I agree to move this into the inclusion plan. I think this is a
@@ -1389,18 +1389,17 @@ into consideration when evaluating our proposal.
 % the main panel or a separate panel that only provides feedback on the
 % inclusion plan.
 
-Matplotlib strives to be an inclusive and open project, anyone who is
-willing and able to contribute to the project should feel welcome to
-do so.  We have adopted the Contributor Covenant V2.0 as
-our Code of Conduct~\cite{CoC}.
-
-Matplotlib has an open development model, all work is done in the open and
-welcome contributions, in the from of bug reports, feature requests, or pull
-requests from anyone.  We maintain an extensive contribution guide
+Matplotlib strives to be an inclusive and open project, anyone who is willing
+and able to contribute to the project should feel welcome to do so.  Matplotlib
+has an open development model, all work is done in the open and welcome
+contributions, in the from of bug reports, feature requests, or pull requests
+from anyone.  We maintain an extensive contribution guide
 (\url{https://matplotlib.org/devdocs/devel/index.html}) as part of our
 documentation.  To improve the development and retention of new contributors we
 run two efforts: an ``incubator'' channel on gitter and bi-monthly New
-Contributor calls.
+Contributor calls.  Upon opening their first PR, authors receive an automated
+message from a bot welcoming them to the project and providing links to
+resources aimed at new contributors.
 
 %% I really want to put this in, but do not see a good place for it :/
 % It is important for everyone working on the project to feel safe to make
@@ -1433,9 +1432,10 @@ providing this support to first time contributors we will retain more
 of them as regular contributors and then maintainers.
 
 
-Ongoing work at NumFOCUS to develop metrics on new contributors
-will help us evaluate the
-efficacy of these efforts at diversifying our contributor base.
+We have adopted the Contributor Covenant V2.0 as our Code of
+Conduct~\cite{CoC}.  Ongoing work at NumFOCUS to develop metrics on new
+contributors will help us evaluate the efficacy of these efforts to make the
+community more inclusive.
 
 \subsubsection{Contribution Workflow}
 %check that this is not a required title
@@ -1770,58 +1770,101 @@ process of those projects.
 % progress report.
 
 Matplotlib strives to be an inclusive and open project; anyone who is willing
-and able to contribute to the project should feel welcome todo so. We have
-adopted the Contributor Covenant V2.0 as our Code of Conduct~\cite{CoC}.
+and able to contribute to the project should feel welcome todo so.  Building on
+our current practices, as discussed in the S-T-M 1.7.5, we plan to focus
+on improving the on-boarding of regular contributors to Matplotlib.  We propose
+to continue outreach and support to encourage people to make their first PR to
+the library, better define existing roles with in the maintainer community and
+create new ones, improve the rate it which contributors return to make
+additional contributions.
 
-Matplotlib has an open development model, all work is done in the open and we
-welcome contributions in the from of bug reports, feature requests, or pull
-requests from anyone. We maintain an extensive contribution guide
-(\url{https://matplotlib.org/devdocs/devel/index.html}) as part of our
-documentation. To improve the development and retention of new contributors we
-have an ``incubator'' channel on gitter, which serves as a semi-closed chat
+We will continue several activities to bring new contributors to the project.
+First, we will continue to host New Contributor Meetings bi-monthly -- started
+as part of a previous project -- giving first-time contributors a space to ask
+questions and interact with community members on a video call.  Additionally we
+we have an ``incubator'' channel on gitter, which serves as a semi-closed chat
 room where new contributors can get support on their first contributions.
+These spaces are intended to aid people getting started and increase the number
+of successful first-time contributors.  Second, we will continue to track
+first-time contributors' pull requests using a GitHub project, which gives
+these special contributions visibility and helps prioritize reviews and
+interactions with new contributors. Third, we will continue and expand the
+practice of labeling issues an ``good first issues'' and providing detailed
+guidance of what needs to be done.  Matplotlib is a large library and it can be
+difficult to know where to start when trying to debug an issue.  By providing
+pointers to the correct section of the code and a checklist of steps need get a
+patch merged we will make fixing the issue accessible to more people.  Finally,
+we will continue to run sprints at conferences with the goal of introducing
+attendees to the process of contributing to open source.  We expect to run 2-3
+sprints per year at at events like Grace Hopper Celebration, Scipy, or PyData
+conferences as we have in the past.
 
-As part of a previous project, we started hosting New Contributor Meetings
-monthly, giving first-time contributors a space to ask questions and interact
-with community members on a video call. In addition, we track first-time
-contributors' pull requests using a GitHub project, which gives these special
-contributions visibility and helps prioritize reviews and interactions with new
-contributors.
+In addition to our Governance Documents~\cite{gov} we plan to further document
+and expand the roles within the contributor community.  We will adopt the CSCCE
+Community Participation Model~\cite{cscce:cpm} as the framework to describe and
+understand our community.  Identifying and documenting the roles with in the
+community is the first step to documenting the paths for a contributor to
+on-board (and off-board) from those roles, from recurring contributor to
+project lead.  By providing a clear path to engagement we will both encourage
+people to participate and help us to understand why interested and qualified
+people are walking away.
 
-To better understand the needs of our community and how to engage with it, we
-will also collaborate with the CSCCE to provide guidance and training on
-community management and community building.
+We have previously tried to start a ``Triage Team'' in the organization who
+have power to tag, milestone, and close issues.  The issue tracker is important
+to communication on the project because it serves as the centralized location
+for making feature requests, reporting bugs, identifying major projects to work
+on, and discussing priorities.  In addition to the direct benefit of improving
+the issue triage and freeing the core-developers to spend more time reviewing
+PRs, this role will bring more people into the developer community and may
+provide a pathway to becoming regular contributors and maintainers.  However,
+these efforts have never got off the ground (past writing documentation
+defining the role) because we did not identify an initial ``Team Captian''.
+To this end one of the tasks of the consultant will be to serve as the inaugural
+Team Captain for at least 18 months and to identify a successor so the team will
+persist past the end of the grant.
 
-Ongoing work at NumFOCUS to develop metrics will help us evaluate the efficacy
-of these efforts at diversifying our contributor base.
+As noted in S-T-M 1.7.3 only about 29\% of people who have one merged
+PR into Matplotlib have 2 or more.  Currently, after merging the first PR of
+a new contributor we leave a message thanking them for their contribution and
+encouraging them to contribute again.  We will extend this to include an offer
+for a one-on-one conversation with a core-maintainer to discuss their experience
+contributing and if they are interested in further contributions.  This will
+both provide information about why people do not return and the additional contact
+may encourage more people to return for further contributions.
+%
 
-% TODO rewrite
-The issue tracker is important to communication on the project because
-it serves as the centralized location for making feature requests,
-reporting bugs, identifying major projects to work on, and discussing
-priorities.  For this reason, it is important to curate the issue
-list, adding labels to issues and closing issues that are resolved or
-unresolvable. Triaging issues does not require any particular
-expertise in the internals of Matplotlib but is extremely valuable to
-the project.  To this end we have created a ``Triage Team'' in the
-organization who have power to tag, milestone, and close issues.  In
-addition to the direct benefit of improving the issue triage and
-freeing the core-developers to spend more time reviewing PRs, this
-role will bring more people into the developer community and may
-provide a pathway to becoming regular contributors and maintainers.
+We will continue to work with NumFOCUS to develop metrics will help us evaluate
+the efficacy of these efforts at diversifying our contributor base.  We have
+adopted the Contributor Covenant V2.0 as our Code of Conduct~\cite{CoC} and
+will continue to work with NumFOCUS and other project to ensure that we are
+implementing it in line with community best-practices.
 
+% TODO get this in someplace?
+%   \item https://contributor-experience.org
 
-  \begin{itemize}
-  \item  ``good first issue'' tag
-  \item https://contributor-experience.org
-  \item incubator
-  \item GSOC participtaion
-  \item welcome bot
-  \item CoC
-  \item CSCCE adoption
-  \end{itemize}
+% TODO, get this in someplace?
+%   \item GSOC participtaion
+
+To support these activities we request support for a Senior Contributor
+Experience Engineer to fill the role of Contributor Experience Lead for
+Matplotlib at 192hrs / year for the duration of the grant.
 
 
+%   \begin{itemize}
+%   \item incubator
+
+%   \item welcome bot
+%   \item CoC
+%   \item CSCCE adoption
+%   \end{itemize}
+
+%  - Set up and maintain (for the grant period, whatever that is) a triage team
+%  for matplotlib
+%  - Complete the CSCCE training with the steering council (this means attending
+%  the sessions) and implementing appropriate parts of it to the matplotlib
+%  community
+%  - Improvements to the maintainer onboarding pipeline and a project lead
+%  succession plan.
 
 
 
