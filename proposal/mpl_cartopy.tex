@@ -1009,12 +1009,14 @@ then calling a single method.  However, the configuration of this automatic
 legend generation capability is in an external registry which is hard to find
 and complicated to modify.  Further, the machinery assumes that
 each \texttt{Artist} will only need to put a single entry in the legend.  This
-assumption is too restictive; in
+assumption is too restrictive; in
 some scatter plots, for example, one might want the legend to show the same
 symbol at several
-sizes\
-\footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html\#automated-legend-creation}}
-to encode information on a third dimension.
+sizes
+to encode information on a third dimension. We have an example for how to do
+this
+now\footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html\#automated-legend-creation}},
+but it is far from obvious.
 The demand for easier customization like this will grow as more complex
 composite \texttt{Artist}s are created.
 
@@ -1075,11 +1077,10 @@ feature in Cartopy.
 We may find that refactoring the ticking system is more technically challenging
 than we expect.  However, we have significant experience in the project, we
 recently completed a similar but smaller scale refactor with minimal user
-disruption, and have well established process Matplotlib for communicating
-deprecations to the user.  Ideally we will be able to switch to a more
-efficient implementation in a way that is transparent to the user, if this proves
-intractable we will provide the more efficient implementation as an opt-in feature
-available to users.
+disruption, and have well established process in Matplotlib for communicating
+deprecations to the user.  Ideally, we will be able to switch to a more
+efficient implementation in a way that is transparent to the user; if this proves
+intractable we will provide the more efficient implementation as an opt-in feature.
 
 % TODO TAC: I am not 100% sure why we have this section, inherited it from
 % last years
