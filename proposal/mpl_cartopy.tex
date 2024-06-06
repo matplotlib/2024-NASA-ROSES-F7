@@ -256,7 +256,7 @@
 % AKA A clear description of the software, relevance to the SMD science
 % community, and the relationship to NASA SMD scientific vision and data
 % strategic plan. This must include
-\subsection{Matplotlib and Cartopy's role in scientific computing}
+\subsection{Introduction}
 
 % scientific vision strategy 2.5 Ensure NASA’s science data are accessible to
 %   all and produce practical benefits to society.
@@ -266,7 +266,7 @@
 %   that further national interests. [due to where Caswell sits as a DOE
 %   contractor]
 
-\subsubsection{Matplotlib}
+\subsubsection{Matplotlib's role in scientific computing}
 %   [ ] o the impact of the software in the SMD science community,
 %   [ ] o the current usage in the SMD science community,
 %   [ ] o how the software is being used by SMD divisions, (check)
@@ -338,9 +338,7 @@ analysis, plus a low-level API that gives full control for fine-tuned
 publication-quality plots, for animations, for writing both GUI-independent and
 GUI-specific tools for interactive data plotting, and for output to a variety
 of vector and raster formats including \texttt{svg}, \texttt{eps},
-\texttt{pdf}, and \texttt{png}.  With the support of NASA (20 ROSES E.7, 20-OSTFL20-0058)
-we are working on overhauling the internal architecture of Matplotlib to better
-support modern highly-structured data.
+\texttt{pdf}, and \texttt{png}.
 
 Matplotlib's generality and flexibility make it readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
@@ -354,7 +352,7 @@ mpl-scatter-density~\cite{mpl-scatter-density}.
 
 % TODO: Add something to finish this section off
 
-\subsubsection{Cartopy}
+\subsubsection{Cartopy's role in scientific computing}
 
 Cartopy is a Python package that extends the capabilities of Matplotlib
 to create high-quality maps and complex geospatial visualizations.
@@ -395,6 +393,36 @@ reanalysis datasets~\cite{merra2_plotting}.
 % broader scientific community with a robust, reliable tool for visualizing and
 % interpreting the vast amounts of geospatial data crucial to addressing some
 % of the most pressing scientific questions of our time.
+
+\subsusection{Progress Report}
+
+
+This proposal is a continuation of the currently running grant ``Revamping
+Matplotlib for Modern Data Structures'' (20-OSTFL20-0058) under ROSES 2020 E.7
+which partially supports Dr.\ Caswell and fully support Dr.\ Sunden.  The main
+goals of active grant are to support general maintenance of Matplotlib and to
+overhaul how Matplotlib internally represents and processes user data.  Both
+thrusts of the grant are preceding well.
+
+With respect to maintenance both Dr.\ Sunden and Dr.\ Caswell are participating
+in the day-to-day of running the library including issue triage, PR review, and
+user support.  Their efforts along with hardware purchased under the grant were
+critical in promptly debugging and fixing a fatal bug due to a bug exposed by
+changes to both macOS and CPython.  In addition one major improvement, adding
+type hints to the public facing API, was completed, two additional projects are
+expected to be completed by the end of the 24Q3, and Dr.\ Sunden was release
+manager for one release (3.8 in 23Q3) and will be release manager for an
+upcoming release (3.10 targetted for 24Q3).
+
+Work led by Dr.\ Sunden to revamp how Matplotlib manages user supplied data for
+plotting is also preceding well.  We have a functioning
+prototype\footnote{\url{https://github.com/matplotlib/data-prototype}} that
+demonstrates both the new data handling structures and the new processing
+pipeline.  We have demonstrated the ability to dynamically query or re-sample
+data based on the view limits of the graph and a generalized implementation of
+the internal data processing pipelines.  We expect to able to deliver a release
+candidate suitable as a foundation for the Cartopy work proposed here by 25Q1.
+
 
 \subsection{Objectives}
 
