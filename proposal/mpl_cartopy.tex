@@ -856,58 +856,22 @@ the health of the project and \textbf{the additional resources requested here
 
 \subsubsection{Cartopy Refactor}
 
-The Cartopy refactor will be a multi-step process of updating the
-Cartopy codebase to take advantage of the new Matplotlib data model.
-Specifically, the Cartopy transform stack must be modified to use the new Matplotlib transforms
+The Cartopy refactor will be a multi-step process of updating the Cartopy
+codebase to take advantage of the new Matplotlib data model.  Specifically, the
+Cartopy transform stack must be modified to use the new Matplotlib transforms
 and data structures. Additionally, we will update the Cartopy documentation to
 reflect these changes and provide new examples that demonstrate the performance
-improvements and new features provided by the new data model. We will
-also work on improving the performance of the geographic transforms within Cartopy
-by reducing the number of calls to the underlying projection library and by optimizing
-the transform stack to cache intermediate results where possible. Each of these items
-can be broken up into smaller PRs that can be reviewed and merged
-incrementally, so progress does not become blocked on a single
-large PR. Two specific features to be enhanced are tile sources and path transformations.
-
-\paragraph{Tile Sources}
-
-Tile sources provide a way to display map data that is increasingly detailed
-as the user zooms
-in. Map tiles are essentially small images that, when assembled, create a seamless map at
-different zoom levels and locations. These tiles are often fetched from online servers
-that provide map imagery, such as NASA, USGS, OpenStreetMap or other commercial map providers,
-allowing users to visualize geographic data overlaid on detailed basemaps.
-
-Currently, Cartopy has a \texttt{SlippyImageArtist} class that is responsible for handling the
-logistics of requesting these tiles. It calculates which tiles are needed based on the
-map's extent and zoom level, makes requests to the tile server, and assembles the retrieved
-tiles into a cohesive map. This functionality is crucial for users who need to overlay geospatial
-data on top of dynamic and high-resolution basemaps, enhancing the clarity and context of
-their visualizations.
-
-However, the current implementation of \texttt{SlippyImageArtist} can be improved by leveraging
-Matplotlib's new data model. This refactoring would allow the class to automatically determine
-the tile scale and dimensions required for any given map projection and zoom level. By integrating
-with Matplotlib's data model, \texttt{SlippyImageArtist} can become more efficient and accurate in
-its tile requests, reducing redundancy and improving performance.
-
-With an automated tile source system, Cartopy will become more accessible to a broader range of
-scientists and researchers who rely on high-quality maps for their work without having to learn
-a complicated API or manually manage the tile requests. This can also be a great example for other
-downstream libraries, illustrating how to take advantage of the new Matplotlib data model.
+improvements and new features provided by the new data model. We will also work
+on improving the performance of the geographic transforms within Cartopy by
+reducing the number of calls to the underlying projection library and by
+optimizing the transform stack to cache intermediate results where
+possible. Each of these items can be broken up into smaller PRs that can be
+reviewed and merged incrementally, so progress does not become blocked on a
+single large PR. A specific feature to be enhanced is path transformations.
 
 \paragraph{Path Transformations}
 
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
-  \caption{\small Example geodetic path from Japan to California demonstrating
-  that the default threshold is currently too large in some cases. Additionally,
-  the line from Japan to California (red) is not the same as the line from
-  California to Japan (blue) due to the current subsampling technique.}
-  \label{fig:cartopy_interpolation}
-\end{wrapfigure}
-
-The second area of focus for the Cartopy refactor is in the handling of path transformations from
+An area of focus for the Cartopy refactor is in the handling of path transformations from
 one projection to another. Currently, these transformations sometimes result in
 visually unappealing artifacts or loss of detail,
 especially along curved lines and coastlines. When too few intermediate points
@@ -939,6 +903,16 @@ of the direction of the path.
 % https://algorithm-wiki.csail.mit.edu/wiki/Line_Simplification
 
 
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=0.45\textwidth]{supplemental/cartopy_interpolation}
+  \caption{\small Example geodetic path from Japan to California demonstrating
+  that the default threshold is currently too large in some cases. Additionally,
+  the line from Japan to California (red) is not the same as the line from
+  California to Japan (blue) due to the current subsampling technique.}
+  \label{fig:cartopy_interpolation}
+\end{wrapfigure}
+
+
 The adaptive sampling algorithm operates by recursively subdividing path segments,
 adding points where the curvature is high.
 This technique is essentially the inverse of line simplification algorithms,
@@ -948,6 +922,7 @@ the distance between the path's original line segments and the straight line
 connecting the endpoints in the target projection. If this distance exceeds a
 threshold, a midpoint is added, and the process repeats recursively until
 the desired level of detail is achieved.
+
 
 
 \subsubsection{Matplotlib Enhancements}
@@ -992,48 +967,12 @@ API could cause difficulty for our users. Therefore, while developing the
 new API, we will take pains to minimize the effects on existing code. Along with the code we will
 develop documentation of the new system, including a migration guide.
 
-\paragraph{Legends}
-
-Like ticks, legends are another fundamental component of data
-visualization where the API in Matplotlib is very flexible but still has
-an architectural limitation we plan to address.
-Generating a legend can be as simple as providing a string label when plotting and
-then calling a single method.  However, the configuration of this automatic
-legend generation capability is in an external registry which is hard to find
-and complicated to modify.  Further, the machinery assumes that
-each \texttt{Artist} will only need to put a single entry in the legend.  This
-assumption is too restrictive; in
-some scatter plots, for example, one might want the legend to show the same
-symbol at several
-sizes
-to encode information on a third dimension. We have an example for how to do
-this
-now\footnote{\url{https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_with_legend.html\#automated-legend-creation}},
-but it is far from obvious.
-The demand for easier customization like this will grow as more complex
-composite \texttt{Artist}s are created.
-
-
-We propose to make two changes to how legends are automatically generated: first,
-to move the generation of the legend entry from an external registry to a
-method on each \texttt{Artist}; and second, to extend the API of that method to
-allow the return of multiple legend entries rather than a single entry.  By
-putting the code to generate the legend entry on the \texttt{Artist} we will
-increase the locality of the code, make it easier to override the default, and
-make it possible to ensure each legend entry is updated to stay in sync with any
-style changes to its \texttt{Artist}.
-
-As with the work on ticking described above, the technical implementation is not
-challenging, but effort will be required to ensure that we have covered all of the use cases of the current
-implementation and have provided back-compatilibilty for our users.
-Documentation,
-including a migration guide, will be included in the work.
 
 \paragraph{Additional improvements}
 
 We expect that through the consultations we will be able to identify several
 similar scale projects that directly address the needs of one or more NASA
-missions.
+missions.  This will be implemented as resources allow.
 
 \subsection{Risk Management}
 
@@ -1048,10 +987,13 @@ efficient use of resources.
 
 There is personnel risk in that we have not yet identified the second Research
 Software Engineer (RSE) who will be a key individual for carrying out this
-work.  We are optimistic that we will be able to recruit a qualified
-individual without undue delay.  We have now hired two individuals as fulltime
-RSEs through NumFOCUS within reasonable time frames and have almost 5 years of
-experience managing and paying RSEs through NumFOCUS.
+work.  We are optimistic that we will be able to recruit a qualified individual
+without undue delay.  Additionally, by delaying the start of the second RSE
+until Y2 of the grant we will be able to reduce the risk of delays in both the
+search process and availability of the identified candidate.  We have now hired
+two individuals as fulltime RSEs through NumFOCUS within reasonable time frames
+and have almost 5 years of experience managing and paying RSEs through
+NumFOCUS.
 
 
 Within the Cartopy refactor, the primary risk is that the new Matplotlib data
@@ -1146,11 +1088,11 @@ community
 engagement and community and project management.
 
 \subsubsection{Consultation}
-Throughout the project Dr.\ Caswell, Dr.\ Sunden, Dr.\ Lucas, and the RSE
-will conduct consultation meetings.  We will start Y1Q1 with NASA researchers
-identified through our professional networks.  By the end of Y1Q2 we will
-develop and deploy a plan to publicize these meetings more widely, to be available to
-all NASA projects who are interested.
+Starting part way through Y1 Dr.\ Caswell, Dr.\ Sunden, Dr.\ Lucas, and the RSE
+will conduct consultation meetings.  We will start Y1Q4 with NASA researchers
+identified through our professional networks and by the end of Y2Q2 we will
+develop and deploy a plan to publicize these meetings more widely, to be
+available to all NASA projects who are interested.
 
 \subsubsection{General Maintenance}
 
@@ -1163,32 +1105,31 @@ contributors to the project.
 
 \subsubsection{Cartopy Refactor}
 
-The Cartopy refactor will begin in Y1Q1
-and the effort will be evenly split across all years in the grant.
-During the first two years of the grant there will be an emphasis on
-integrating the new Matplotlib data model into the Cartopy codebase,
-with the work planned to be included in a release by Y3Q1.
-Y3 will focus on implementing the specific
-features of tile sources and Y4 path transformations utilizing the new
-Matplotlib data model as appropriate. Y5 will be spent on
-improving the performance of the methods. Throughout the grant, general
-maintenance and community work will be performed in parallel with the
-explicit Cartopy refactor tasks.
+The Cartopy refactor will begin in Y1 by Dr.\ Lucas who will be joined in the
+effort by an RSE in Y2-Y4 on the grant.  During the first two years of the
+grant there will be an emphasis on integrating the new Matplotlib data model
+into the Cartopy codebase, with the work planned to be included in a release by
+Y3Q1.  Y3-4 will focus on implementing the path transformations utilizing the
+new Matplotlib data model as appropriate. Y5 will be spent on improving the
+performance of the methods.  Throughout the grant, general maintenance and
+community work will be performed in parallel with the explicit Cartopy refactor
+tasks.
 
 
 \subsubsection{Matplotlib Enhancements}
 
-The Ticker and Legend enhancement we will follow overlapping 18
-month development cycles (aligned with our 6-month release cycle)
-in parallel with consultation, general maintenance and
-community work.  The first six months are for planning and design, with another
-6 months for implementation, testing, and documentation.  Once the feature
-is finished we will include it in a feature release as an experimental option.
-During the final 6 months, improvements and bug fixes will be based on user feedback.
-If the feedback is positive, the
-feature will be made the default in the next release. The Ticker work will
-begin in Y1Q2; Legend enhancements will proceed once ticking is included in Matplotlib as an
-optional feature.
+The Ticker enhancement we will have an 18 month development cycles (aligned
+with our 6-month release cycle) in parallel with consultation, general
+maintenance and community work.  The first six months are for planning and
+design, with another 6 months for implementation, testing, and documentation.
+Once the feature is finished we will include it in a feature release as an
+experimental option.  During the final 6 months, improvements and bug fixes
+will be based on user feedback.  If the feedback is positive, the feature will
+be made the default in the next release. The Ticker work will begin in Y2Q2
+once Dr.\ Sunden and the second RSE are supported.
+
+In Y1 of the grant Dr.\ Caswell will continue to supervise work on the
+Matplotlib data model work currently supported by a ROSES 2020 E.7 grant.
 
 % The Ticker refactor will begin at the start of the grant period, Y1Q1 and will take place over the course of 18 months, in parallel with general maintenance and community work.
 % The initial quarter will focus on planning and API design for the new ticking system.
@@ -1242,16 +1183,13 @@ optional feature.
 %
 \subsubsection{Work Process}
 
-All work under this proposal will undergo the same review process
-as any other contribution.  We
-encourage many small PRs to reduce risk.  At least one maintainer not
-supported on this proposal
-will need to sign off on any changes before they are merged. This
-disseminates understanding of the proposed work and ensures
-community buy-in.  Finally, by merging
-changes to the default branch continuously throughout the period of
-work the incremental improvements will be released as part of our
-semiannual release cadence.
+All work under this proposal will undergo the same review process as any other
+contribution.  We encourage many small PRs to reduce risk.  At least one
+maintainer not supported on this proposal will need to sign off on any changes
+before they are merged. This disseminates understanding of the proposed work
+and ensures community buy-in.  Finally, by merging changes to the default
+branch continuously throughout the period of work the incremental improvements
+will be released as part of our semiannual release cadence.
 
 The work will be presented regularly at conferences by all team members.
 
@@ -2075,11 +2013,11 @@ F.W. Heyl Scholar \hfill 2012-2016\\
   \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{6}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
   \hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
   \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3}& \cellcolor{gray!30}\textbf{Y4}& \cellcolor{gray!30}\textbf{Y5} & \cellcolor{gray!30}\textbf{Total}     \\  \hline
-  Dr.\ Thomas A.\ Caswell & PI \& RSE   & 0.2 & 0.2 & 0.2 & 0.2 & 0.2 & 1.0 \\  \hline
-  Dr.\ Greg Lucas         & CO-I \& RSE & 0.2 & 0.2 & 0.2 & 0.2 & 0.2 & 1.0 \\  \hline
-  Dr.\ Kyle Sunden        & CO-I \& RSE & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 5.0 \\  \hline
-  ---                     & RSE         & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 5.0 \\  \hline
-  Quansight consultant    & CEE         & 0.1 & 0.1 & 0.1 & 0.1 & 0.1 & 0.5 \\  \hline
+  Dr.\ Thomas A.\ Caswell & PI \& RSE   & 0.15 & 0.15 & 0.15 & 0.15 & 0.15 & 0.75 \\  \hline
+  Dr.\ Greg Lucas         & CO-I \& RSE & 0.10 & 0.11 & 0.11 & 0.11 & 0.11 & 0.54 \\  \hline
+  Dr.\ Kyle Sunden        & CO-I \& RSE & 0.0 & 1.0 & 1.0 & 1.0 & 1.0 & 4.0 \\  \hline
+  ---                     & RSE         & 0.0 & 1.0 & 1.0 & 1.0 & 0.0 & 3.0 \\  \hline
+  Quansight consultant    & CEE         & 0.1 & 0.1 & 0.1 & 0.1 & 0.0 & 0.4 \\  \hline
   \multicolumn{2}{|l|}{\textbf{Total Funded Work Effort}} & \textbf{2.5}& \textbf{2.5}& \textbf{2.5}& \textbf{2.5}& \textbf{2.5} &  \textbf{12.5}\\    \hline
   \multicolumn{8}{|c|}{\cellcolor{gray!30}\textbf{Work Efforts Proposed, but NOT to be Funded by this Proposal}}\\  \hline
   \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{6}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
@@ -2095,11 +2033,11 @@ F.W. Heyl Scholar \hfill 2012-2016\\
   \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{6}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
   \hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
   \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3}& \cellcolor{gray!30}\textbf{Y4}& \cellcolor{gray!30}\textbf{Y5} & \cellcolor{gray!30}\textbf{Total}     \\  \hline
-  Dr.\ Thomas A.\ Caswell & PI \& RSE   & 0.2 & 0.2 & 0.2 & 0.2 & 0.2 & 1.0 \\  \hline
-  Dr.\ Greg Lucas         & CO-I \& RSE & 0.2 & 0.2 & 0.2 & 0.2 & 0.2 & 1.0 \\  \hline
-  Dr.\ Kyle Sunden        & CO-I \& RSE & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 5.0 \\  \hline
-  ---                     & RSE         & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 5.0 \\  \hline
-  Quansight consultant    & CEE         & 0.1 & 0.1 & 0.1 & 0.1 & 0.1 & 0.5 \\  \hline
+  Dr.\ Thomas A.\ Caswell & PI \& RSE   & 0.15 & 0.15 & 0.15 & 0.15 & 0.15 & 0.75 \\  \hline
+  Dr.\ Greg Lucas         & CO-I \& RSE & 0.10 & 0.11 & 0.11 & 0.11 & 0.11 & 0.54 \\  \hline
+  Dr.\ Kyle Sunden        & CO-I \& RSE & 0.0 & 1.0 & 1.0 & 1.0 & 1.0 & 4.0 \\  \hline
+  ---                     & RSE         & 0.0 & 1.0 & 1.0 & 1.0 & 0.0 & 3.0 \\  \hline
+  Quansight consultant    & CEE         & 0.1 & 0.1 & 0.1 & 0.1 & 0.0 & 0.4 \\  \hline
   \multicolumn{2}{|l|}{\textbf{Grand Total of Work Efforts}} & \textbf{2.5}& \textbf{2.5}& \textbf{2.5}& \textbf{2.5}& \textbf{2.5} &  \textbf{12.5}\\    \hline
 \end{tabular}
 
@@ -2208,68 +2146,32 @@ Dr\ Caswell is a CO-I on a NASA ROSES proposal to support HDF.\\
 \setcounter{page}{1}
 \subsection{Budget Narrative}
 
-Salary support is requested for PI Dr.\ Thomas A.\ Caswell (0.20 FTE in
+Salary support is requested for PI Dr.\ Thomas A.\ Caswell (0.15 FTE in
 years 1-5).  He will participate in all aspects of the proposed work
-and supervise Dr.\ Sunden.  Additionally, we are requesting support for one
-domestic trip per year to a major conference for the purpose of meeting with
-users and collaborators and presenting on the supported work.  As a reference the
-SciPy conference in Seattle, WA is July is used.  Funds for Dr.\ Caswell will be
+and supervise Dr.\ Sunden.  Funds for Dr.\ Caswell will be
 managed as an IAA between NASA and the DOE.
 
-\begin{tabular}{|r|r|}
-  \hline
-  & Seattle, WA scipy conference, 6 days\\\hline
-  RT airfare & \$396 \\\hline
-  GA perdiem lodging/food & \$1,595 (\$232/night, \$79/day) \\\hline
-  Registration & \$790 \\\hline
-  misc ground transport, & \$50 \\\hline
-  car rental, & \$330 (\$55 / day) \\\hline
-  parking \@ \$18/day, \$40 bag fee & \$151 \\\hline\hline
-  total for one person & \$3,312    \\\hline
-\end{tabular}
-
-Total requested for travel for Dr. Caswell: \$16,560
-
-Salary support is requested for PI Dr.\ Greg Lucas (0.20 FTE in years 1-5).  He
+Salary support is requested for PI Dr.\ Greg Lucas (0.10 FTE in years 1-5).  He
 will participate in all aspects of the proposed work, lead the Cartopy effort,
-and will supervise the RSE.  Additionally, we are
-requesting support for one domestic trip to a major conference per year for the
-purpose of meeting with users and collaborators and presenting on the supported
-work.  As a reference the SciPy conference in Seattle, WA is July is used,
-budgeted to include inflation at 2.8\% for each successive year.  All funds for Dr.\ Lucas will be
-managed as a subcontract to University of Colorado.
+and will supervise the RSE.  All funds for Dr.\ Lucas will be managed as a
+subcontract to University of Colorado.
 
 
-\begin{tabular}{|r|r|}
-  \hline
-  & Seattle, WA scipy conference, 6 days\\\hline
-  RT airfare & \$296 \\\hline
-  GA perdiem lodging/food & \$1,595 (\$232/night, \$79/day) \\\hline
-  Registration & \$790 \\\hline
-  misc ground transport,parking \@ \$18/day,  & \$161 \\\hline
-  car rental, & \$330 (\$55 / day) \\\hline
-  \$40 bag fee & \$40 \\\hline\hline
-  total for one person & \$3,212    \\\hline
-\end{tabular}
-
-Total requested for travel for Dr. Lucas: \$17,702
-
-
-Salary support is requested for a Dr.\ Kyle Sunden (1 FTE in years 1-5).
+Salary support is requested for a Dr.\ Kyle Sunden (1 FTE in years 2-5).
 Dr.\ Sunden will lead the Matplotlib enhancements, lead the consultation
 efforts, and contribute to all aspects of the proposed work.
 Dr.\ Sunden will be hired as an independent contractor through NumFOCUS.
 
 Salary support is requested for an RSE who will be identified later (1 FTE in
-years 1-5).  The RSE will contribute to all aspects of the proposed work with a
+years 2-4).  The RSE will contribute to all aspects of the proposed work with a
 focus on the Cartopy refactor.  The RSE will be hired as an independent
 contractor through NumFOCUS.
 
 In addition to labor, we are requesting two domestic trips per year for both
-Dr.\ Sunden and the RSE:  one major domestic conference and one regional
-domestic conference.  For the major conference Scipy is used as a reference and
-for the regional conference PyData NYC in November is used.  Travel costs are
-budgeted for inflation at 2.8\%.
+Dr.\ Sunden and the RSE for the years they have salary support: one major
+domestic conference and one regional domestic conference.  For the major
+conference Scipy is used as a reference and for the regional conference PyData
+NYC in November is used.  Travel costs are budgeted for inflation at 2.8\%.
 
 \begin{tabular}{|r|r|}
   \hline
@@ -2294,13 +2196,13 @@ budgeted for inflation at 2.8\%.
   total for one person & \$2,122     \\\hline
 \end{tabular}
 
-Total requested for Dr.\ Sunden and the RSE: \$57,469
+Total requested for Dr.\ Sunden and the RSE: \$40,523
 
 Support for a senior Contributor Experience Engineer as a consultant (192 hrs/year)
 is requested to help implement the inclusion plan and on-board new contributers
-to the project.
+to the project for Y1-4.
 
-Total travel requested on the grant: \$91,731
+Total travel requested on the grant: \$40,523
 
 \subsubsection{Facilities and Equipment}
 
@@ -2312,12 +2214,12 @@ The existing facilities and equipment needed to carry out the proposed work at
 CU Boulder include computers and software to support
 research, development, and testing.
 
-We request a total \$18,000 to purchase a computer, monitor, and accessories
+We request a total \$22,000 to purchase computers, monitors, and accessories
 for development machines for Dr.\ Sunden and the RSE.  This will cover a
-primary development machine and accessories during the first year (\$10,000
-YR1) and to ensure that they have access to the operating systems (Linux,
-Windows, MacOS) and architectures (arm, x86\_64) required to locally reproduce
-and debug OS or hardware specific issues reported (\$2,000 / yr total YR2-5).
+primary development machine and accessories during the Y2 (\$10,000 YR1) and to
+ensure that they have access to the operating systems (Linux, Windows, MacOS)
+and architectures (arm, x86\_64) required to locally reproduce and debug OS or
+hardware specific issues reported (\$4,000 / yr total YR3-5).
 
 Quansight will provide the equipment required for the CEL consultant to work.
 
@@ -2329,20 +2231,51 @@ No direct labor
 \textit{Subcontract/Subawards}
 \begin{itemize}
   \item Dr.\ Thomas A.\ Caswell is the PI and will oversee and contribute to
-    all aspects of the proposed work.  The time commitment is 0.2FTE and \$3,312
-    for travel.  His primary appointment is at Brookhaven National Laboratory
-    which will be funded via an Inter Agency Agreement between NASA and DOE.
-\item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
-  the proposed work.  The time commitment is 0.2FTE and \$3,347 for travel.  His
-  primary appointment is at University of Colorado Boulder which will be
-  subcontracted for his effort.
+    all aspects of the proposed work and supervise finishing the work on an
+    existing ROSE 2020 E.7 grant.  The time commitment is 0.15FTE .  His
+    primary appointment is at Brookhaven National Laboratory which will be
+    funded via an Inter Agency Agreement between NASA and DOE.
+\item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of the
+  proposed work.  The time commitment is 0.11FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
+\end{itemize}
+\textit{Consultants}
+\begin{itemize}
+  \item A Senior Contributor Experience Engineer hired at a consultant for 192 hours.
+\end{itemize}
+\textit{Equipment}
+\begin{itemize}
+\item No equipment is requested.
+\end{itemize}
+\textit{Services}
+\begin{itemize}
+\item No support for services is requested.
+\end{itemize}
+\textit{Travel}
+\begin{itemize}
+\item No travel support is requested.
+\end{itemize}
+
+\subsubsection{Year 2}
+\paragraph{Direct Labor}
+No direct labor
+\paragraph{Other Direct Costs}
+\textit{Subcontract/Subawards}
+\begin{itemize}
+  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee and contribute to
+    all aspects of the proposed work.  The time commitment is 0.15FTE.  His
+    primary appointment is at Brookhaven National Laboratory which will be
+    funded via an Inter Agency Agreement between NASA and DOE.
+  \item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
+    proposed work.  The time commitment is 0.11FTE.  His primary appointment is
+    at University of Colorado Boulder which will be subcontracted for his
+    effort.
 \end{itemize}
 \textit{Consultants}
 \begin{itemize}
   \item Dr.\ Kyle Sunden is a Co-I and will lead the Matplotlib enhancements,
     lead the consultation efforts, and contribute to all aspects of the
-    proposed work.  He will be an independent contractor hired through
-    NumFOCUS, committing
+    proposed work.  He will be an independent contractor hired through NumFOCUS and commit
     1.00 FTE to this project.
   \item The RSE will contribute to all aspects of the proposed work with a
     focus on the Cartopy refactor.  The RSE will be an independent contractor hired
@@ -2360,49 +2293,8 @@ No direct labor
 \end{itemize}
 \textit{Travel}
 \begin{itemize}
-\item Support is requested for Dr.\ Sunden and the RSE to attend two conferences at
-  \$10,868.  See the budget narrative for estimated cost  breakdown.
-\end{itemize}
-
-\subsubsection{Year 2}
-\paragraph{Direct Labor}
-No direct labor
-\paragraph{Other Direct Costs}
-\textit{Subcontract/Subawards}
-\begin{itemize}
-  \item Dr.\ Thomas A.\ Caswell is the PI and will oversee and contribute to
-    all aspects of the proposed work.  The time commitment is 0.2FTE and \$3,312
-    for travel.  His primary appointment is at Brookhaven National Laboratory
-    which will be funded via an Inter Agency Agreement between NASA and DOE.
-  \item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
-    proposed work.  The time commitment is 0.2FTE and \$3,442 for travel.
-    His primary appointment is at University of Colorado Boulder which will be
-    subcontracted for his effort.
-\end{itemize}
-\textit{Consultants}
-\begin{itemize}
-  \item Dr.\ Kyle Sunden is a Co-I and will lead the Matplotlib enhancements,
-    lead the consultation efforts, and contribute to all aspects of the
-    proposed work.  He will be an independent contractor hired through NumFOCUS and commit
-    1.00 FTE to this project.
-  \item The RSE will contribute to all aspects of the proposed work with a
-    focus on the Cartopy refactor.  The RSE will be an independent contractor hired
-    through NumFOCUS and commit 1.00 FTE to this project.
-  \item A Senior Contributor Experience Engineer hired at a consultant for 192 hours.
-
-\end{itemize}
-\textit{Equipment}
-\begin{itemize}
-\item \$2,000 is requested for equipment required by D.\ Sunden and the RSE.
-\end{itemize}
-\textit{Services}
-\begin{itemize}
-\item No support for services is requested.
-\end{itemize}
-\textit{Travel}
-\begin{itemize}
 \item Support is requested for each Dr.\ Sunden and the RSE to attend two conferences at
-  \$11,172  See the budget narrative for estimated cost  breakdown.
+  \$11,172  See the budget narrative for estimated cost breakdown.
 \end{itemize}
 
 
@@ -2413,13 +2305,12 @@ No direct labor
 \textit{Subcontract/Subawards}
 \begin{itemize}
   \item Dr.\ Thomas A.\ Caswell is the PI and will oversee and contribute to
-    all aspects of the proposed work.  The time commitment is 0.2FTE and \$3,312
-    for travel.  His primary appointment is at Brookhaven National Laboratory
-    which will be funded via an Inter Agency Agreement between NASA and DOE.
+    all aspects of the proposed work.  The time commitment is 0.15FTE.  His
+    primary appointment is at Brookhaven National Laboratory which will be
+    funded via an Inter Agency Agreement between NASA and DOE.
 \item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
-  proposed work an.  The time commitment is 0.2FTE and \$3,537 for travel.  His
-  primary appointment is at University of Colorado Boulder which will be
-  subcontracted for his effort.
+  proposed work an.  The time commitment is 0.11FTE.  His primary appointment is
+  at University of Colorado Boulder which will be subcontracted for his effort.
 \end{itemize}
 \textit{Consultants}
 \begin{itemize}
@@ -2436,7 +2327,7 @@ No direct labor
 \end{itemize}
 \textit{Equipment}
 \begin{itemize}
-\item \$2,000 is requested for equipment required by D.\ Sunden and the RSE.
+\item \$4,000 is requested for equipment required by D.\ Sunden and the RSE.
 \end{itemize}
 \textit{Services}
 \begin{itemize}
@@ -2456,11 +2347,11 @@ No direct labor
 \textit{Subcontract/Subawards}
 \begin{itemize}
   \item Dr.\ Thomas A.\ Caswell is the PI and will oversee and contribute to
-    all aspects of the proposed work.  The time commitment is 0.2FTE and \$3,312
-    for travel.  His primary appointment is at Brookhaven National Laboratory
-    which will be funded via an Inter Agency Agreement between NASA and DOE.
+    all aspects of the proposed work.  The time commitment is 0.15FTE.  His
+    primary appointment is at Brookhaven National Laboratory which will be
+    funded via an Inter Agency Agreement between NASA and DOE.
 \item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
-  proposed work.  The time commitment is 0.2FTE and \$3,637 for travel.  His
+  proposed work.  The time commitment is 0.11FTE.  His
   primary appointment is at University of Colorado Boulder which will be
   subcontracted for his effort.
 \end{itemize}
@@ -2478,7 +2369,7 @@ No direct labor
 \end{itemize}
 \textit{Equipment}
 \begin{itemize}
-\item \$2,000 is requested for equipment required by D.\ Sunden and the RSE.
+\item \$4,000 is requested for equipment required by D.\ Sunden and the RSE.
 \end{itemize}
 \textit{Services}
 \begin{itemize}
@@ -2499,13 +2390,12 @@ No direct labor
 \textit{Subcontract/Subawards}
 \begin{itemize}
   \item Dr.\ Thomas A.\ Caswell is the PI and will oversee and contribute to
-    all aspects of the proposed work.  The time commitment is 0.2FTE and \$3,312
-    for travel.  His primary appointment is at Brookhaven National Laboratory
-    which will be funded via an Inter Agency Agreement between NASA and DOE.
+    all aspects of the proposed work.  The time commitment is 0.15FTE.  His
+    primary appointment is at Brookhaven National Laboratory which will be
+    funded via an Inter Agency Agreement between NASA and DOE.
 \item Dr.\ Greg Lucas is a Co-I and will oversee the Cartopy aspects of
-  proposed work.  The time commitment is 0.2FTE and \$3,739 for travel.  His
-  primary appointment is at University of Colorado Boulder which will be
-  subcontracted for his effort.
+  proposed work.  The time commitment is 0.11FTE.  His primary appointment is at
+  University of Colorado Boulder which will be subcontracted for his effort.
 \end{itemize}
 \textit{Consultants}
 \begin{itemize}
@@ -2513,15 +2403,10 @@ No direct labor
     lead the consultation efforts, and contribute to all aspects of the
     proposed work.  He will be an independent contractor hired through NumFOCUS and work and commit
     1.00 FTE to this project.
-  \item The RSE will contribute to all aspects of the proposed work with a
-    focus on the Cartopy refactor.  The RSE will be an independent contractor hired
-    through NumFOCUS and commit 1.00 FTE to this project.
-  \item A Senior Contributor Experience Engineer hired at a consultant for 192 hours.
-
 \end{itemize}
 \textit{Equipment}
 \begin{itemize}
-\item \$2,000 is requested for equipment required by D.\ Sunden and the RSE.
+\item \$4,000 is requested for equipment required by D.\ Sunden and the RSE.
 \end{itemize}
 \textit{Services}
 \begin{itemize}
@@ -2529,8 +2414,8 @@ No direct labor
 \end{itemize}
 \textit{Travel}
 \begin{itemize}
-\item Support is requested for each Dr.\ Sunden and the RSE to attend two conferences at
-  \$12,137  See the budget narrative for estimated cost  breakdown.
+\item Support is requested for Dr.\ Sunden to attend two conferences at
+  \$6,069.  See the budget narrative for estimated cost breakdown.
 \end{itemize}
 
 
