@@ -1,0 +1,355 @@
+%!TEX TS-program = XeLaTeX
+\documentclass[12pt]{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%%%
+%% Needed for fonts in xelatex to work
+%%%
+% NOTE: I actually use XeLaTeX, which allows me to get the fonts
+% exactly the way that I want them. For proposals, this means
+% I can use Times New Roman instead of the default Computer
+% Modern. I actually like Computer Modern, but since Arial
+% is what the solicitation suggests there's no point in throwing off a reviewer
+% with an unexpected font, particularly one with such a
+% polarizing reaction in readers. Never upset the reviewrers, I
+% always say.
+%
+% What's the point of this bit of rambling? If you do not want to use
+% XeLaTeX and would rather stick to good old LaTeX, then you
+% need to comment out the next few lines of font packages and
+% font commands.
+%
+% If you want to use XeLaTeX but want different fonts, then you
+% just need to change the name in the argument for \setmainfont.
+% Make sure that the font you use is loaded on
+% your machine and your TeX distribution knows how to find it.
+% See Google if you need to learn more about this.
+%
+\usepackage{fontspec}
+\setmainfont{Arial}
+
+%%%
+%% Packages that I use on a regular basis.
+%%%
+% Of course, you are likely to need some math typesetting so these
+% three packages have you covered.
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+% I use color, graphicx, and epstopdf to read in PDFs for my figures.
+\usepackage{color}
+\usepackage{graphicx}
+% \usepackage{epstopdf}
+% I don't remember why threeparttable and setspace is here. Inertia.
+\usepackage{threeparttable}
+\usepackage{setspace}
+\usepackage{hyperref}
+%\doublespacing
+%%%
+%% Some packages to handle the figures and captions
+%%%
+\usepackage[labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+%%%
+%% Packages and settings for my bibliography.
+%%%
+% apa_with_doi is a style I created to keep DOI in the bibliography
+% but strip out URLs. There are a lot of other styles you can
+% find for natbib. Again, Google is your friend.
+% Author name and year references, i.e., Author (year):
+%\usepackage{natbib}
+%\bibliographystyle{apa_with_doi}
+% Numbered references:
+\usepackage[numbers,super]{natbib}
+\bibliographystyle{unsrtnat}
+
+
+%%%
+%% Packages and commands to build my table of contents (TOC).
+%%%
+%% The trick was getting the References included properly.
+%% Also, some of my table of contents entry have no page number
+%% because those pages are generated separately by my institute.
+%% Nothing to be done about that. You may or may not have the
+%% same problem, so you may or may not have to tweak this.
+\usepackage[nottoc,numbib]{tocbibind}
+\renewcommand{\tocbibname}{References}
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\usepackage{pdfpages}
+
+%%%
+%% These commands get the spacing around the title and section titles right.
+%%%
+% I tightened up the spacing. The LaTeX default is just too roomy.
+% This spacing is still clean and legible, just not so free with the
+% whitespace between sections.
+%
+% First the title.
+\usepackage{titling}
+\setlength{\droptitle}{-50pt}
+\pretitle{\begin{center}\Large\bfseries\vspace{0ex}}%
+\posttitle{\end{center}\Large\vspace{-2ex}}%
+\preauthor{\begin{center}\large}%
+\postauthor{\end{center}\large\vspace{-3ex}}%
+\predate{\begin{center}\large}%q
+\postdate{\end{center}\large\vspace{-6ex}}%
+% Now the section headings.
+\usepackage[noindentafter]{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titlespacing{\section}{0pt}{18pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\subsection}{0pt}{16pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\subsubsection}{0pt}{14pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
+
+%%%
+%% These commands get the lists to work the way that I want them to.
+%%%
+% i.e. I want less space wrapping around the list.
+\usepackage{enumitem}
+\setlist{nolistsep}
+\setlist[2]{noitemsep}
+\setlist[1]{noitemsep}
+
+%%%
+%% Commands for making the tables.
+%%%
+\usepackage{booktabs}
+\usepackage{multirow, hhline}
+\usepackage{array}
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
+
+%%%
+%%% Package to create Gantt schedules
+%%%
+\usepackage{pgfgantt}
+
+
+%%%
+%%% Formatting urls
+%%%
+\usepackage{url}
+\urlstyle{rm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+
+%% In order to have a caption to the side of a figure or table, use the
+%% 'sidecap' package.
+\usepackage[rightcaption]{sidecap}
+\sidecaptionvpos{figure}{t}
+
+\usepackage{wrapfig}
+
+
+%% For more control of the enumeration environment (lists with numbers)
+%% use the enumitem package.
+%\usepackage{enumitem}
+
+%% Also, to reset the numbering of enumerate, use the following:
+%\setenumerate[0]{label=\alph*.}
+
+% To deal with figures all alone on a page.
+\renewcommand{\floatpagefraction}{.8}%
+
+% To use symbols for the footnotes:
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+% set up the page numbers as 1-N, 2-N, ...
+\numberwithin{page}{section}
+\renewcommand{\thepage}{\thesection-\arabic{page}}
+
+% https://tex.stackexchange.com/questions/210871/latex-page-numbering-by-section
+%this does not seem to work, just hard code it :(
+% not sure if there is something else in this template that is breaking it
+% or things have changed in the last 6 years?
+%\usepackage{etoolbox}
+%\makeatletter
+%% Make sure that page starts from 1 with every \section
+%\patchcmd{\@sect}% <cmd>
+%  {\protected@edef}% <search>
+%  {\def\arg{#1}\def\arg@{section}%
+%   \ifx\arg\arg@\stepcounter{page}\fi%
+%   \protected@edef}% <replace>
+%  {}{}% <success><failure>
+%\makeatother
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}%
+  {\z@}{1.25ex \@plus 0ex \@minus .2ex}{-.5em}%
+  {\normalfont\normalsize\itshape\bfseries}%
+}
+\makeatother
+%% Finally, we get to the document.
+\begin{document}
+\title{Sustaining Matplotlib and Cartopy: Revised Work Plan}
+\author{Thomas A.\ Caswell}
+\date{}
+\maketitle
+
+% First, let's get that TOC in there. NASA likes it.
+\setcounter{tocdepth}{2}
+\tableofcontents
+\thispagestyle{empty}
+% Let's leave this TOC alone on this page and start a new one for
+% proposal body.
+\newpage
+
+
+To reduce the budget for the initial proposal we will:
+\begin{itemize}
+\item reduce Lucas' support  from 20\% to \~10\% FTE for years 1-5
+\item reduce Caswell's support from 20\% to \~15\% FTE for years 1-5
+\item reduce the support for the second RSE from 5 years to 3 years and delay the start until year 2
+\item eliminating the developer experience engineer in year 5
+\item eliminating the RSE travel budget in the year 1 and all travel for Caswell and Lucas
+\end{itemize}
+
+To reduce the scope we would make significant cuts to new development, smaller
+cuts to maintenance effort and delay starting the consultation at full effort
+until Y2.  For new developments we would eliminate the legend refactor from
+Matplotlib, the tiled image work from cartopy, and limit any additional
+developments identified during the consultation.  The tick refactor and the
+path transformation would remain in scope but have a longer timeline than
+originally proposed.
+
+
+\setcounter{section}{1}
+\setcounter{subsection}{5}
+\subsection{Work Plan}
+
+
+We plan to split the effort with 75\%\ for Matplotlib and 25\%\ for Cartopy.
+Within the Matplotlib fraction we plan 65\%\ for maintenance, 20\%\ for new
+developent, and 15\%\ for community engagement and community and project
+management.  We intend to target this distribution of effort across the
+lifetime of the grant, but there may be variations year-to-year.  For Cartopy,
+the proposed split in effort will be roughly 30\%\ for maintenance, 60\%\ for
+new developent, and 10\%\ for community engagement and community and project
+management.
+
+
+
+\subsubsection{Consultation}
+Starting part way through Y1 Dr.\ Caswell, Dr.\ Sunden, Dr.\ Lucas, and the RSE
+will conduct consultation meetings.  We will start Y1Q4 with NASA researchers
+identified through our professional networks and by the end of Y2Q2 we will
+develop and deploy a plan to publicize these meetings more widely, to be
+available to all NASA projects who are interested.
+
+\subsubsection{General Maintenance}
+
+Throughout the project Dr.\ Caswell, Dr.\ Sunden, Dr.\ Lucas, and the RSE
+will work on general maintenance and community engagement of both Matplotlib
+and Cartopy.  This includes, but is not limited to, fixing bugs, reviewing Pull
+Requests, answering user questions, managing releases, and welcoming new
+contributors to the project.
+
+
+\subsubsection{Cartopy Refactor}
+
+The Cartopy refactor will begin in Y1 by Dr.\ Lucas who will be joined in the
+effort by an RSE in Y2-Y4 on the grant.  During the first two years of the
+grant there will be an emphasis on integrating the new Matplotlib data model
+into the Cartopy codebase, with the work planned to be included in a release by
+Y3Q1.  Y3-4 will focus on implementing the path transformations utilizing the
+new Matplotlib data model as appropriate. Y5 will be spent on improving the
+performance of the methods.  Throughout the grant, general maintenance and
+community work will be performed in parallel with the explicit Cartopy refactor
+tasks.
+
+
+\subsubsection{Matplotlib Enhancements}
+
+The Ticker enhancement we will have an 18 month development cycles (aligned
+with our 6-month release cycle) in parallel with consultation, general
+maintenance and community work.  The first six months are for planning and
+design, with another 6 months for implementation, testing, and documentation.
+Once the feature is finished we will include it in a feature release as an
+experimental option.  During the final 6 months, improvements and bug fixes
+will be based on user feedback.  If the feedback is positive, the feature will
+be made the default in the next release. The Ticker work will begin in Y2Q2
+once Dr.\ Sunden and the second RSE are supported.
+
+In Y1 of the grant Dr.\ Caswell will continue to supervise work on the
+Matplotlib data model work currently supported by a ROSES 2020 E.7 grant.
+
+% The Ticker refactor will begin at the start of the grant period, Y1Q1 and will take place over the course of 18 months, in parallel with general maintenance and community work.
+% The initial quarter will focus on planning and API design for the new ticking system.
+% This will include gathering examples of plots which could take advantage of the new ticking system.
+% The technical implementation of the new ticking system will primarily take place in Y1Q2, with testing and documentation following in Y1Q3.
+% It is expected that the design and integration with existing APIs will be a significant portion of the total effort.
+% The initial release as an opt-in feature will be in Y1Q4.
+% This will be followed by bug fixes and additional integration of pre-existing APIs.
+% We expect to be ready for full release in Y2Q2, though may opt to delay for one or two more releases to allow additional time for feedback from our users.
+
+% Y1Q1: Planning and Design
+% Y1Q2: Implementation
+% Y1Q3: Testing and Documentation
+% Y1Q4: Initial release as opt-in behavior
+% Y2Q1: Bug fixes and integration
+% Y2Q2: Release as default
+
+% \subsubsection{Sharing Figures: Serialization}
+%
+% Following the conclusion of the Ticker refactor, another 18 month cycle will focus on the first portion of the sharing figures project, namely a serialization standard for Matplotlib figures.
+% The first quarter (Y2Q3) will be primarily focused on planning and design requirements, with small proof of concept developement tasks.
+% The second quarter (Y2Q4) will focus on serializing the Matplotlib \texttt{Artist}s and their relationships.
+% The third quarter (Y3Q1) will in particular extend that work from the previous ROSES award, allowing serialization of both Data Containers and the transformation pipeline.
+% It is expected that data serialization will be of particular technological consideration, as some Data Containers contain large amounts of data and/or reference data hosted in other locations (e.g. local files or remote web services).
+% Following thourough documentation and testing, we expect a release to be available in Y3Q3, after which most effort will be in responding to user feedback and interfacing with downstream libraries to disseminate the work.
+% % Y2Q3: Planning and Design
+% % Y2Q4: Implementation serializing Artist tree
+% % Y3Q1: Implementation serializing Data containers and transformation pipeline
+% % Y3Q2: Documentation and testing
+% % Y3Q3: Release, respond to user feedback
+% % Y3Q4: Bug fexes and use cases
+%
+% \subsubsection{Sharing Figures: Bundling}
+%
+% The last major feature enhancement to Matplotlib is to create a standardized bundle for sharing fully functional, interactive figures.
+% The goal is to have statically distrubutable assets that provide a Python runtime, dependencies, and allow a web browser to display the figures.
+% This will be built heavily on top of the serialization efforts described above.
+% This portion of the figure sharing project relies on upstream libraries, including Pyodide.
+% As this project is not anticipated to be started until year 4 of the award, a significant step will be to survey the available libraries, which could easily have changed by that time.
+% As such, the first quarter (Y4Q1) will focus on a technilogical survey of existing technologies and their comparitive suitability for providing a bundled python runtime, dependencies, and graphical user interface.
+% The following four quarters (Y4Q2-Y5Q2) will conist of the active planning, implementation, documentation and testing.
+% This will culminate in the initial feature release in Y5Q2.
+% To mitigate risk and avoid unnecessarily adding dependencies for users who do not need this feature, it will be released as a separately installable package, rather than integrated into the main Matplotlib codebase.
+%
+% % Y4Q1: Survey of upstream library options
+% % Y4Q2: Planning and Design
+% % Y4Q3: Implementation
+% % Y4Q4: Implementation
+% % Y5Q1: Documentation and Testing
+% % Y5Q2: Release and Bug fixes
+%
+\subsubsection{Work Process}
+
+All work under this proposal will undergo the same review process as any other
+contribution.  We encourage many small PRs to reduce risk.  At least one
+maintainer not supported on this proposal will need to sign off on any changes
+before they are merged. This disseminates understanding of the proposed work
+and ensures community buy-in.  Finally, by merging changes to the default
+branch continuously throughout the period of work the incremental improvements
+will be released as part of our semiannual release cadence.
+
+The work will be presented regularly at conferences by all team members.
+
+
+\subsubsection{Grant Management}
+
+Dr.\ Caswell of BNL (also the Matplotlib Project Lead) is the PI of the proposed
+development.  He is responsible for the quality and direction of the proposed
+work and the proper use of all awarded funds.  He is also responsible for all
+management and budget issues, and is the final authority for this task.
+
+Dr.\ Lucas of UC Boulder is the institutional PI for UC Boulder and is
+responsible for the Cartopy work including the proposed refactor.
+
+
+
+\end{document}
