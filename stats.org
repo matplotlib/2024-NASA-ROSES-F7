@@ -1,0 +1,719 @@
+* extract PR / issue stats from GH
+
+** gidgethub way
+#+begin_src python
+    import os
+    import aiohttp
+    import gidgethub
+    import gidgethub.aiohttp
+    import re
+    import pymongo
+    import asyncio
+    import tqdm
+
+    GH_USER = "tacaswell"
+
+    conn = pymongo.MongoClient()
+    db = conn.get_database("mpl_info")
+    col = db.get_collection("log")
+    m_cache = db.get_collection("cache")
+    issues = db.get_collection("issues")
+
+
+    def dump_cache(cache, m_cache):
+        for k, v in cache.items():
+            m_cache.replace_one({"k": k}, {"k": k, "v": v}, upsert=True)
+
+
+    def restore_cache(cache, m_cache):
+        for doc in m_cache.find():
+            cache[doc["k"]] = doc["v"]
+
+
+    try:
+        with open(os.path.expanduser("~/.ghoauth"), "r") as f:
+            oauth_token = f.read().strip()
+    except FileNotFoundError:
+        oauth_token = None
+
+    try:
+        cache
+    except NameError:
+        cache = {}
+        restore_cache(cache, m_cache)
+
+
+    async def slow_your_roll(gh):
+        """
+        Compute the ideal sleep time to maximum number of requests while staying under
+        the rate limits.
+        """
+        if gh.rate_limit is None:
+            return 3600 / 5000
+
+        remaining = gh.rate_limit.remaining
+        reset_ts = gh.rate_limit.reset_datetime.timestamp()
+
+        # if we are near the end, just wait it out!
+        if remaining < 25:
+            return reset_ts - time.time() + 5
+
+        return (reset_ts - time.time()) / remaining
+
+
+    async def get_issues(org, repo, oauth_token):
+        async with aiohttp.ClientSession() as session:
+            gh = gidgethub.aiohttp.GitHubAPI(
+                session, GH_USER, oauth_token=oauth_token, cache=cache
+            )
+
+            return await get_issues_core(gh, org, repo)
+
+
+    stash = []
+
+
+    async def get_issues_core(gh, org, repo):
+        data = []
+        snooze = await slow_your_roll(gh)
+        j = 0
+        old_usage = None
+        async for d in gh.getiter(
+            f"/repos/{org}/{repo}/issues{{?state}}{{&direction}}",
+            {"state": "all", "direction": "asc"},
+        ):
+            data.append(d)
+            if j % 10000 == 0:
+                snooze = await slow_your_roll(gh)
+                dump_cache(cache, m_cache)
+                print(j)
+            if gh.rate_limit is not None and old_usage != gh.rate_limit.remaining:
+                await gh.sleep(snooze)
+                old_usage = gh.rate_limit.remaining
+            j += 1
+
+        dump_cache(cache, m_cache)
+        return data
+
+
+    async def get_comments(org, repo, issues, oauth_token, comment_cache=None):
+        async with aiohttp.ClientSession() as session:
+            gh = gidgethub.aiohttp.GitHubAPI(
+                session, GH_USER, oauth_token=oauth_token, cache=cache
+            )
+            return await get_comments_core(issues, comment_cache=comment_cache)
+
+
+    async def get_comments_core(gh, issues, org, repo):
+        output = {}
+        snooze = await slow_your_roll(gh)
+        old_usage = None
+        for j, issue in tqdm.tqdm(list(enumerate(issues))):
+            data = []
+            async for d in gh.getiter(
+                f"/repos/{org}/{repo}/issues/{issue['number']}/comments"
+            ):
+                data.append(d)
+            output[issue["number"]] = data
+
+            if j % 10000 == 0:
+                dump_cache(cache, m_cache)
+                snooze = await slow_your_roll(gh)
+            if gh.rate_limit is not None and old_usage != gh.rate_limit.remaining:
+                await gh.sleep(snooze)
+                old_usage = gh.rate_limit.remaining
+
+        return output
+
+
+    async def get_timeline_core(gh, issues, org, repo):
+        output = {}
+        snooze = await slow_your_roll(gh)
+        old_usage = None
+        for j, issue in tqdm.tqdm(list(enumerate(issues))):
+            data = []
+            async for d in gh.getiter(
+                f"/repos/{org}/{repo}/issues/{issue['number']}/timeline"
+            ):
+                data.append(d)
+            output[issue["number"]] = data
+
+            if j % 10000 == 0:
+                dump_cache(cache, m_cache)
+                snooze = await slow_your_roll(gh)
+            if gh.rate_limit is not None and old_usage != gh.rate_limit.remaining:
+                await gh.sleep(snooze)
+                old_usage = gh.rate_limit.remaining
+
+        return output
+
+
+    async def get_all(org, repo, oauth_token):
+        async with aiohttp.ClientSession() as session:
+            gh = gidgethub.aiohttp.GitHubAPI(
+                session, GH_USER, oauth_token=oauth_token, cache=cache
+            )
+            issues = await get_issues_core(gh, org, repo)
+            comments = await get_comments_core(gh, issues, org, repo)
+            timeline = await get_timeline_core(gh, issues, org, repo)
+        return issues, comments, timeline
+
+
+    async def get_year_comments(years, issues, oauth_token, *, comment_cache=None):
+        out = {}
+        for year in years:
+            year = str(year)
+            print(year)
+
+            out.update(
+                await get_comments(
+                    "matplotlib",
+                    "matplotlib",
+                    [_["number"] for _ in issues if _["created_at"].startswith(year)],
+                    oauth_token,
+                )
+            )
+
+        dump_cache(cache, m_cache)
+        return out
+
+
+    # d_issues = await get_issues('matplotlib', 'matplotlib', oauth_token)
+    # for d in new_issues:
+    #    print(f"{d['user']['login']: <20} {d['author_association']: <24} {d['pull_request']['url']}")
+
+
+    async def get_ratelimit(oauth_token=oauth_token):
+        async with aiohttp.ClientSession() as session:
+            gh = gidgethub.aiohttp.GitHubAPI(
+                session, GH_USER, oauth_token=oauth_token, cache=cache
+            )
+            return await gh.getitem("/rate_limit")
+
+
+    async def test(oauth_token=oauth_token):
+        async with aiohttp.ClientSession() as session:
+            gh = gidgethub.aiohttp.GitHubAPI(
+                session, GH_USER, oauth_token=oauth_token, cache=cache
+            )
+            return await slow_your_roll(gh)
+
+
+    async def get_new_contributor_prs(org, repo, oauth_token):
+        async with aiohttp.ClientSession() as session:
+            gh = gidgethub.aiohttp.GitHubAPI(
+                session, GH_USER, oauth_token=oauth_token, cache=cache
+            )
+            data = []
+            async for d in gh.getiter(
+                f"/repos/{org}/{repo}/issues{{?state}}", {"state": "open"}
+            ):
+                if (
+                    d["author_association"] in {"CONTRIBUTOR", "FIRST_TIME_CONTRIBUTOR"}
+                    and "pull_request" in d
+                ):
+
+                    data.append(d)
+                if len(data) > 10:
+                    break
+
+            dump_cache(cache, m_cache)
+            return data
+#+end_src
+
+#+begin_src python
+  import asyncio
+
+  issues, comments, timelines = asyncio.run(get_all('matplotlib', 'matplotlib', oauth_token))
+#+end_src
+
+#+begin_src python
+  
+#+end_src
+
+** caching
+*** v1
+Hi! this is the first versino of caching and an essay why ect
+
+#+begin_src python
+  import json
+
+  with open('/tmp/gh_dump.json', 'r') as fin:
+      d_issues = json.load(fin)
+
+  def split_issuse_from_pr(all_issues):
+      issues = []
+      prs = []
+
+      for issue in all_issues:
+          if 'pull_request' in issue:
+              prs.append(issue)
+          else:
+              issues.append(issue)
+
+      return issues, prs
+
+
+  issues, prs = split_issuse_from_pr(d_issues)
+
+#+end_src
+
+
+#+begin_src python
+  import json
+
+  with open('/tmp/gh_dump.json', 'w') as fout:
+      json.dump(d_issues, fout)
+
+  with open('/tmp/24comments.json', 'x') as fout:
+      json.dump(pr_comment24, fout)
+
+#+end_src
+
+*** v2
+#+begin_src python
+  import json
+  with open('data_dump.json', 'r') as fin:
+        gh_data = json.load(fin)
+
+  d_issues = gh_data['issues']
+  all_comments = gh_data['comments']
+  def split_issues_from_pr(all_issues):
+      issues = []
+      prs = []
+
+      for issue in all_issues:
+          if 'pull_request' in issue:
+              prs.append(issue)
+          else:
+              issues.append(issue)
+
+      return issues, prs
+
+
+  issues, prs = split_issues_from_pr(d_issues)
+#+end_src
+
+
+** plotting
+
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+  import pandas as pd
+  import datetime
+
+
+  def plot_by(gh_issues, *, ax=None, freq="ME", label, show_net=True, show_rolling=False):
+
+      opened = pd.Series(
+          1,
+          index=[
+              datetime.datetime.strptime(p["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+              for p in gh_issues
+          ],
+      )
+      closed = pd.Series(
+          -1,
+          index=[
+              datetime.datetime.strptime(p["closed_at"], "%Y-%m-%dT%H:%M:%SZ")
+              for p in gh_issues
+              if p["state"] != "open"
+          ],
+      )
+      all_at = pd.concat([closed, opened])
+      opened_by, closed_by = map(
+          lambda x: (x.groupby(pd.Grouper(freq=freq))).sum().iloc[:-1], (opened, closed)
+      )
+      if ax is None:
+          fig, ax = plt.subplots(layout="constrained")
+      if show_net:
+          (ln,) = ax.plot(
+              all_at.sort_index().cumsum(),
+              lw=2,
+              label=f"net open {label}",
+              alpha=0.5,
+              zorder=0,
+          )
+          binned_net = all_at.sort_index().cumsum().groupby(pd.Grouper(freq=freq))
+          ax.step(
+              binned_net.mean().index,
+              binned_net.mean().values,
+              where="pre",
+              color=ln.get_color(),
+          )
+          diff_binned_net = binned_net.mean().diff()
+          ax.step(
+              binned_net.mean().index,
+              diff_binned_net,
+              where="pre",
+              color=ln.get_color(),
+              zorder=2,
+          )
+          for y in [-50, -25, 25, 50]:
+              ax.axhline(y, color="r", alpha=0.5, zorder=1)
+      (close_step,) = ax.step(
+          closed_by.index,
+          closed_by.values,
+          where="pre",
+          label=f"{label} closed/{freq}",
+      )
+      (open_step,) = ax.step(
+          opened_by.index,
+          opened_by.values,
+          where="pre",
+          label=f"{label} opened/{freq}",
+      )
+      if show_rolling:
+          for data, step in [(opened_by, open_step), (closed_by, close_step)]:
+              ax.plot(
+                  data.rolling(4).mean().index,
+                  data.rolling(4).mean().values,
+                  color=step.get_color(),
+                  lw=2,
+              )
+      ax.axhline(0, color="k", lw=3, ls="--", alpha=0.5)
+      ax.legend()
+
+
+  def plot_unique_contributors(gh_issues, *, freq='QE', ax=None, label=None):
+      unq = (
+          pd.Series(
+              [p["user"]["login"] for p in gh_issues],
+              index=[
+                  datetime.datetime.strptime(p["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+                  for p in gh_issues
+              ],
+          )
+          .groupby(pd.Grouper(freq=freq))
+          .apply(lambda x: len(set(x)))
+      )
+
+      if ax is None:
+          fig, ax = plt.subplots(layout="constrained")
+          ax.set_xlabel('date')
+          ax.set_ylabel('unique accounts')
+
+      ax.step(unq.index, unq.values, label=label )
+
+
+  def plot_new_contributors(gh_issues, *, freq='QE', ax=None, label=None):
+      seen = set()
+      new_date = []
+      for p in gh_issues:
+          if (uname:=p["user"]["login"]) not in seen:
+              new_date.append(datetime.datetime.strptime(p["created_at"], "%Y-%m-%dT%H:%M:%SZ"))
+              seen.add(uname)
+
+
+      unq = (
+          pd.Series(
+              1,
+              index=new_date,
+          )
+          .groupby(pd.Grouper(freq=freq))
+          .sum()
+      )
+
+      if ax is None:
+          fig, ax = plt.subplots(layout="constrained")
+          ax.set_xlabel('date')
+          ax.set_ylabel('new accounts')
+
+      ax.step(unq.index, unq.values, label=label )
+#+end_src
+
+#+begin_src python
+  import matplotlib
+  import matplotlib.pyplot as plt
+  import numpy as np
+
+
+  data = {
+      "Pull Requests opened": [1656, 1752],
+      "Pull Requests closed": [1613, 1775],
+      "Issues opened": [795, 1108],
+      "Issues closed": [756, 999],
+  }
+  labels = ["2019", "2020"]
+
+  x = np.arange(len(labels))  # the label locations
+  width = 0.35  # the width of the bars
+
+  fig, (ax1, ax2) = plt.subplots(1, 2, constrained_layout=True, sharey=True)
+
+  for ax, typ in zip((ax1, ax2),["Pull Requests", "Issues"]):
+      open_lab = f"{typ} opened"
+      close_lab = f"{typ} closed"
+      rects2 = ax.bar(
+          x - width / 2,
+          data[open_lab],
+          width,
+          label='opened',
+          color="k",
+          edgecolor="w",
+          hatch="/",
+      )
+      rects1 = ax.bar(
+          x + width / 2,
+          data[close_lab],
+          width,
+          label='closed',
+          color="w",
+          edgecolor="k",
+          hatch="\\",
+      )
+      ax.bar_label(rects1, padding=3)
+      ax.bar_label(rects2, padding=3)
+      ax.set_xlabel("Year")
+      ax.set_title(typ)
+      ax.set_xticks(x)
+      ax.set_xticklabels(labels)
+      ax.spines['top'].set_visible(False)
+      ax.spines['right'].set_visible(False)
+  ax2.legend(ncol=2)
+
+  ax1.set_ylabel("#")
+  ax1.set_ylim(top=2000)
+  fig.set_size_inches(6.3, 2.75)
+
+  plt.show()
+  # ax2.bar(['2019', '2020'], data['issue closed'], color='C2', width=.7)
+  # ax2.bar(['2019', '2020'], data['issue opened'], color='C3', width=.5)
+#+end_src
+
+#+begin_src python
+  import datetime
+
+
+  def first_contact(issue, comments):
+      opened_at = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+      if closed_at := issue["closed_at"]:
+          closed_at = datetime.datetime.strptime(closed_at, "%Y-%m-%dT%H:%M:%SZ")
+      state = issue["state"]
+      if len(comments):
+          first_comment = datetime.datetime.strptime(
+              comments[0]["created_at"], "%Y-%m-%dT%H:%M:%SZ"
+          )
+      else:
+          first_comment = None
+
+      if first_comment is None:
+          if closed_at is None:
+              ref_time = None
+          else:
+              ref_time = closed_at
+      else:
+          if closed_at is None:
+              ref_time = first_comment
+          else:
+              ref_time = min(closed_at, first_comment)
+
+      if ref_time is None:
+          return datetime.datetime.now() - opened_at
+      return ref_time - opened_at
+
+
+  def resolve(issue, comments):
+      opened_at = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+      if closed_at := issue["closed_at"]:
+          closed_at = datetime.datetime.strptime(closed_at, "%Y-%m-%dT%H:%M:%SZ")
+      state = issue["state"]
+      if state != "closed":
+          return None
+      return closed_at - opened_at
+
+
+  def helper(issue_id):
+      return life_time(pr_dict[issue_id], all_pr_comments[issue_id])
+
+
+  def plot_fraction_responded(life_time, pr_dict, all_pr_comments, year, ax, frac=0.75):
+      first_contact = {
+          k: life_time(pr_dict[k], all_pr_comments[k])
+          for k, v in pr_dict.items()
+          if v["created_at"].startswith(str(year))
+      }
+      total = len(first_contact)
+      life_in_days = sorted(
+          [
+              _.total_seconds() / (24 * 60 * 60)
+              for _ in first_contact.values()
+              if _ is not None
+          ]
+      )
+      cumsum = np.arange(len(life_in_days)) / total
+      indx_pct = np.searchsorted(cumsum, frac)
+
+      (ln,) = ax.step(life_in_days, cumsum, label=str(year))
+      if indx_pct < len(life_in_days):
+          ax.axvline(life_in_days[indx_pct], color=ln.get_color(), ls="--")
+      # ax.annotate(f'{int(frac*100):d}% of first responses with in {life_in_days[indx_pct]*24:.1f} hr',
+      #               (1, 0), xycoords='axes fraction', ha='right', xytext=(-5, 5), textcoords='offset points')
+      print(
+          (f"{year}: {int(frac*100):d}% with in {life_in_days[indx_pct] if indx_pct < len(life_in_days) else np.nan:.1f} day, " +
+          f"{np.mean(life_in_days):.2f} avg  {np.median(life_in_days):.2f} median [total: {total}]")
+      )
+
+
+  frac = 0.9
+  fig, ax = plt.subplots(layout="constrained")
+  ax.set_title("Time to first interaction")
+  ax.set_ylim(0, 1)
+  ax.set_xlim(0, 30)
+  ax.set_ylabel("Cumulative fraction of PRs")
+  ax.set_xlabel("time [days]")
+
+  ax.axhline(frac, color="k", ls="-", alpha=0.5)
+
+  for year in range(2013, 2025):
+      plot_fraction_responded(first_contact, pr_dict, all_pr_comments, year, ax, frac)
+  ax.legend()
+
+  print()
+  print()
+
+  fig, ax = plt.subplots(layout="constrained")
+  ax.set_title("Time to first interaction")
+  ax.set_ylim(0, 1)
+  ax.set_xlim(0, 30)
+  ax.set_ylabel("Cumulative fraction of PRs")
+  ax.set_xlabel("time [days]")
+
+  ax.axhline(frac, color="k", ls="-", alpha=0.5)
+
+  for year in range(2014, 2025):
+      plot_fraction_responded(first_contact, issue_dict, all_issue_comments, year, ax, frac)
+  ax.legend()
+#+end_src
+
+#+begin_src python
+  with open("data_dump.json", "w") as fout:
+      json.dump(
+          {
+              "issues": d_issues,
+              "comments": all_comments,
+          },
+          fout,
+      )
+#+end_src
+
+#+begin_src python
+  import json
+  with open("data_dump.json", "r") as fin:
+      all_comments = json.load(fin)
+      pr_comments = all_comments['prs']
+      issues_comments = all_comments['issues']
+
+#+end_src
+
+#+begin_src python
+  from collections import defaultdict
+
+
+  def author_by_year(comments):
+      out = defaultdict(lambda: defaultdict(lambda: 0))
+      for c in comments:
+          year = int(c["created_at"][:4])
+          user = c["user"]["login"].lower()
+          out[year][user] += 1
+
+      return {k: dict(v) for k, v in out.items()}
+
+
+  def author_by_year_by_issue(comments):
+      out = defaultdict(lambda: defaultdict(lambda: set()))
+      for k, v in comments.items():
+          for c in v:
+              year = int(c["created_at"][:4])
+              user = c["user"]["login"].lower()
+              out[year][user].add(k)
+
+      return {y: {u: len(s) for u, s in v.items()} for y, v in out.items()}
+
+
+  def display(by_year, top=10):
+      for k, v in sorted(by_year.items(), reverse=True):
+          print(k)
+          for name in sorted(v, key=v.get, reverse=True)[:top]:
+              print(f"\t{name}: {v[name]}")
+
+
+  def comments_by_range(comments_by_issue, users, start_date, end_date):
+      out = {user: 0 for user in users}
+      unique_issues = set()
+      for issue, comments in comments_by_issue.items():
+          for c in comments:
+              user = c["user"]["login"].lower()
+              if user not in users:
+                  continue
+              if start_date < c["created_at"] < end_date:
+                  out[user] += 1
+                  unique_issues.add(issue)
+      return out, unique_issues
+
+  # display(issue_talkitive_by_year)
+#+end_src
+
+#+begin_src python
+  def activity_by_range(gh_data, users, start_date, end_date):
+
+      comment_count = {user: 0 for user in users}
+      review_count = {user: 0 for user in users}
+      merge_count = {user: 0 for user in users}
+      pr_count = {user: 0 for user in users}
+      unique_issues = set()
+      totals = {k: 0 for k in ['comments', 'reviews', 'merges', 'prs', 'issues']}
+      for issue, data in gh_data.items():
+          if start_date < data["head"]["created_at"] < end_date:
+              if "pull_request" in data["head"]:
+                  totals['prs'] += 1
+                  
+                  if (ud := data["head"]["user"]) is not None:
+                      if (user := ud["login"].lower()) in users:
+                          pr_count[user] += 1
+                          unique_issues.add(issue)
+              
+
+          for c in data["comments"]:
+              if start_date < c["created_at"] < end_date:
+                  totals['comments'] += 1
+                  if c["user"] is None:
+                      continue
+                  user = c["user"]["login"].lower()
+                  if user in users:
+                      comment_count[user] += 1
+                      unique_issues.add(issue)
+          for tl in data["timeline"]:
+
+              match tl:
+                  case {"event": "merged"}:
+                      if start_date < tl["created_at"] < end_date:
+                          totals['merges'] += 1
+                          if tl["actor"] is None:
+                              continue
+                          
+                          if (user := tl["actor"]["login"].lower()) in users:
+                              merge_count[user] += 1
+                              unique_issues.add(issue)
+                  case {"event": "reviewed"}:
+                      if start_date < tl["submitted_at"] < end_date:
+                          totals['reviews'] += 1                        
+                          if tl["user"] is None:
+                              continue
+                          
+                          if (user := tl["user"]["login"].lower()) in users:
+                              review_count[user] += 1
+                              unique_issues.add(issue)
+
+      return comment_count, review_count, merge_count, pr_count, unique_issues, totals
+
+
+  cc, rc, mc, pc, ui, tots = activity_by_range(gh_data, ['tacaswell', 'ksunden'], '2023-08-01', '2024-08-30')
+
+  print(f"comment {100* sum(cc.values()) / tots['comments']:0.0f}%")
+  print(f"reviews {100* sum(rc.values()) / tots['reviews']:0.0f}%")
+  print(f"merges {100* sum(mc.values()) / tots['merges']:0.0f}%")
+  print(f"PRs {100* sum(pc.values()) / tots['prs']:0.0f}%")
+  print(f"unique issues {100* len(ui) / tots['issues']:0.0f}%")
+#+end_src
